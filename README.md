@@ -1,2 +1,2 @@
-# MSC--nlab1
+# MSC-Onlab1
 Önálló laboratórium 1
