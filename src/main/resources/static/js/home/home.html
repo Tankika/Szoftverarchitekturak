@@ -1,0 +1,28 @@
+<h1>Greetings</h1>
+<div ng-show="authenticated">
+<!--     <p>The ID is {{controller.greeting.id}}</p> -->
+<!--     <p>The content is {{controller.greeting.content}}</p> -->
+	<form ng-submit="controller.send()">
+		<div class="form-group">
+			<label for="new-post-input"></label>
+			<textarea id="new-post-input" class="form-control" rows="10" placeholder="Type your message here!" ng-model="controller.postInput"></textarea>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	
+	<table class="table" ng-show="controller.posts">
+		<thead>
+			<th>Entry</th>
+			<th>Date</th>
+			<th>Posted by</th>
+		</thead>
+		<tr ng-repeat="post in controller.posts">
+			<td>{{post.entry}}</td>
+			<td>{{post.creationDateTime}}</td>
+			<td>{{post.username}}</td>
+		</tr>
+	</table>
+</div>
+<div ng-show="!authenticated">
+    <p>Login to see your greeting</p>
+</div>
