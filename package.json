@@ -1,0 +1,26 @@
+{
+  "name": "service-finder",
+  "version": "0.0.1",
+  "description": "MSC - Onallo labor 1 projekt",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-karma": "^1.0.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-beep-reporter": "^0.1.4",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-jasmine": "^1.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tankika/MSC-Onlab1.git"
+  },
+  "author": "Tamás Perlaki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tankika/MSC-Onlab1/issues"
+  },
+  "homepage": "https://github.com/Tankika/MSC-Onlab1#readme"
+}
