@@ -1,23 +1,25 @@
 angular.module('ServiceFinder.Home')
 
-	.controller('homeCtrl', ['$http', '$route', function($http, $route) {
+	.controller('HomeController', ['HomeService', '$route', function(HomeService, $route) {
 		var self = this;
+		self.send = send;
+		
 	//		$http.get('/resource/').success(function(data) {
 	//			self.greeting = data;
 	//		})
+		
 		getPosts();
 		
-		self.send = function() {
-			$http.post("/sendPost", {
-				entry : self.postInput
-			}).then(function() {
+		function send() {
+			HomeService.send(self.postInput).then(function() {
 				$route.reload();
 			});
-		};
+		}
 		
 		function getPosts() {
-			$http.get("listPosts").then(function(data) {
+			HomeService.getPosts().then(function(data) {
 				self.posts = data.data.posts;
 			});
 		}
-	}])
+		
+	}]);

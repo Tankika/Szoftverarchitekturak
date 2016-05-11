@@ -1,19 +1,38 @@
 describe('HomeController test', function() {
-//	beforeEach(module('ServiceFinder.Home'));
+	beforeEach(module('ServiceFinder.Home'));
 
-	var $controller;
+	var $controller,
+		HomeService = {
+			getPosts: function() {
+				return {
+					then : function(callback) {
+						callback({
+							data : {
+								posts : ["post1", "post2"]
+							}
+						});
+					}
+				};
+			}
+		};
 
-	beforeEach(inject(function(_$controller_){
-		$controller = _$controller_;
-	}));
 
-	describe('$scope.grade', function() {
-		it('sets the strength to "strong" if the password length is >8 chars', function() {
-//			var $scope = {};
-//			var controller = $controller('HomeController', { $scope: $scope });
-//			$scope.password = 'longerthaneightchars';
-//			$scope.grade();
-			expect(true).toEqual(true);
+	beforeEach(function() {
+		
+		module({
+			HomeService: HomeService
+		});
+		
+		inject(function(_$controller_){
+			$controller = _$controller_;
+		});
+	});
+	
+	
+	describe('', function() {
+		it('', function() {
+			var controller = $controller('HomeController', { $route : {} } );
+			expect(controller.posts.length).toEqual(2);
 		});
 	});
 });

@@ -5,7 +5,7 @@ angular.module('ServiceFinder')
 		$routeProvider
 		.when('/', {
 			templateUrl : 'js/home/home.html',
-			controller : 'homeCtrl',
+			controller : 'HomeController',
 			controllerAs: 'controller'
 		})
 		.when('/login', {
@@ -19,4 +19,4 @@ angular.module('ServiceFinder')
 	
 		$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 	
-	})
+	});

@@ -4,11 +4,11 @@ angular.module('ServiceFinder.Login')
 	
 		var authenticate = function(credentials, callback) {
 	
-			var headers = credentials
-				? {
+			var headers = credentials ?
+				{
 					authorization : "Basic " + btoa(credentials.username + ":" + credentials.password)
-				}
-				: {};
+				} :
+				{};
 	
 			$http.get('user', {headers : headers}).then(function(data) {
 				if (data.data.name) {
@@ -16,10 +16,10 @@ angular.module('ServiceFinder.Login')
 				} else {
 					$rootScope.authenticated = false;
 				}
-				callback && callback();
+				callback();
 			}, function() {
 				$rootScope.authenticated = false;
-				callback && callback();
+				callback();
 			});
 	
 		};
@@ -46,4 +46,4 @@ angular.module('ServiceFinder.Login')
 			$location.path("/"); 
 		}
 		};
-	}])
+	}]);
