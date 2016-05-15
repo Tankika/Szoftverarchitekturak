@@ -6,12 +6,12 @@ angular.module('ServiceFinder')
 		.when('/', {
 			templateUrl : 'js/home/home.html',
 			controller : 'HomeController',
-			controllerAs: 'controller'
+			controllerAs: 'homeCtrl'
 		})
 		.when('/login', {
 			templateUrl : 'js/login/login.html',
-			controller : 'navigationCtrl',
-			controllerAs: 'controller'
+			controller : 'LoginController',
+			controllerAs: 'loginCtrl'
 		}).otherwise('/');
 	
 	})

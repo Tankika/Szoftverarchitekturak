@@ -1,14 +1,15 @@
 angular.module('ServiceFinder.Home')
 
-	.controller('HomeController', ['HomeService', '$route', function(HomeService, $route) {
+	.controller('HomeController', ['HomeService', 'UserService', '$route', function(HomeService, UserService, $route) {
 		var self = this;
-		self.send = send;
 		
-	//		$http.get('/resource/').success(function(data) {
-	//			self.greeting = data;
-	//		})
+		self.send = send;
+		self.user = {};
 		
 		getPosts();
+		UserService.getUser().then(function(data) {
+			self.user = data;
+		});
 		
 		function send() {
 			HomeService.send(self.postInput).then(function() {

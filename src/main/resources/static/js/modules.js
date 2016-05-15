@@ -1,4 +1,5 @@
-angular.module('ServiceFinder.Home', []);
-angular.module('ServiceFinder.Login', []);
+angular.module('ServiceFinder.User', []);
+angular.module('ServiceFinder.Home', ['ServiceFinder.User']);
+angular.module('ServiceFinder.Login', ['ServiceFinder.User']);
 
-angular.module('ServiceFinder', [ 'ngRoute', 'ServiceFinder.Home', 'ServiceFinder.Login' ]);
+angular.module('ServiceFinder', [ 'ngRoute', 'ServiceFinder.Home', 'ServiceFinder.Login', 'ServiceFinder.User' ]);

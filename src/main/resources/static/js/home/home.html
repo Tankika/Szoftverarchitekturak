@@ -1,28 +1,25 @@
-<h1>Greetings</h1>
-<div ng-show="authenticated">
-<!--     <p>The ID is {{controller.greeting.id}}</p> -->
-<!--     <p>The content is {{controller.greeting.content}}</p> -->
-	<form ng-submit="controller.send()">
+<div ng-show="homeCtrl.user.authenticated === true">
+	<form ng-submit="homeCtrl.send()">
 		<div class="form-group">
 			<label for="new-post-input"></label>
-			<textarea id="new-post-input" class="form-control" rows="10" placeholder="Type your message here!" ng-model="controller.postInput"></textarea>
+			<textarea id="new-post-input" class="form-control" rows="10" placeholder="Type your message here!" ng-model="homeCtrl.postInput"></textarea>
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 	
-	<table class="table" ng-show="controller.posts">
+	<table class="table" ng-show="homeCtrl.posts">
 		<thead>
 			<th>Entry</th>
 			<th>Date</th>
 			<th>Posted by</th>
 		</thead>
-		<tr ng-repeat="post in controller.posts">
+		<tr ng-repeat="post in homeCtrl.posts">
 			<td>{{post.entry}}</td>
 			<td>{{post.creationDateTime}}</td>
 			<td>{{post.username}}</td>
 		</tr>
 	</table>
 </div>
-<div ng-show="!authenticated">
+<div ng-show="homeCtrl.user.authenticated === false">
     <p>Login to see your greeting</p>
 </div>

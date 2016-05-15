@@ -7,11 +7,11 @@ angular.module('ServiceFinder.Home')
 		function send(post) {
 			var deferred = $q.defer(),
 				request = {
-						entry : post
+					entry : post
 				};
 			
-			$http.post("/sendPost", request).then(function(data) {
-				deferred.resolve(data);
+			$http.post("/sendPost", request).then(function(response) {
+				deferred.resolve(response.data);
 			}, function(error) {
 				deferred.reject(error);
 			});
@@ -22,12 +22,13 @@ angular.module('ServiceFinder.Home')
 		function getPosts() {
 			var deferred = $q.defer();
 			
-			$http.get("listPosts").then(function(data) {
-				deferred.resolve(data);
+			$http.get("listPosts").then(function(response) {
+				deferred.resolve(response.data);
 			}, function(error) {
 				deferred.reject(error);
 			});
 			
 			return deferred.promise;
 		}
+		
 	}]);

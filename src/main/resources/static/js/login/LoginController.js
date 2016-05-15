@@ -1,49 +1,63 @@
 angular.module('ServiceFinder.Login')
-	.controller('navigationCtrl', ['$rootScope', '$http', '$location', function($rootScope, $http, $location) {
-		var self = this;
-	
-		var authenticate = function(credentials, callback) {
-	
-			var headers = credentials ?
-				{
-					authorization : "Basic " + btoa(credentials.username + ":" + credentials.password)
-				} :
-				{};
-	
-			$http.get('user', {headers : headers}).then(function(data) {
-				if (data.data.name) {
-					$rootScope.authenticated = true;
-				} else {
-					$rootScope.authenticated = false;
-				}
-				callback();
-			}, function() {
-				$rootScope.authenticated = false;
-				callback();
-			});
-	
-		};
-	
-		authenticate();
+
+	.controller('LoginController', ['UserService', '$location', '$route', '$scope', function(UserService, $location, $route, $scope) {
+		var self = this,
+			userChangedUnsubscriber;
+		
 		self.credentials = {};
-		self.login = function() {
-				authenticate(self.credentials, function() {
-					if ($rootScope.authenticated) {
-						$location.path("/");
-						self.error = false;
-					} else {
-						$location.path("/login");
-						self.error = true;
-					}
-				});
-		};
+		self.user = {};
 		
-		self.logout = function() {
-		$http.post("/logout", {}).then(logoutHandler, logoutHandler);
+		self.login = login;
+		self.logout = logout;
 		
-		function logoutHandler(result) {
-			$rootScope.authenticated = false;
-			$location.path("/"); 
+		getUser();
+		
+		userChangedUnsubscriber = UserService.subscribe(userChangedListener);
+		$scope.$on('$destroy', onScopeDestroy);
+		
+		function login() {
+			UserService.login(self.credentials).then(handleSuccess, handleError);
+			
+			function handleSuccess(data) {
+				if (angular.isObject(data) && data.authenticated === true) {
+					self.user = data;
+					self.error = false;
+					
+					$location.path("/");
+				} else {
+					self.error = true;
+				}
+			}
+			
+			function handleError(error) {
+				self.error = true;
+			}
 		}
-		};
+		
+		function logout() {
+			UserService.logout().then(logoutHandler, logoutHandler);
+			
+			function logoutHandler(result) {
+				if($location.path() === "/") {
+					$route.reload();
+				} else {
+					$location.path("/");
+				}
+			}
+		}
+		
+		function getUser() {
+			UserService.getUser().then(function(data) {
+				self.user = data;
+			});
+		}
+		
+		function userChangedListener(newUser) {
+			self.user = newUser;
+		}
+		
+		function onScopeDestroy() {
+			userChangedUnsubscriber();
+		}
+		
 	}]);
