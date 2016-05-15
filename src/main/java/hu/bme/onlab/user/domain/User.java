@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import hu.bme.onlab.home.domain.Post;
+import hu.bme.onlab.post.domain.Post;
 
 @Entity(name = "users")
 public class User {

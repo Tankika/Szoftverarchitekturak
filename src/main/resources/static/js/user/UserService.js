@@ -53,7 +53,7 @@ angular.module('ServiceFinder.User')
 		function logout() {
 			var deferred = $q.defer();
 			
-			$http.get("/logout")
+			$http.post("/logout", {})
 			.then(function(response) {
 				setUserLoggedOff();
 				deferred.resolve(response.data);

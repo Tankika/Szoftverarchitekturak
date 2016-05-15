@@ -1,4 +1,4 @@
-package hu.bme.onlab.home.domain;
+package hu.bme.onlab.post.domain;
 
 import java.util.Calendar;
 

@@ -7,9 +7,7 @@ describe('HomeController test', function() {
 				return {
 					then : function(callback) {
 						callback({
-							data : {
-								posts : ["post1", "post2"]
-							}
+							posts : ["post1", "post2"]
 						});
 					}
 				};

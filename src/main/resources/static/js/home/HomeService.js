@@ -22,7 +22,7 @@ angular.module('ServiceFinder.Home')
 		function getPosts() {
 			var deferred = $q.defer();
 			
-			$http.get("listPosts").then(function(response) {
+			$http.get("/listPosts").then(function(response) {
 				deferred.resolve(response.data);
 			}, function(error) {
 				deferred.reject(error);

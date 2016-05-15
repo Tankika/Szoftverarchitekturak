@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
+@EnableJpaRepositories
 @SpringBootApplication
 public class ServiceFinder {
 
@@ -44,8 +46,10 @@ public class ServiceFinder {
 			http
 				.httpBasic()
 			.and()
-				.authorizeRequests().antMatchers("/index.html", "/home.html", "/login.html", "/user", "/").permitAll()
+				.authorizeRequests().antMatchers("/index.html", "/home.html", "/login.html", "/user", "/listPosts", "/").permitAll()
 				.anyRequest().authenticated()
+			.and()
+				.logout().logoutSuccessUrl("/")
 			.and()
 				.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
 				.csrf()
