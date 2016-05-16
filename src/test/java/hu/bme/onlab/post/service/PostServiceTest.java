@@ -1,5 +1,6 @@
-package hu.bme.onlab.post.serv;
+package hu.bme.onlab.post.service;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -7,8 +8,15 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
+import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +29,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import hu.bme.onlab.post.bean.SendPostRequest;
-import hu.bme.onlab.post.service.PostService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { PostServiceContext.class })
@@ -33,13 +40,20 @@ public class PostServiceTest {
 	@Autowired	
 	private DataSource dataSource;
 	
-	private static final String USER_NAME = "Username";
+	private static final String USER_NAME = "user";
 	
 	@BeforeClass
 	public static void setupContext() {
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(USER_NAME, "pw", new ArrayList<GrantedAuthority>());
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+	
+	@Before
+	public void setupDatabase() throws Exception {
+		IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File("./src/test/resources/hu/bme/onlab/post/service/dataset.xml"));
+		IDatabaseConnection databaseConnection = new DatabaseDataSourceConnection(dataSource);
+		DatabaseOperation.CLEAN_INSERT.execute(databaseConnection, dataSet);
 	}
 	
 	@Test
@@ -54,6 +68,7 @@ public class PostServiceTest {
 			try(Statement statement = connection.createStatement()) {
 				String query = "select author_username, entry, creationDateTime from post p";
 				try (ResultSet resultSet = statement.executeQuery(query)) {
+					Assert.assertTrue("The resultSet should have at least one element", resultSet.next());
 					Assert.assertEquals("Username saved for the post should match the one set in the context", USER_NAME, resultSet.getString(1));
 					Assert.assertEquals("Entry text saved for the post should match the one sent in the request", entry, resultSet.getString(2));
 					Assert.assertNotNull("Service call should fill the date field", resultSet.getDate(3));
@@ -62,6 +77,7 @@ public class PostServiceTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testListPosts() {		
 		postService.listPosts();

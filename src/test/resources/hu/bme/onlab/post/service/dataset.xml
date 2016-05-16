@@ -1,0 +1,8 @@
+<dataset>
+	<users username="admin" enabled="true" password="password" />
+	<users username="user" enabled="true" password="password" />
+	
+	<authorities username="admin" authority="ROLE_ADMIN" />
+	<authorities username="admin" authority="ROLE_USER" />
+	<authorities username="user" authority="ROLE_USER" />
+</dataset>

@@ -1,4 +1,4 @@
-package hu.bme.onlab.post.serv;
+package hu.bme.onlab.post.service;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -15,8 +15,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import hu.bme.onlab.post.repository.PostRepository;
-import hu.bme.onlab.post.service.PostService;
-import hu.bme.onlab.post.service.PostServiceImpl;
 import hu.bme.onlab.user.repository.UserRepository;
 
 @Configuration
@@ -36,8 +34,11 @@ public class PostServiceContext {
 
 	@Bean
 	public DataSource dataSource() {
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.setType(EmbeddedDatabaseType.H2).build();
+		DataSource dataSource = new EmbeddedDatabaseBuilder()
+				.setType(EmbeddedDatabaseType.H2)
+				.build();
+		
+		return dataSource;
 	}
 
 	@Bean
