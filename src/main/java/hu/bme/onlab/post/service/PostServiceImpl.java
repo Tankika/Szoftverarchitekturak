@@ -31,7 +31,10 @@ public class PostServiceImpl implements PostService {
 		this.postRepository = postRepository;
 		this.userRepository = userRepository;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendPost(SendPostRequest request) {
 
@@ -46,6 +49,9 @@ public class PostServiceImpl implements PostService {
 		postRepository.save(post);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ListPostsResponse listPosts() {
 		ListPostsResponse response = new ListPostsResponse();

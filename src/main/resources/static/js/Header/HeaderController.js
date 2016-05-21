@@ -25,8 +25,16 @@ angular.module('ServiceFinder.Header')
 				size: 'sm'
 			});
 			
-			// In case the modal was closed, register button was pressed, so we open the register panel.
-			modal.closed.then(openSignupModal);
+			// Handle the close event of the modal.
+			modal.result.then(function(result) {
+				if(result === "login") {
+					// User successfully logged in on modal.
+					$location.path("/");
+				} else if(result === "signup") {
+					// User clicked the signup link on modal.
+					modal.closed.then(openSignupModal);	
+				}
+			});
 		}
 		
 		function openSignupModal() {

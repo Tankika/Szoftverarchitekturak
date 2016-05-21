@@ -28,6 +28,7 @@ public class Authority {
 	}
 	public void setUser(User user) {
 		this.user = user;
+		user.getAuthorities().add(this);
 	}
 	
 	@Id
@@ -38,7 +39,7 @@ public class Authority {
 		this.authority = authority;
 	}
 
-	public class AuthorityId implements Serializable {
+	public static class AuthorityId implements Serializable {
 		private transient static final long serialVersionUID = -8043425316738528456L;
 		
 		private String user;

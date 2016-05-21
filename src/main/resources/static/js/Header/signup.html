@@ -6,7 +6,8 @@
 			</a>	
 		</div>
 	</div>
-	<form novalidate name="signup_form" role="form" ng-submit="signup_form.$valid && signupModalCtrl.signup()">
+	
+	<form novalidate name="signup_form" role="form" ng-submit="!signup_form.email.$pending && signup_form.$valid && signupModalCtrl.signup()">
 		<div class="modal-header">
 			<div class="modal-title">
 				Regisztráció
@@ -14,6 +15,10 @@
 		</div>
 		
 		<div class="modal-body">
+			<div class="alert alert-danger" ng-show="signupModalCtrl.error">
+			    Ismeretlen hiba történt regisztráció közben. Kérlek próbáld meg később.
+			</div>
+			
 			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$touched) && signup_form.email.$invalid }">
 				<label for="email">E-mail cím:</label>
 				<input required
@@ -21,12 +26,17 @@
 					name="email"
 					type="email" 
 					class="form-control"
-					ng-model="signupModalCtrl.credentials.username" />
+					ng-model="signupModalCtrl.credentials.username"
+					ng-model-options="{ debounce: 250 }"
+					ng-maxlength="254"
+					ui-validate-async="{ 'emailTaken': 'signupModalCtrl.isEmailFree($value)' }") />
+				<span ng-show="signup_form.email.$pending" class="loader">Loading...</span>
 				<div class="error-block">
-					<span ng-show="signup_form.email.$error.required">Kérlek add meg az e-mail címed!</span>
-					<span ng-show="signup_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</span>
+					<div ng-show="signup_form.email.$error.required">Kérlek add meg az e-mail címed!</div>
+					<div ng-show="signup_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</div>
+					<div ng-show="signup_form.email.$error.maxlength">Az e-mail cím legfeljebb 254 karakter hosszú lehet!</div>
+					<div ng-show="signup_form.email.$error.emailTaken">A megadott e-mail cím már szerepel a rendszerben!</div>
 				</div>
-<!-- 				TODO: async validáció duplikáltra -->
 			</div>
 			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password.$touched) && signup_form.password.$invalid }">
 				<label for="password">Jelszó:</label>
@@ -35,9 +45,13 @@
 					name="password"
 					type="password"
 					class="form-control"
-					ng-model="signupModalCtrl.credentials.password" />
+					ng-model="signupModalCtrl.credentials.password"
+					ng-minlength="8"
+					ng-maxlength="100" />
 				<div class="error-block">
-					<span ng-show="signup_form.password.$error.required">Kérlek add meg a jelszavad!</span>
+					<div ng-show="signup_form.password.$error.required">Kérlek add meg a jelszavad!</div>
+					<div ng-show="signup_form.password.$error.minlength">A jelszónak minimum 8 karakter hosszúnak kell lennie!</div>
+					<div ng-show="signup_form.password.$error.maxlength">A jelszó legfeljebb 100 karakter hosszú lehet!</div>
 				</div>
 			</div>
 			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password_confirm.$touched) && signup_form.password_confirm.$invalid }">
@@ -47,11 +61,12 @@
 					name="password_confirm"
 					type="password"
 					class="form-control"
-					ui-validate="{ 'confirmed': '$value==password' }"
-					ng-model="signupModalCtrl.password_confirm" />
+					ng-model="signupModalCtrl.credentials.password_confirm"
+					ui-validate="{ 'confirmed': '$value == signupModalCtrl.credentials.password' }"
+					ui-validate-watch=" 'signupModalCtrl.credentials.password' " />
 				<div class="error-block">
-					<span ng-show="signup_form.password_confirm.$error.required">Kérlek add meg a jelszavad ismét!</span>
-					<span ng-show="signup_form.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</span>
+					<div ng-show="signup_form.password_confirm.$error.required">Kérlek erősítsd meg a jelszavad!</div>
+					<div ng-show="signup_form.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</div>
 				</div>
 			</div>
 		</div>
@@ -62,7 +77,7 @@
 					<button type="button" class="btn btn-default btn-block" ng-click="$dismiss()">Mégsem</button>
 				</div>
 				<div class="col-xs-6">
-					<button type="submit" class="btn btn-primary btn-block" ng-disabled="signup_form.$invalid">Regisztráció</button>
+					<button type="submit" class="btn btn-primary btn-block" ng-disabled="signup_form.email.$pending || signup_form.$invalid">Regisztráció</button>
 				</div>
 			</div>
 		</div>

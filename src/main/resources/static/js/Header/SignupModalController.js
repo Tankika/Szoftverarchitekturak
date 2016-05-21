@@ -1,52 +1,37 @@
 angular.module('ServiceFinder.Header')
 
-	.controller('SignupModalController', ['UserService', '$location', '$route', '$scope', '$uibModal', function(UserService, $location, $route, $scope, $uibModal) {
+	.controller('SignupModalController', ['UserService', '$scope', '$q', function(UserService, $scope, $q) {
 		var self = this;
+
+		self.error = false;
+		self.credentials = {};
 		
-//		self.credentials = {};
-//		self.user = {};
-//		
-//		self.openLoginModal = openLoginModal;
-//		self.logout = logout;
-//		
-//		getUser();
-//		
-//		userChangedUnsubscriber = UserService.subscribe(userChangedListener);
-//		$scope.$on('$destroy', onScopeDestroy);
-//		
-//		function openLoginModal() {
-//			$uibModal.open({
-//				templateUrl: 'js/login/login.html',
-//				controller: 'LoginModalController',
-//				controllerAs: 'loginModalCtrl',
-//				size: 'sm'
-//			});
-//		}
-//		
-//		function logout() {
-//			UserService.logout().then(logoutHandler, logoutHandler);
-//			
-//			function logoutHandler(result) {
-//				if($location.path() === "/") {
-//					$route.reload();
-//				} else {
-//					$location.path("/");
-//				}
-//			}
-//		}
-//		
-//		function getUser() {
-//			UserService.getUser().then(function(data) {
-//				self.user = data;
-//			});
-//		}
-//		
-//		function userChangedListener(newUser) {
-//			self.user = newUser;
-//		}
-//		
-//		function onScopeDestroy() {
-//			userChangedUnsubscriber();
-//		}
+		self.signup = signup;
+		self.isEmailFree = isEmailFree;
+		
+		function signup() {
+			UserService.signup(self.credentials).then(function(data) {
+				$scope.$close(data);
+			}, function(error) {
+				self.error = true;
+			});
+		}
+		
+		function isEmailFree(email) {
+			var deferred = $q.defer();
+			
+			UserService.isEmailFree(email)
+			.then(function(data) {
+				if(data.emailFree) {
+					deferred.resolve();
+				} else {
+					deferred.reject();
+				}
+			}, function(error) {
+				deferred.reject();
+			});
+			
+			return deferred.promise;
+		}
 		
 	}]);

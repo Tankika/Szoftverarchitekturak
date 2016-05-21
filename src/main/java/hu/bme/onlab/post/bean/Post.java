@@ -21,8 +21,10 @@ public class Post implements Bean {
 
     @PropertyDefinition
     private String entry;
+    
     @PropertyDefinition
     private Calendar creationDateTime;
+    
     @PropertyDefinition
     private String username;
     

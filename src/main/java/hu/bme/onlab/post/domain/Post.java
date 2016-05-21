@@ -55,5 +55,6 @@ public class Post {
 
 	public void setAuthor(User author) {
 		this.author = author;
+		author.getPosts().add(this);
 	}
 }

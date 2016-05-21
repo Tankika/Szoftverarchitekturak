@@ -3,6 +3,8 @@ angular.module('ServiceFinder.Header')
 	.controller('LoginModalController', ['UserService', '$location', '$scope', function(UserService, $location, $scope) {
 		var self = this;
 		
+		self.error = false;
+		self.loginFailed = false;
 		self.credentials = {};
 		
 		self.login = login;
@@ -14,21 +16,25 @@ angular.module('ServiceFinder.Header')
 			function handleSuccess(data) {
 				if (angular.isObject(data) && data.authenticated === true) {
 					self.error = false;
+					self.loginFailed = false;
 					
-					$location.path("/");
-					$scope.$dismiss();
+					$scope.$close("login");
 				} else {
 					self.error = true;
 				}
 			}
 			
 			function handleError(error) {
-				self.error = true;
+				if(error.status === 401) {
+					self.loginFailed = true;			
+				} else {
+					self.error = true;			
+				}
 			}
 		}
 		
 		function onSignupClick() {
-			$scope.$close();
+			$scope.$close("signup");
 		}
 		
 	}]);

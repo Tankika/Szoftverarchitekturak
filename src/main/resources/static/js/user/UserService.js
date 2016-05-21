@@ -7,7 +7,9 @@ angular.module('ServiceFinder.User')
 		this.login = login;
 		this.getUser = getUser;
 		this.logout = logout;
-		this.subscribe = subscribe; 
+		this.signup = signup;
+		this.isEmailFree = isEmailFree;
+		this.subscribe = subscribe;
 		
 		function login(credentials) {
 			var deferred = $q.defer(),
@@ -59,6 +61,39 @@ angular.module('ServiceFinder.User')
 				deferred.resolve(response.data);
 			}, function(error) {
 				setUserLoggedOff();
+				deferred.reject(error);
+			});
+			
+			return deferred.promise;
+		}
+		
+		function signup(credentials) {
+			var deferred = $q.defer(),
+				request = {
+					username: credentials.username,
+					password: credentials.password
+				};
+			
+			$http.post("/signup", request)
+			.then(function(response) {
+				deferred.resolve(response.data);
+			}, function(error) {
+				deferred.reject(error);
+			});
+			
+			return deferred.promise;
+		}
+		
+		function isEmailFree(email) {
+			var deferred = $q.defer(),
+				request = {
+					email: email
+				};
+			
+			$http.post("/checkEmail", request)
+			.then(function(response) {
+				deferred.resolve(response.data);
+			}, function(error) {
 				deferred.reject(error);
 			});
 			

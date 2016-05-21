@@ -16,6 +16,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -52,7 +54,7 @@ public class ServiceFinder {
 				.httpBasic().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
 				.authorizeRequests()
-					.antMatchers("/user", "/listPosts", "/", "/fonts/**")
+					.antMatchers("/", "/signup", "/checkEmail", "/user", "/listPosts", "/fonts/**")
 						.permitAll()
 					.anyRequest()
 						.authenticated()
@@ -107,7 +109,11 @@ public class ServiceFinder {
 			@Override
 			public void commence(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException authException) throws IOException, ServletException {
-				response.sendRedirect("/");
+				if(authException instanceof BadCredentialsException || authException instanceof InsufficientAuthenticationException) {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+				} else {
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, authException.getMessage());					
+				}
 			}
 		}
 		
