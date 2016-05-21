@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 	<head>
+		<base href="/" />
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,10 +27,10 @@
 	                    <span class="icon-bar"></span>
 	                    <span class="icon-bar"></span>
 	                </button>
-	                <a class="navbar-brand" href="#/">Szolgáltatás kereső</a>
+	                <a class="navbar-brand" href="/">Szolgáltatás kereső</a>
 	            </div>
 	            <!-- Collect the nav links, forms, and other content for toggling -->
-	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="LoginController as loginCtrl">
+	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="HeaderController as loginCtrl">
 	            	<form class="navbar-form navbar-left" role="search">
 					  <div class="form-group">
 						<input type="text" class="form-control" placeholder="Kulcsszó">
@@ -39,7 +40,7 @@
 					
 	                <ul class="nav navbar-nav navbar-right" ng-show="loginCtrl.user.authenticated === false">
 	                    <li>
-	                        <a href="">Regisztráció</a>
+	                        <a href="" ng-click="loginCtrl.openSignupModal()">Regisztráció</a>
 	                    </li>
 	                    <li>
 	                        <a href="" ng-click="loginCtrl.openLoginModal()">Bejelentkezés</a>
@@ -47,14 +48,14 @@
 	                </ul>
 	                <ul class="nav navbar-nav navbar-right" ng-show="loginCtrl.user.authenticated === true">
 	                    <li>
-	                        <a href="#" ng-click="loginCtrl.logout()">Kijelentkezés</a>
+	                        <a href="" ng-click="loginCtrl.logout()">Kijelentkezés</a>
 	                    </li>
 	                </ul>
 	                
 	                <p class="navbar-text navbar-right"></p>
 	                <ul class="nav navbar-nav navbar-right">
 	                    <li>
-	                        <a href="#">Hírdetés feladása</a>
+	                        <a href="" ng-click="loginCtrl.onNewPostClick()">Hírdetés feladása</a>
 	                    </li>
 	                </ul>
 	            </div>

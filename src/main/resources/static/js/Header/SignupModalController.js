@@ -1,4 +1,4 @@
-angular.module('ServiceFinder.Login')
+angular.module('ServiceFinder.Header')
 
 	.controller('SignupModalController', ['UserService', '$location', '$route', '$scope', '$uibModal', function(UserService, $location, $route, $scope, $uibModal) {
 		var self = this;

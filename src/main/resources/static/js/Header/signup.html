@@ -1,0 +1,70 @@
+<div class="signup-modal">
+	<div class="row close-section">
+		<div class="col-xs-12">
+			<a role="button" class="close" ng-click="$dismiss()">
+				<span class="glyphicon glyphicon-remove"></span>
+			</a>	
+		</div>
+	</div>
+	<form novalidate name="signup_form" role="form" ng-submit="signup_form.$valid && signupModalCtrl.signup()">
+		<div class="modal-header">
+			<div class="modal-title">
+				Regisztráció
+			</div>
+		</div>
+		
+		<div class="modal-body">
+			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$touched) && signup_form.email.$invalid }">
+				<label for="email">E-mail cím:</label>
+				<input required
+					id="email"
+					name="email"
+					type="email" 
+					class="form-control"
+					ng-model="signupModalCtrl.credentials.username" />
+				<div class="error-block">
+					<span ng-show="signup_form.email.$error.required">Kérlek add meg az e-mail címed!</span>
+					<span ng-show="signup_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</span>
+				</div>
+<!-- 				TODO: async validáció duplikáltra -->
+			</div>
+			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password.$touched) && signup_form.password.$invalid }">
+				<label for="password">Jelszó:</label>
+				<input required
+					id="password"
+					name="password"
+					type="password"
+					class="form-control"
+					ng-model="signupModalCtrl.credentials.password" />
+				<div class="error-block">
+					<span ng-show="signup_form.password.$error.required">Kérlek add meg a jelszavad!</span>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password_confirm.$touched) && signup_form.password_confirm.$invalid }">
+				<label for="password-confirm">Jelszó megerősítése:</label>
+				<input required
+					id="password-confirm"
+					name="password_confirm"
+					type="password"
+					class="form-control"
+					ui-validate="{ 'confirmed': '$value==password' }"
+					ng-model="signupModalCtrl.password_confirm" />
+				<div class="error-block">
+					<span ng-show="signup_form.password_confirm.$error.required">Kérlek add meg a jelszavad ismét!</span>
+					<span ng-show="signup_form.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal-footer">
+			<div class="row">
+				<div class="col-xs-6">
+					<button type="button" class="btn btn-default btn-block" ng-click="$dismiss()">Mégsem</button>
+				</div>
+				<div class="col-xs-6">
+					<button type="submit" class="btn btn-primary btn-block" ng-disabled="signup_form.$invalid">Regisztráció</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,18 +1,11 @@
+@errorColor: #a94442;
+
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
 footer {
     margin: 50px 0;
-}
-
-.login-modal {
-	.row:first-child {
-		a {
-		    padding-top: 20px;
-		    padding-right: 15px;
-		}
-	}
 }
 
 .modal-dialog {
@@ -31,6 +24,32 @@ footer {
 			    display: inline-block;
     			padding-bottom: 1.2rem;
 		    }		
+		}
+	}
+	
+	.close-section {
+		a {
+		    padding-top: 20px;
+		    padding-right: 15px;
+		}
+	}
+
+	.login-modal {
+		.button-section {
+    		margin-bottom: 3rem;
+		}
+	}
+}
+
+form {
+	.error-block {
+		display: none;		
+	}
+	
+	.has-error {
+		.error-block {
+			display: initial;
+			color: @errorColor;
 		}
 	}
 }

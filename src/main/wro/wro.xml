@@ -8,13 +8,15 @@
 		<js>webjar:angularjs/1.4.10/angular-animate.js</js>
 		<js>webjar:angular-ui-bootstrap/1.3.2/ui-bootstrap.js</js>
 		<js>webjar:angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.js</js>
+		<js>webjar:angular-ui-validate/1.2.2/src/validate.js</js>
 	</group>
 	<group name="service-finder">
 		<css>/src/main/resources/static/style/main.less</css>
 		<js>/src/main/resources/static/js/modules.js</js>
 		<js>/src/main/resources/static/js/app.js</js>
-		<js>/src/main/resources/static/js/home/*.js</js>
-		<js>/src/main/resources/static/js/login/*.js</js>
-		<js>/src/main/resources/static/js/user/*.js</js>
+		<js>/src/main/resources/static/js/Home/*.js</js>
+		<js>/src/main/resources/static/js/Header/*.js</js>
+		<js>/src/main/resources/static/js/User/*.js</js>
+		<js>/src/main/resources/static/js/NewPost/*.js</js>
 	</group>
 </groups>

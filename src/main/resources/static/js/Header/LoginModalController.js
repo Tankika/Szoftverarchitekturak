@@ -1,4 +1,4 @@
-angular.module('ServiceFinder.Login')
+angular.module('ServiceFinder.Header')
 
 	.controller('LoginModalController', ['UserService', '$location', '$scope', function(UserService, $location, $scope) {
 		var self = this;
@@ -6,6 +6,7 @@ angular.module('ServiceFinder.Login')
 		self.credentials = {};
 		
 		self.login = login;
+		self.onSignupClick = onSignupClick;
 		
 		function login() {
 			UserService.login(self.credentials).then(handleSuccess, handleError);
@@ -15,7 +16,7 @@ angular.module('ServiceFinder.Login')
 					self.error = false;
 					
 					$location.path("/");
-					$scope.$close();
+					$scope.$dismiss();
 				} else {
 					self.error = true;
 				}
@@ -24,6 +25,10 @@ angular.module('ServiceFinder.Login')
 			function handleError(error) {
 				self.error = true;
 			}
+		}
+		
+		function onSignupClick() {
+			$scope.$close();
 		}
 		
 	}]);

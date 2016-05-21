@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import hu.bme.onlab.user.domain.Authority.AuthorityId;
 
@@ -20,6 +21,7 @@ public class Authority {
 	
 	@Id
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name="username")
 	public User getUser() {
 		return user;

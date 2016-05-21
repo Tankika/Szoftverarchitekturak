@@ -1,6 +1,6 @@
-angular.module('ServiceFinder.Login')
+angular.module('ServiceFinder.Header')
 
-	.controller('LoginController', ['UserService', '$location', '$route', '$scope', '$uibModal', function(UserService, $location, $route, $scope, $uibModal) {
+	.controller('HeaderController', ['UserService', '$location', '$route', '$scope', '$uibModal', function(UserService, $location, $route, $scope, $uibModal) {
 		var self = this,
 			userChangedUnsubscriber;
 		
@@ -8,6 +8,8 @@ angular.module('ServiceFinder.Login')
 		self.user = {};
 		
 		self.openLoginModal = openLoginModal;
+		self.openSignupModal = openSignupModal;
+		self.onNewPostClick = onNewPostClick;
 		self.logout = logout;
 		
 		getUser();
@@ -16,21 +18,32 @@ angular.module('ServiceFinder.Login')
 		$scope.$on('$destroy', onScopeDestroy);
 		
 		function openLoginModal() {
-			$uibModal.open({
-				templateUrl: 'js/login/login.html',
+			var modal = $uibModal.open({
+				templateUrl: 'js/Header/login.html',
 				controller: 'LoginModalController',
 				controllerAs: 'loginModalCtrl',
 				size: 'sm'
 			});
+			
+			// In case the modal was closed, register button was pressed, so we open the register panel.
+			modal.closed.then(openSignupModal);
 		}
 		
 		function openSignupModal() {
 			$uibModal.open({
-				templateUrl: 'js/login/signup.html',
+				templateUrl: 'js/Header/signup.html',
 				controller: 'SignupModalController',
 				controllerAs: 'signupModalCtrl',
 				size: 'sm'
 			});
+		}
+		
+		function onNewPostClick() {
+			if(self.user.authenticated === true) {
+				$location.path("/newPost");
+			} else {
+				openLoginModal();
+			}
 		}
 		
 		function logout() {

@@ -2,10 +2,12 @@ package hu.bme.onlab.post.domain;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import hu.bme.onlab.user.domain.User;
 
@@ -28,6 +30,7 @@ public class Post {
 		this.id = id;
 	}
 
+	@Column(length=4000)
 	public String getEntry() {
 		return entry;
 	}
@@ -45,6 +48,7 @@ public class Post {
 	}
 
 	@ManyToOne
+	@NotNull
 	public User getAuthor() {
 		return author;
 	}
