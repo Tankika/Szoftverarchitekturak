@@ -16,10 +16,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'main/resources/static/js/3rdparty/angular-1.3.8.js',
+      'main/resources/static/js/3rdparty/angular-1.4.10.js',
       'main/resources/static/js/modules.js',
       'main/resources/static/js/**/*.js',
-      'test/resources/js/3rdparty/angular-mocks-1.3.8.js',
+      'test/resources/js/3rdparty/angular-mocks-1.4.10.js',
       'test/resources/js/**/*.js'
     ],
 

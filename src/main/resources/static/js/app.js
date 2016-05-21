@@ -8,11 +8,7 @@ angular.module('ServiceFinder')
 			controller : 'HomeController',
 			controllerAs: 'homeCtrl'
 		})
-		.when('/login', {
-			templateUrl : 'js/login/login.html',
-			controller : 'LoginController',
-			controllerAs: 'loginCtrl'
-		}).otherwise('/');
+		.otherwise('/');
 	
 	})
 	.config(function($httpProvider) {
