@@ -19,7 +19,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 public class SignupRequest implements Bean {
 
 	@PropertyDefinition(validate = "notEmpty")
-	private String username;
+	private String email;
 	
 	@PropertyDefinition(validate = "notEmpty")
 	private String password;
@@ -55,28 +55,28 @@ public class SignupRequest implements Bean {
 
 	//-----------------------------------------------------------------------
 	/**
-	 * Gets the username.
+	 * Gets the email.
 	 * @return the value of the property, not empty
 	 */
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
 	/**
-	 * Sets the username.
-	 * @param username  the new value of the property, not empty
+	 * Sets the email.
+	 * @param email  the new value of the property, not empty
 	 */
-	public void setUsername(String username) {
-		JodaBeanUtils.notEmpty(username, "username");
-		this.username = username;
+	public void setEmail(String email) {
+		JodaBeanUtils.notEmpty(email, "email");
+		this.email = email;
 	}
 
 	/**
-	 * Gets the the {@code username} property.
+	 * Gets the the {@code email} property.
 	 * @return the property, not null
 	 */
-	public final Property<String> username() {
-		return metaBean().username().createProperty(this);
+	public final Property<String> email() {
+		return metaBean().email().createProperty(this);
 	}
 
 	//-----------------------------------------------------------------------
@@ -118,7 +118,7 @@ public class SignupRequest implements Bean {
 		}
 		if (obj != null && obj.getClass() == this.getClass()) {
 			SignupRequest other = (SignupRequest) obj;
-			return JodaBeanUtils.equal(getUsername(), other.getUsername()) &&
+			return JodaBeanUtils.equal(getEmail(), other.getEmail()) &&
 					JodaBeanUtils.equal(getPassword(), other.getPassword());
 		}
 		return false;
@@ -127,7 +127,7 @@ public class SignupRequest implements Bean {
 	@Override
 	public int hashCode() {
 		int hash = getClass().hashCode();
-		hash = hash * 31 + JodaBeanUtils.hashCode(getUsername());
+		hash = hash * 31 + JodaBeanUtils.hashCode(getEmail());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPassword());
 		return hash;
 	}
@@ -146,7 +146,7 @@ public class SignupRequest implements Bean {
 	}
 
 	protected void toString(StringBuilder buf) {
-		buf.append("username").append('=').append(JodaBeanUtils.toString(getUsername())).append(',').append(' ');
+		buf.append("email").append('=').append(JodaBeanUtils.toString(getEmail())).append(',').append(' ');
 		buf.append("password").append('=').append(JodaBeanUtils.toString(getPassword())).append(',').append(' ');
 	}
 
@@ -161,10 +161,10 @@ public class SignupRequest implements Bean {
 		static final Meta INSTANCE = new Meta();
 
 		/**
-		 * The meta-property for the {@code username} property.
+		 * The meta-property for the {@code email} property.
 		 */
-		private final MetaProperty<String> username = DirectMetaProperty.ofReadWrite(
-				this, "username", SignupRequest.class, String.class);
+		private final MetaProperty<String> email = DirectMetaProperty.ofReadWrite(
+				this, "email", SignupRequest.class, String.class);
 		/**
 		 * The meta-property for the {@code password} property.
 		 */
@@ -175,7 +175,7 @@ public class SignupRequest implements Bean {
 		 */
 		private final Map<String, MetaProperty<?>> metaPropertyMap$ = new DirectMetaPropertyMap(
 				this, null,
-				"username",
+				"email",
 				"password");
 
 		/**
@@ -187,8 +187,8 @@ public class SignupRequest implements Bean {
 		@Override
 		protected MetaProperty<?> metaPropertyGet(String propertyName) {
 			switch (propertyName.hashCode()) {
-				case -265713450:  // username
-					return username;
+				case 96619420:  // email
+					return email;
 				case 1216985755:  // password
 					return password;
 			}
@@ -212,11 +212,11 @@ public class SignupRequest implements Bean {
 
 		//-----------------------------------------------------------------------
 		/**
-		 * The meta-property for the {@code username} property.
+		 * The meta-property for the {@code email} property.
 		 * @return the meta-property, not null
 		 */
-		public final MetaProperty<String> username() {
-			return username;
+		public final MetaProperty<String> email() {
+			return email;
 		}
 
 		/**
@@ -231,8 +231,8 @@ public class SignupRequest implements Bean {
 		@Override
 		protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
 			switch (propertyName.hashCode()) {
-				case -265713450:  // username
-					return ((SignupRequest) bean).getUsername();
+				case 96619420:  // email
+					return ((SignupRequest) bean).getEmail();
 				case 1216985755:  // password
 					return ((SignupRequest) bean).getPassword();
 			}
@@ -242,8 +242,8 @@ public class SignupRequest implements Bean {
 		@Override
 		protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
 			switch (propertyName.hashCode()) {
-				case -265713450:  // username
-					((SignupRequest) bean).setUsername((String) newValue);
+				case 96619420:  // email
+					((SignupRequest) bean).setEmail((String) newValue);
 					return;
 				case 1216985755:  // password
 					((SignupRequest) bean).setPassword((String) newValue);
@@ -254,7 +254,7 @@ public class SignupRequest implements Bean {
 
 		@Override
 		protected void validate(Bean bean) {
-			JodaBeanUtils.notEmpty(((SignupRequest) bean).username, "username");
+			JodaBeanUtils.notEmpty(((SignupRequest) bean).email, "email");
 			JodaBeanUtils.notEmpty(((SignupRequest) bean).password, "password");
 		}
 

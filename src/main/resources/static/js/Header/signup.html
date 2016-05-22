@@ -26,7 +26,7 @@
 					name="email"
 					type="email" 
 					class="form-control"
-					ng-model="signupModalCtrl.credentials.username"
+					ng-model="signupModalCtrl.credentials.email"
 					ng-model-options="{ debounce: 250 }"
 					ng-maxlength="254"
 					ui-validate-async="{ 'emailTaken': 'signupModalCtrl.isEmailFree($value)' }") />

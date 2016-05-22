@@ -11,9 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.bme.onlab.post.bean.ListPostsResponse;
+import hu.bme.onlab.post.bean.Post;
 import hu.bme.onlab.post.bean.SendPostRequest;
-import hu.bme.onlab.post.domain.Post;
 import hu.bme.onlab.post.repository.PostRepository;
 import hu.bme.onlab.user.domain.User;
 import hu.bme.onlab.user.repository.UserRepository;
@@ -39,9 +38,9 @@ public class PostServiceImpl implements PostService {
 	public void sendPost(SendPostRequest request) {
 
 		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User author = userRepository.findByUsernameIgnoreCase(principal.getUsername()).get(0);
+		User author = userRepository.findByEmailIgnoreCase(principal.getUsername()).get(0);
 		
-		Post post = new Post();
+		hu.bme.onlab.post.domain.Post post = new hu.bme.onlab.post.domain.Post();
 		post.setEntry(request.getEntry());
 		post.setAuthor(author);
 		post.setCreationDateTime(Calendar.getInstance());
@@ -53,19 +52,18 @@ public class PostServiceImpl implements PostService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ListPostsResponse listPosts() {
-		ListPostsResponse response = new ListPostsResponse();
-		response.setPosts(new ArrayList<>());
+	public List<Post> listPosts() {
+		List<Post> response = new ArrayList<Post>();
 		
-		List<Post> postDomains = postRepository.findAll(new PageRequest(0, 10)).getContent();
+		List<hu.bme.onlab.post.domain.Post> postDomains = postRepository.findAll(new PageRequest(0, 10)).getContent();
 		postDomains
 			.stream()
 			.forEach(domainObject -> {
-				hu.bme.onlab.post.bean.Post postBean = new hu.bme.onlab.post.bean.Post();
-				postBean.setUsername(domainObject.getAuthor().getUsername());
+				Post postBean = new Post();
+				postBean.setEmail(domainObject.getAuthor().getEmail());
 				postBean.setEntry(domainObject.getEntry());
 				postBean.setCreationDateTime(domainObject.getCreationDateTime());
-				response.getPosts().add(postBean);	
+				response.add(postBean);	
 			});
 		
 		return response;

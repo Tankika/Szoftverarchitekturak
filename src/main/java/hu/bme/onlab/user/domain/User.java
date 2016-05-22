@@ -18,14 +18,14 @@ import javax.persistence.UniqueConstraint;
 import hu.bme.onlab.post.domain.Post;
 
 @Table(uniqueConstraints = {
-		@UniqueConstraint(columnNames={"username"})
+		@UniqueConstraint(columnNames={"email"})
 	})
 @Entity(name = "users")
 @SequenceGenerator(name="user_sequence", sequenceName="user_sequence")
 public class User {
 
 	private Long id;
-	private String username;
+	private String email;
 	private String password;
 	private boolean enabled;
 	
@@ -42,12 +42,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Column(length=254)

@@ -16,7 +16,7 @@ angular.module('ServiceFinder.User')
 				headers = {};
 			
 			if(angular.isObject(credentials)) {
-				headers.authorization = "Basic " + btoa(credentials.username + ":" + credentials.password);
+				headers.authorization = "Basic " + btoa(credentials.email + ":" + credentials.password);
 			}
 			
 			$http.get("/user", { headers: headers })
@@ -70,7 +70,7 @@ angular.module('ServiceFinder.User')
 		function signup(credentials) {
 			var deferred = $q.defer(),
 				request = {
-					username: credentials.username,
+					email: credentials.email,
 					password: credentials.password
 				};
 			

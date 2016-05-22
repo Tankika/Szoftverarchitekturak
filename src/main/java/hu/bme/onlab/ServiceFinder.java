@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -44,7 +45,10 @@ public class ServiceFinder {
 	protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		@Autowired
-		DataSource dataSource;
+		private DataSource dataSource;
+
+		@Autowired
+		private PasswordEncoder passwordEncoder;
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
@@ -80,20 +84,30 @@ public class ServiceFinder {
 			auth
 				.jdbcAuthentication()
 				.dataSource(this.dataSource)
-				.authoritiesByUsernameQuery(getAuthoritiesByUsernameQuery());
+				.passwordEncoder(passwordEncoder)
+				.authoritiesByUsernameQuery(getAuthoritiesByUsernameQuery())
+				.usersByUsernameQuery(getUsersByUsernameQuery());
 		}
 		
-		private String getAuthoritiesByUsernameQuery() {
+		private static String getAuthoritiesByUsernameQuery() {
 			return "select " 
-				+		"users.username, auth.authority "
+				+		"users.email, auth.authority "
 				+	"from "
 				+		"authorities auth, users, user_auth " 
 				+ 	"where "
 				+		"auth.ID = user_auth.AUTH_ID "
 				+		"and user_auth.USER_ID = users.ID "
-				+		"and username = ?";
+				+		"and users.email = ?";
 		}
 		
+		private static String getUsersByUsernameQuery() {
+			return "select "
+				+		"users.email, users.password, users.enabled "
+				+	"from "
+				+		"users "
+				+	"where "
+				+		"users.email = ?";
+		}		
 		
 		public class CsrfHeaderFilter extends OncePerRequestFilter {
 			@Override

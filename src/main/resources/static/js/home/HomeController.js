@@ -12,7 +12,7 @@ angular.module('ServiceFinder.Home')
 		
 		function getPosts() {
 			HomeService.getPosts().then(function(data) {
-				self.posts = data.posts;
+				self.posts = data;
 			});
 		}
 		

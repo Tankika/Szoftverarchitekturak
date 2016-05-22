@@ -3,6 +3,7 @@ package hu.bme.onlab.user.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hu.bme.onlab.user.bean.CheckEmailRequest;
@@ -22,10 +23,13 @@ public class UserServiceImpl implements UserService {
 	
 	private AuthorityRepository authorityRepository;
 	
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository) {
+	public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.authorityRepository = authorityRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	/**
@@ -34,8 +38,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void signup(SignupRequest signupRequest) {
 		User user = new User();
-		user.setUsername(signupRequest.getUsername());
-		user.setPassword(signupRequest.getPassword());
+		user.setEmail(signupRequest.getEmail());
+		user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 		user.setEnabled(true);
 		Authority userAuthority = authorityRepository.findByAuthorityIgnoreCase(ROLE_USER).get(0);
 		user.addAuthority(userAuthority);
@@ -50,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	public CheckEmailResponse checkEmail(CheckEmailRequest checkEmailRequest) {
 		CheckEmailResponse response = new CheckEmailResponse();
 		
-		List<User> userList = userRepository.findByUsernameIgnoreCase(checkEmailRequest.getEmail());
+		List<User> userList = userRepository.findByEmailIgnoreCase(checkEmailRequest.getEmail());
 		response.setEmailFree(userList.isEmpty());
 		
 		return response; 
