@@ -1,7 +1,231 @@
-<form novalidate ng-submit="newPostCtrl.send()">
-	<div class="form-group">
-		<label for="new-post-input"></label>
-		<textarea id="new-post-input" class="form-control" rows="10" placeholder="Type your message here!" ng-model="newPostCtrl.postInput"></textarea>
-	</div>
-	<button type="submit" class="btn btn-default">Submit</button>
-</form>
+ <div id="new-post-page">
+	 <div class="row">
+	     <div class="col-lg-12">
+	         <h1 class="page-header">Új hírdetés feladása</h1>
+	     </div>
+	 </div>
+	
+	<form name="new_post_form" novalidate ng-submit="new_post_form.$valid && newPostCtrl.send()">
+		<div>
+			<uib-accordion>
+			
+				<uib-accordion-group heading="Képek hozzáadása" panel-class="{{ new_post_form.$submitted && new_post_form.picture_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+					<form name="picture_form" novalidate>
+						TODO
+					</form>
+				</uib-accordion-group>
+				
+				<uib-accordion-group heading="Szolgáltatás leírása" panel-class="{{ new_post_form.$submitted && new_post_form.description_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+					<form name="description_form" novalidate>
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || description_form.title.$dirty) && description_form.title.$invalid }">
+							<div class="col-xs-12 col-sm-6 col-md-6">							
+								<input required
+									id="title"
+									name="title"
+									type="text"
+									class="form-control"
+									placeholder="Írd ide a hírdetés címét!"
+									ng-model="newPostCtrl.postData.title"
+									ng-minlength="12"
+									ng-maxlength="100">
+								</input>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
+								<div class="error-block">
+									<div ng-show="description_form.title.$error.required">A cím megadása kötelező!</div>
+									<div ng-show="description_form.title.$error.minlength">A címnek legalább 12 karakter hosszúnak kell lennie!</div>
+									<div ng-show="description_form.title.$error.maxlength">A címn legfeljebb 100 karakter hosszú lehet!</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek add meg a hírdetésed címét!
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || description_form.description.$dirty) && description_form.description.$invalid }">
+							<div class="col-xs-12 col-sm-6 col-md-6">							
+								<textarea required
+									id="description"
+									name="description"
+									class="form-control"
+									rows="10"
+									placeholder="Írd ide a szolgáltatás leírását!"
+									ng-model="newPostCtrl.postData.description"
+									ng-minlength="20"
+									ng-maxlength="4000">
+								</textarea>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6">
+								<div class="error-block">
+									<div ng-show="description_form.description.$error.required">A bővebb leírás megadása kötelező!</div>
+									<div ng-show="description_form.description.$error.minlength">A bővebb leírásnak legalább 20 karakter hosszúnak kell lennie!</div>
+									<div ng-show="description_form.description.$error.maxlength">A bővebb leírás legfeljebb 4000 karakter hosszú lehet!</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek adj egy részletesebb leírást a szolgáltatásodról!
+								</div>
+							</div>
+						</div>
+					</form>
+				</uib-accordion-group>
+				
+				<uib-accordion-group heading="Szolgáltatás adatai" panel-class="{{ new_post_form.$submitted && new_post_form.details_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+					<form name="details_form" novalidate>
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.zip_code.$dirty) && details_form.zip_code.$invalid }">
+							<div class="col-xs-4 col-sm-3 col-md-2">
+								<input required
+									id="zip-code"
+									name="zip_code"
+									type="text"
+									class="form-control"
+									placeholder="1234"
+									ng-model="newPostCtrl.postData.zipCode"
+									ng-pattern="'\\d{4}'">
+								</input>
+							</div>
+							<div class="col-xs-8 col-sm-9 col-md-10 center-one-line">
+								<div class="error-block">
+									<div ng-show="details_form.zip_code.$error.required">Az irányítószám megadása kötelező!</div>
+									<div ng-show="details_form.zip_code.$error.pattern">Az irányítószám formátuma nem megfelelő!</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek add meg a település irányítószámát, aminek a környékén elérhető a szolgáltatás!
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.price_min.$dirty || details_form.price_max.$dirty) && (details_form.price_min.$invalid || details_form.price_max.$invalid) }">
+							<div class="col-xs-4 col-sm-3 col-md-2">						
+								<div class="input-group">
+									<input
+										id="price-min"
+										name="price_min"
+										type="number"
+										class="form-control"
+										placeholder="Min"
+										ng-model="newPostCtrl.postData.priceMin"
+										min="0"
+										max="1000000000"
+										size="9"
+										ui-validate="{ 'minLessThanMax': '$value == null || newPostCtrl.postData.priceMax == null || $value <= newPostCtrl.postData.priceMax' }"
+										ui-validate-watch=" 'newPostCtrl.postData.priceMax' ">
+									<span class="input-group-addon">Ft</span>
+								</div>
+							</div>
+							<div class="col-xs-4 col-sm-3 col-md-2">						
+								<div class="input-group">
+									<input
+										id="price-max"
+										name="price_max"
+										type="number"
+										class="form-control"
+										placeholder="Max"
+										ng-model="newPostCtrl.postData.priceMax"
+										min="0"
+										max="1000000000"
+										size="9">
+									<span class="input-group-addon">Ft</span>
+								</div>
+							</div>
+							<div class="col-xs-4 col-sm-6 col-md-8 center-one-line">
+								<div class="error-block">
+									<div ng-show="details_form.price_min.$error.min">A minimum árnak legalább nullának kell lennie!</div>
+									<div ng-show="details_form.price_min.$error.max">A minimum ár legfeljebb egy milliárd forint lehet!</div>
+									<div ng-show="details_form.price_min.$error.number">A minimum ár csak szám lehet!</div>
+									<div ng-show="details_form.price_min.$error.minLessThanMax">A minimum árnak kisebbnek kell lennie a maximum árnál!</div>
+									<div ng-show="details_form.price_max.$error.min">A maximum árnak legalább nullának kell lennie!</div>
+									<div ng-show="details_form.price_max.$error.max">A maximum ár legfeljebb egy milliárd forint lehet!</div>
+									<div ng-show="details_form.price_max.$error.number">A maximum ár csak szám lehet!</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Ha szeretnéd, megadhatsz egy ártartományt a szolgáltatásról!
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.category.$dirty) && details_form.category.$invalid }">
+							<div class="col-lg-12">
+				                <h3>Válassz kategóriát! <small class="error-block" ng-show="details_form.category.$error.required">A kategória megadása kötelező!</small></h3>
+				            </div>
+							<div class="row">
+								<div class="col-md-2 col-sm-3" ng-repeat="i in [1, 2, 3, 4, 5, 6]">						
+									<div class="panel panel-default text-center">
+					                    <div class="panel-heading">
+					                        <span class="fa-stack fa-4x">
+					                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+					                              <i class="fa fa-tree fa-stack-1x fa-inverse"></i>
+					                        </span>
+					                    </div>
+					                    <div class="panel-body">
+					                        <h4>{{i}}</h4>
+					                    </div>
+					                </div>
+								</div>
+							</div>
+<!-- 							<input required -->
+<!-- 								id="category" -->
+<!-- 								name="category" -->
+<!-- 								type="text" -->
+<!-- 								ng-model="newPostCtrl.postData.category" -->
+<!-- 								hidden /> -->
+						</div>
+					</form>
+				</uib-accordion-group>
+				
+				<uib-accordion-group heading="Hírdető adatai" panel-class="{{ new_post_form.$submitted && new_post_form.advertiser_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+					<form name="advertiser_form" novalidate>
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || advertiser_form.name.$dirty) && advertiser_form.name.$invalid }">
+							<div class="col-xs-12 col-sm-6 col-md-6">
+								<input required
+									id="name"
+									name="name"
+									type="text"
+									class="form-control"
+									placeholder="Mekk Elek"
+									ng-model="newPostCtrl.postData.name"
+									ng-pattern="'[a-zA-Z]+( [a-zA-Z]+){1,}'">
+								</input>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
+								<div class="error-block">
+									<div ng-show="advertiser_form.name.$error.required">A név megadása kötelező!</div>
+									<div ng-show="advertiser_form.name.$error.pattern">A név formátuma nem megfelelő</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek add meg a neved!
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || advertiser_form.phone.$dirty) && advertiser_form.phone.$invalid }">
+							<div class="col-xs-12 col-sm-6 col-md-6">
+								<input required
+									id="phone"
+									name="phone"
+									type="text"
+									class="form-control"
+									placeholder="+36 12 345 6789"
+									ng-model="newPostCtrl.postData.phone"
+									ng-pattern="'\\+36 (1|\\d{2}) \\d{3} \\d{3,4}'">
+								</input>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
+								<div class="error-block">
+									<div ng-show="advertiser_form.phone.$error.required">A telefonszám megadása kötelező!</div>
+									<div ng-show="advertiser_form.phone.$error.pattern">A telefonszám formátuma nem megfelelő, példa jó formára: +36 12 345 6789</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek addj meg egy telefonszámot, amin elérhető leszel!
+								</div>
+							</div>
+						</div>
+					</form>
+				</uib-accordion-group>
+				
+			</uib-accordion>
+			<div class="text-right">
+				<button type="submit" class="btn btn-primary">Hírdetés feladása</button>
+			</div>
+		</div>
+	</form>
+</div>

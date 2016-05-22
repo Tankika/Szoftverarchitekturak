@@ -22,7 +22,7 @@
 				Hibás e-mail címet vagy jelszót adtál meg. Kérlek ellenőrizd őket.
 			</div>
 				
-			<div class="form-group" ng-class="{ 'has-error': (login_form.$submitted || login_form.email.$touched) && login_form.email.$invalid }">
+			<div class="form-group" ng-class="{ 'has-error': login_form.$submitted && login_form.email.$invalid }">
 				<label for="email">E-mail cím:</label>
 				<input required
 					id="email"
@@ -35,7 +35,7 @@
 					<span ng-show="login_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</span>
 				</div>
 			</div>
-			<div class="form-group" ng-class="{ 'has-error': (login_form.$submitted || login_form.password.$touched) && login_form.password.$invalid }">
+			<div class="form-group" ng-class="{ 'has-error': login_form.$submitted && login_form.password.$invalid }">
 				<label for="password">Jelszó:</label>
 				<input required
 					id="password"
@@ -55,7 +55,7 @@
 					<button type="button" class="btn btn-default btn-block" ng-click="$dismiss()">Mégsem</button>
 				</div>
 				<div class="col-xs-6">
-					<button type="submit" class="btn btn-primary btn-block" ng-disabled="login_form.$invalid">Belépés</button>
+					<button type="submit" class="btn btn-primary btn-block">Belépés</button>
 				</div>
 			</div>
 			<div class="row">

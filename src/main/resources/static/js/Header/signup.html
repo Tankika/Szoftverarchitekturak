@@ -19,7 +19,7 @@
 			    Ismeretlen hiba történt regisztráció közben. Kérlek próbáld meg később.
 			</div>
 			
-			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$touched) && signup_form.email.$invalid }">
+			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$error.emailTaken) && signup_form.email.$invalid }">
 				<label for="email">E-mail cím:</label>
 				<input required
 					id="email"
@@ -37,7 +37,7 @@
 					<div ng-show="signup_form.email.$error.emailTaken">A megadott e-mail cím már szerepel a rendszerben!</div>
 				</div>
 			</div>
-			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password.$touched) && signup_form.password.$invalid }">
+			<div class="form-group" ng-class="{ 'has-error': signup_form.$submitted && signup_form.password.$invalid }">
 				<label for="password">Jelszó:</label>
 				<input required
 					id="password"
@@ -53,7 +53,7 @@
 					<div ng-show="signup_form.password.$error.maxlength">A jelszó legfeljebb 100 karakter hosszú lehet!</div>
 				</div>
 			</div>
-			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.password_confirm.$touched) && signup_form.password_confirm.$invalid }">
+			<div class="form-group" ng-class="{ 'has-error': signup_form.$submitted && signup_form.password_confirm.$invalid }">
 				<label for="password-confirm">Jelszó megerősítése:</label>
 				<input required
 					id="password-confirm"
@@ -76,7 +76,7 @@
 					<button type="button" class="btn btn-default btn-block" ng-click="$dismiss()">Mégsem</button>
 				</div>
 				<div class="col-xs-6">
-					<button type="submit" class="btn btn-primary btn-block" ng-disabled="signup_form.email.$pending || signup_form.$invalid">Regisztráció</button>
+					<button type="submit" class="btn btn-primary btn-block" ng-disabled="signup_form.email.$pending">Regisztráció</button>
 				</div>
 			</div>
 		</div>

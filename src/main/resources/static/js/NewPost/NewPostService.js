@@ -6,7 +6,13 @@ angular.module('ServiceFinder.NewPost')
 		function send(post) {
 			var deferred = $q.defer(),
 				request = {
-					entry : post
+					title : post.title,
+					description : post.description,
+					zipCode: post.zipCode,
+					priceMin: post.priceMin,
+					priceMax: post.priceMax,
+					name: post.name,
+					phone: post.phone
 				};
 			
 			$http.post("/sendPost", request).then(function(response) {

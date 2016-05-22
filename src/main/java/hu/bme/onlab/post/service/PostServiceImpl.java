@@ -38,12 +38,18 @@ public class PostServiceImpl implements PostService {
 	public void sendPost(SendPostRequest request) {
 
 		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User author = userRepository.findByEmailIgnoreCase(principal.getUsername()).get(0);
+		User user = userRepository.findByEmailIgnoreCase(principal.getUsername()).get(0);
 		
 		hu.bme.onlab.post.domain.Post post = new hu.bme.onlab.post.domain.Post();
-		post.setEntry(request.getEntry());
-		post.setAuthor(author);
+		post.setTitle(request.getTitle());
+		post.setDescription(request.getDescription());
+		post.setZipCode(request.getZipCode());
+		post.setPriceMin(request.getPriceMin());
+		post.setPriceMax(request.getPriceMax());
+		post.setName(request.getName());
+		post.setPhone(request.getPhone());
 		post.setCreationDateTime(Calendar.getInstance());
+		post.setAdvertiser(user);
 		
 		postRepository.save(post);
 	}
@@ -60,8 +66,8 @@ public class PostServiceImpl implements PostService {
 			.stream()
 			.forEach(domainObject -> {
 				Post postBean = new Post();
-				postBean.setEmail(domainObject.getAuthor().getEmail());
-				postBean.setEntry(domainObject.getEntry());
+				postBean.setEmail(domainObject.getAdvertiser().getEmail());
+//				postBean.setadvert(domainObject.getEntry());
 				postBean.setCreationDateTime(domainObject.getCreationDateTime());
 				response.add(postBean);	
 			});

@@ -14,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import hu.bme.onlab.post.domain.Post;
 
@@ -42,6 +45,9 @@ public class User {
 		this.id = id;
 	}
 
+	@NotNull
+	@Pattern(regexp="^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$")
+	@Size(max=254)
 	public String getEmail() {
 		return email;
 	}
@@ -51,6 +57,8 @@ public class User {
 	}
 
 	@Column(length=254)
+	@NotNull
+	@Size(min=8, max=100)
 	public String getPassword() {
 		return password;
 	}
@@ -86,7 +94,7 @@ public class User {
 		}
 	}
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "author")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "advertiser")
 	public Set<Post> getPosts() {
 		if(posts == null) {
 			posts = new HashSet<Post>();
@@ -100,8 +108,8 @@ public class User {
 	
 	public void addPost(Post post) {
 		this.getPosts().add(post);
-		if(post.getAuthor() != this) {
-			post.setAuthor(this);
+		if(post.getAdvertiser() != this) {
+			post.setAdvertiser(this);
 		}
 	}
 }

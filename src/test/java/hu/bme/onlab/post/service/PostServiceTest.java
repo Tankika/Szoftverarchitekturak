@@ -60,7 +60,7 @@ public class PostServiceTest {
 	public void testSendPost() throws Exception {
 		String entry = "test entry";
 		SendPostRequest sendPostRequest = new SendPostRequest();
-		sendPostRequest.setEntry(entry);
+//		sendPostRequest.setEntry(entry);
 		
 		postService.sendPost(sendPostRequest);
 		
