@@ -1,61 +1,69 @@
 package hu.bme.onlab.user.domain;
 
-import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import hu.bme.onlab.user.domain.Authority.AuthorityId;
-
-
-@IdClass(AuthorityId.class)
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames={"authority"})
+	})
 @Entity(name = "authorities")
+@SequenceGenerator(name="authority_sequence", sequenceName="authority_sequence")
 public class Authority {
 	
-	private User user;
+	private Long id;
 	private String authority;
 	
-	@Id
-	@ManyToOne
-	@NotNull
-	@JoinColumn(name="username")
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-		user.getAuthorities().add(this);
-	}
+	private Set<User> users;
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="authority_sequence")
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	@NotNull
 	public String getAuthority() {
 		return authority;
 	}
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
-
-	public static class AuthorityId implements Serializable {
-		private transient static final long serialVersionUID = -8043425316738528456L;
-		
-		private String user;
-		private String authority;
-		
-		public String getUser() {
-			return user;
+	
+	@ManyToMany
+	@JoinTable(
+			name="USER_AUTH",
+			joinColumns=@JoinColumn(name="AUTH_ID", referencedColumnName="ID"),
+			inverseJoinColumns=@JoinColumn(name="USER_ID", referencedColumnName="ID"))
+	public Set<User> getUsers() {
+		if(users == null) {
+			users = new HashSet<User>();
 		}
-		public void setUser(String user) {
-			this.user = user;
-		}
-		public String getAuthority() {
-			return authority;
-		}
-		public void setAuthority(String authority) {
-			this.authority = authority;
+		return users;
+	}
+	
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+	
+	public void addUser(User user) {
+		this.getUsers().add(user);
+		if(!user.getAuthorities().contains(this)) {
+			user.addAuthority(this);
 		}
 	}
 }

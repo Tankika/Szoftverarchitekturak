@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 	public void sendPost(SendPostRequest request) {
 
 		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User author = userRepository.findOne(principal.getUsername());
+		User author = userRepository.findByUsernameIgnoreCase(principal.getUsername()).get(0);
 		
 		Post post = new Post();
 		post.setEntry(request.getEntry());

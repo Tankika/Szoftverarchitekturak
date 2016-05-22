@@ -10,6 +10,7 @@ import hu.bme.onlab.user.bean.CheckEmailResponse;
 import hu.bme.onlab.user.bean.SignupRequest;
 import hu.bme.onlab.user.domain.Authority;
 import hu.bme.onlab.user.domain.User;
+import hu.bme.onlab.user.repository.AuthorityRepository;
 import hu.bme.onlab.user.repository.UserRepository;
 
 @Service
@@ -19,9 +20,12 @@ public class UserServiceImpl implements UserService {
 	
 	private UserRepository userRepository;
 	
+	private AuthorityRepository authorityRepository;
+	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository) {
 		this.userRepository = userRepository;
+		this.authorityRepository = authorityRepository;
 	}
 	
 	/**
@@ -33,9 +37,8 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(signupRequest.getUsername());
 		user.setPassword(signupRequest.getPassword());
 		user.setEnabled(true);
-		Authority authority = new Authority();
-		authority.setAuthority(ROLE_USER);
-		authority.setUser(user);
+		Authority userAuthority = authorityRepository.findByAuthorityIgnoreCase(ROLE_USER).get(0);
+		user.addAuthority(userAuthority);
 		
 		userRepository.save(user);
 	}

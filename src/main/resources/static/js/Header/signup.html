@@ -30,7 +30,6 @@
 					ng-model-options="{ debounce: 250 }"
 					ng-maxlength="254"
 					ui-validate-async="{ 'emailTaken': 'signupModalCtrl.isEmailFree($value)' }") />
-				<span ng-show="signup_form.email.$pending" class="loader">Loading...</span>
 				<div class="error-block">
 					<div ng-show="signup_form.email.$error.required">Kérlek add meg az e-mail címed!</div>
 					<div ng-show="signup_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</div>

@@ -24,10 +24,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -62,16 +62,11 @@ public class ServiceFinder {
 				.logout()
 					.logoutSuccessUrl("/")
 			.and()
-				.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+				.addFilterAfter(new CsrfHeaderFilter(), SessionManagementFilter.class)
 				.csrf()
 				.csrfTokenRepository(csrfTokenRepository())
 			.and()
 				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
-		}
-		
-		@Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.jdbcAuthentication().dataSource(this.dataSource);
 		}
 		
 		private CsrfTokenRepository csrfTokenRepository() {
@@ -79,6 +74,26 @@ public class ServiceFinder {
 			repository.setHeaderName("X-XSRF-TOKEN");
 			return repository;
 		}
+		
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth
+				.jdbcAuthentication()
+				.dataSource(this.dataSource)
+				.authoritiesByUsernameQuery(getAuthoritiesByUsernameQuery());
+		}
+		
+		private String getAuthoritiesByUsernameQuery() {
+			return "select " 
+				+		"users.username, auth.authority "
+				+	"from "
+				+		"authorities auth, users, user_auth " 
+				+ 	"where "
+				+		"auth.ID = user_auth.AUTH_ID "
+				+		"and user_auth.USER_ID = users.ID "
+				+		"and username = ?";
+		}
+		
 		
 		public class CsrfHeaderFilter extends OncePerRequestFilter {
 			@Override
@@ -90,7 +105,7 @@ public class ServiceFinder {
 				if (csrf != null) {
 					Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
 					String token = csrf.getToken();
-					if (cookie==null || token!=null && !token.equals(cookie.getValue())) {
+					if (cookie == null || token != null && !token.equals(cookie.getValue())) {
 						cookie = new Cookie("XSRF-TOKEN", token);
 						cookie.setPath("/");
 						response.addCookie(cookie);

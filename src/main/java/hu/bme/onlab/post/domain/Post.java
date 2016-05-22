@@ -5,13 +5,16 @@ import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
 import hu.bme.onlab.user.domain.User;
 
 @Entity(name = "post")
+@SequenceGenerator(name="post_sequence", sequenceName="post_sequence")
 public class Post {
 
 	private Long id;
@@ -21,7 +24,7 @@ public class Post {
 	private User author;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
 	public Long getId() {
 		return id;
 	}
@@ -55,6 +58,8 @@ public class Post {
 
 	public void setAuthor(User author) {
 		this.author = author;
-		author.getPosts().add(this);
+		if(!author.getPosts().contains(this)) {
+			author.getPosts().add(this);
+		}
 	}
 }
