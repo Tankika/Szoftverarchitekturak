@@ -173,24 +173,38 @@
 			</dependency>
 	      </dependencies>
 	    </plugin>
-      <plugin>
-        <groupId>org.joda</groupId>
-        <artifactId>joda-beans-maven-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <id>joda-beans-generate</id>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-            	<indent>tab</indent>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+	      <plugin>
+	        <groupId>org.joda</groupId>
+	        <artifactId>joda-beans-maven-plugin</artifactId>
+	        <version>1.0</version>
+	        <executions>
+	          <execution>
+	            <id>joda-beans-generate</id>
+	            <goals>
+	              <goal>generate</goal>
+	            </goals>
+	            <configuration>
+	            	<indent>tab</indent>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
 	  </plugins>
 	</build>
+	 <reporting>
+	   <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-pmd-plugin</artifactId>
+	        <version>3.6</version>
+	      </plugin>
+	     <plugin>
+	       <groupId>org.codehaus.mojo</groupId>
+	       <artifactId>findbugs-maven-plugin</artifactId>
+	       <version>3.0.3</version>
+	     </plugin>
+	   </plugins>
+	 </reporting>
 	
 
 </project>

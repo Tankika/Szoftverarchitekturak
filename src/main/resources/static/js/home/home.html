@@ -22,9 +22,7 @@
  <!-- Page Heading -->
  <div class="row">
      <div class="col-lg-12">
-         <h1 class="page-header">Page Heading
-             <small>Secondary Text</small>
-         </h1>
+         <h1 class="page-header">Szolgáltatások</h1>
      </div>
  </div>
  <!-- /.row -->
@@ -32,23 +30,30 @@
 <div class="row">
 
 	<div class="col-md-3">
-		FILTER PANEL
+		<div class="well">
+			FILTER PANEL
+		</div>
 	</div>
 	
-	<div class="col-md-9">
+	<div class="col-md-9 well">
 	
 <!-- 		<div ng-repeat="post in homeCtrl.posts"> -->
 		<div ng-repeat="post in homeCtrl.posts">
 	        <div class="row">
-	            <div class="col-md-4">
+	            <div class="col-md-3">
 	                <a href="#">
 	                    <img class="img-responsive" src="http://placehold.it/200x200" alt="">
 	                </a>
 	            </div>
-	            <div class="col-md-8">
-	                <h3>Project One</h3>
-	                <h4>{{ post.email }}</h4>
+	            <div class="col-md-9">
+	                <h3>{{ post.title }}</h3>
+	                <h4>
+	                	<span ng-show="post.priceMin && post.priceMax">{{ post.priceMin + ' Ft-tól' }} {{ post.priceMax + ' Ft-ig' }}</span>
+	                	<span ng-show="post.priceMin && !post.princeMax">{{ post.priceMin + ' Ft-tól' }}</span>
+	                	<span ng-show="!post.priceMin && post.priceMax">{{ post.priceMax + ' Ft-ig' }}</span>
+	                </h4>
 	                <h5>{{ post.creationDateTime | date:'yyyy.MM.dd - HH:mm:ss' }}</h5>
+                	<uib-rating class="rating" ng-model="post.rating"></uib-rating>
 	            </div>
 	        </div>
 	

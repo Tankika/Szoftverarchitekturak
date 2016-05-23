@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.bme.onlab.post.bean.Post;
+import hu.bme.onlab.post.bean.PostListData;
 import hu.bme.onlab.post.bean.SendPostRequest;
 import hu.bme.onlab.post.repository.PostRepository;
 import hu.bme.onlab.user.domain.User;
@@ -58,16 +59,17 @@ public class PostServiceImpl implements PostService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Post> listPosts() {
-		List<Post> response = new ArrayList<Post>();
+	public List<PostListData> listPosts() {
+		List<PostListData> response = new ArrayList<PostListData>();
 		
-		List<hu.bme.onlab.post.domain.Post> postDomains = postRepository.findAll(new PageRequest(0, 10)).getContent();
+		List<hu.bme.onlab.post.domain.Post> postDomains = postRepository.findAll(new PageRequest(0, 10, Direction.DESC, "creationDateTime")).getContent();
 		postDomains
 			.stream()
 			.forEach(domainObject -> {
-				Post postBean = new Post();
-				postBean.setEmail(domainObject.getAdvertiser().getEmail());
-//				postBean.setadvert(domainObject.getEntry());
+				PostListData postBean = new PostListData();
+				postBean.setTitle(domainObject.getTitle());
+				postBean.setPriceMin(domainObject.getPriceMin());
+				postBean.setPriceMax(domainObject.getPriceMax());
 				postBean.setCreationDateTime(domainObject.getCreationDateTime());
 				response.add(postBean);	
 			});

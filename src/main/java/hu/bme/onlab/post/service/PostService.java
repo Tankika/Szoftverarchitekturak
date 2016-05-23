@@ -2,7 +2,7 @@ package hu.bme.onlab.post.service;
 
 import java.util.List;
 
-import hu.bme.onlab.post.bean.Post;
+import hu.bme.onlab.post.bean.PostListData;
 import hu.bme.onlab.post.bean.SendPostRequest;
 
 public interface PostService {
@@ -17,5 +17,5 @@ public interface PostService {
 	 * 	
 	 * @return
 	 */
-	List<Post> listPosts();
+	List<PostListData> listPosts();
 }

@@ -109,7 +109,7 @@ public class ServiceFinder {
 				+		"users.email = ?";
 		}		
 		
-		public class CsrfHeaderFilter extends OncePerRequestFilter {
+		public static class CsrfHeaderFilter extends OncePerRequestFilter {
 			@Override
 			protected void doFilterInternal(HttpServletRequest request,
 					HttpServletResponse response, FilterChain filterChain)
@@ -129,7 +129,7 @@ public class ServiceFinder {
 			}
 		}
 		
-		private class CustomAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
+		private static class CustomAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 			
 			public CustomAuthenticationEntryPoint() {
 				this.setRealmName("ServiceFinder");

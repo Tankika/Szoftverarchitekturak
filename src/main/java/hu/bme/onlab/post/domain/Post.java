@@ -26,8 +26,8 @@ public class Post {
 	private String title;
 	private String description;
 	private String zipCode;
-	private int priceMin;
-	private int priceMax;
+	private Integer priceMin;
+	private Integer priceMax;
 	private String name;
 	private String phone;
 	private Calendar creationDateTime;
@@ -77,21 +77,21 @@ public class Post {
 
 	@Min(0)
 	@Max(1000000000)
-	public int getPriceMin() {
+	public Integer getPriceMin() {
 		return priceMin;
 	}
 
-	public void setPriceMin(int priceMin) {
+	public void setPriceMin(Integer priceMin) {
 		this.priceMin = priceMin;
 	}
 
 	@Min(0)
 	@Max(1000000000)
-	public int getPriceMax() {
+	public Integer getPriceMax() {
 		return priceMax;
 	}
 
-	public void setPriceMax(int priceMax) {
+	public void setPriceMax(Integer priceMax) {
 		this.priceMax = priceMax;
 	}
 

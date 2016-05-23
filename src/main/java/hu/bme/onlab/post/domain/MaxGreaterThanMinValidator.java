@@ -11,7 +11,7 @@ public class MaxGreaterThanMinValidator implements ConstraintValidator<MaxGreate
 
 	@Override
 	public boolean isValid(Post value, ConstraintValidatorContext context) {
-		if(value.getPriceMin() <= value.getPriceMax()) {
+		if(value.getPriceMin() == null || value.getPriceMax() == null || value.getPriceMin().compareTo(value.getPriceMax()) <= 0) {
 			return true;
 		} else {
 			return false;

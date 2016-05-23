@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.bme.onlab.post.bean.Post;
+import hu.bme.onlab.post.bean.PostListData;
 import hu.bme.onlab.post.bean.SendPostRequest;
 import hu.bme.onlab.post.service.PostService;
 
@@ -28,7 +28,7 @@ public class PostController {
 	}
 	
 	@RequestMapping(path = "/listPosts", method = RequestMethod.GET)
-	public List<Post> listPosts() {
+	public List<PostListData> listPosts() {
 		return postService.listPosts();
 	}
 	
