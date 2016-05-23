@@ -1,6 +1,8 @@
 angular.module('ServiceFinder.Header')
 
 	.controller('HeaderController', ['UserService', '$location', '$route', '$scope', '$uibModal', function(UserService, $location, $route, $scope, $uibModal) {
+		'use strict';
+
 		var self = this,
 			userChangedUnsubscriber;
 		

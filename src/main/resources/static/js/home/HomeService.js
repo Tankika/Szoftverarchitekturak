@@ -1,12 +1,18 @@
 angular.module('ServiceFinder.Home')
 
 	.service('HomeService', ['$http', '$q', function($http, $q) {
+		'use strict';
+		
 		this.getPosts = getPosts;
 		
-		function getPosts() {
-			var deferred = $q.defer();
+		function getPosts(paging) {
+			var deferred = $q.defer(),
+				request = {
+					page: paging.page,
+					pageSize: paging.pageSize
+				};
 			
-			$http.get("/listPosts").then(function(response) {
+			$http.post("/listPosts", request).then(function(response) {
 				deferred.resolve(response.data);
 			}, function(error) {
 				deferred.reject(error);

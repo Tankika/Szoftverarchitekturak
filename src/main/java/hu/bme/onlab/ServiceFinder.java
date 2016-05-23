@@ -34,9 +34,19 @@ import org.springframework.web.util.WebUtils;
 
 @EnableJpaRepositories
 @SpringBootApplication
-public class ServiceFinder {
+public class ServiceFinder {	
+	
+	public static final String API_KEY;
+	
+	static {
+		API_KEY = System.getProperty("google.key");
+		
+		if(API_KEY == null) {
+			throw new IllegalStateException("Google api key is not set in system properties");
+		}
+	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		SpringApplication.run(ServiceFinder.class, args);
 	}
 
@@ -93,7 +103,7 @@ public class ServiceFinder {
 			return "select " 
 				+		"users.email, auth.authority "
 				+	"from "
-				+		"authorities auth, users, user_auth " 
+				+		"authority auth, users, user_auth " 
 				+ 	"where "
 				+		"auth.ID = user_auth.AUTH_ID "
 				+		"and user_auth.USER_ID = users.ID "

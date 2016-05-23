@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+	'use strict';
+		
 	var jshintFiles = ['Gruntfile.js',
 	                   'src/main/resources/static/js/**/*.js',
 	                   'src/test/resources/js/**/*.js',
@@ -12,7 +14,10 @@ module.exports = function(grunt) {
 		    tasks: ['jshint']
 		},
         jshint: {
-            files: jshintFiles
+			files: jshintFiles,
+			options: {
+				strict: true	
+			}
         },
         karma: {
         	options: {

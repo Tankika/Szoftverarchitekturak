@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 
 import hu.bme.onlab.user.domain.User;
 
-@Entity(name = "post")
+@Entity
 @MaxGreaterThanMin
 @SequenceGenerator(name="post_sequence", sequenceName="post_sequence")
 public class Post {
@@ -25,7 +25,6 @@ public class Post {
 	private Long id;
 	private String title;
 	private String description;
-	private String zipCode;
 	private Integer priceMin;
 	private Integer priceMax;
 	private String name;
@@ -33,6 +32,7 @@ public class Post {
 	private Calendar creationDateTime;
 	
 	private User advertiser;
+	private Location location;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
@@ -65,18 +65,8 @@ public class Post {
 		this.description = description;
 	}
 
-	@NotNull
-	@Pattern(regexp="\\d{4}")
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
 	@Min(0)
-	@Max(1000000000)
+	@Max(999999999)
 	public Integer getPriceMin() {
 		return priceMin;
 	}
@@ -86,7 +76,7 @@ public class Post {
 	}
 
 	@Min(0)
-	@Max(1000000000)
+	@Max(999999999)
 	public Integer getPriceMax() {
 		return priceMax;
 	}
@@ -96,7 +86,7 @@ public class Post {
 	}
 
 	@NotNull
-	@Pattern(regexp="[a-zA-Z]+( [a-zA-Z]+){1,}")
+	@Pattern(regexp="^[a-zA-Z]+( [a-zA-Z]+){1,}$")
 	public String getName() {
 		return name;
 	}
@@ -106,7 +96,7 @@ public class Post {
 	}
 
 	@NotNull
-	@Pattern(regexp="\\+36 (1|\\d{2}) \\d{3} \\d{3,4}")
+	@Pattern(regexp="^\\+36 (1|\\d{2}) \\d{3} \\d{3,4}$")
 	public String getPhone() {
 		return phone;
 	}
@@ -133,7 +123,20 @@ public class Post {
 	public void setAdvertiser(User advertiser) {
 		this.advertiser = advertiser;
 		if(!advertiser.getPosts().contains(this)) {
-			advertiser.getPosts().add(this);
+			advertiser.addPost(this);
+		}
+	}
+
+	@ManyToOne
+	@NotNull
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+		if(!location.getPosts().contains(this)) {
+			location.addPost(this);
 		}
 	}
 }

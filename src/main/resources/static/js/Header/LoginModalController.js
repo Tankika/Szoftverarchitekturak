@@ -1,6 +1,8 @@
 angular.module('ServiceFinder.Header')
 
 	.controller('LoginModalController', ['UserService', '$location', '$scope', function(UserService, $location, $scope) {
+		'use strict';
+		
 		var self = this;
 		
 		self.error = false;

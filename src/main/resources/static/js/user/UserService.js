@@ -1,6 +1,8 @@
 angular.module('ServiceFinder.User')
 
 	.service('UserService', ['$http', '$q', function($http, $q) {
+		'use strict';
+		
 		var user,
 			userChangedEventListeners = [];
 		

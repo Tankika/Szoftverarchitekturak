@@ -23,7 +23,7 @@ public class SendPostRequest implements Bean {
 	@PropertyDefinition
 	private String description;
 	@PropertyDefinition
-	private String zipCode;
+	private String postalCode;
 	@PropertyDefinition
 	private Integer priceMin;
 	@PropertyDefinition
@@ -114,27 +114,27 @@ public class SendPostRequest implements Bean {
 
 	//-----------------------------------------------------------------------
 	/**
-	 * Gets the zipCode.
+	 * Gets the postalCode.
 	 * @return the value of the property
 	 */
-	public String getZipCode() {
-		return zipCode;
+	public String getPostalCode() {
+		return postalCode;
 	}
 
 	/**
-	 * Sets the zipCode.
-	 * @param zipCode  the new value of the property
+	 * Sets the postalCode.
+	 * @param postalCode  the new value of the property
 	 */
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	/**
-	 * Gets the the {@code zipCode} property.
+	 * Gets the the {@code postalCode} property.
 	 * @return the property, not null
 	 */
-	public final Property<String> zipCode() {
-		return metaBean().zipCode().createProperty(this);
+	public final Property<String> postalCode() {
+		return metaBean().postalCode().createProperty(this);
 	}
 
 	//-----------------------------------------------------------------------
@@ -252,7 +252,7 @@ public class SendPostRequest implements Bean {
 			SendPostRequest other = (SendPostRequest) obj;
 			return JodaBeanUtils.equal(getTitle(), other.getTitle()) &&
 					JodaBeanUtils.equal(getDescription(), other.getDescription()) &&
-					JodaBeanUtils.equal(getZipCode(), other.getZipCode()) &&
+					JodaBeanUtils.equal(getPostalCode(), other.getPostalCode()) &&
 					JodaBeanUtils.equal(getPriceMin(), other.getPriceMin()) &&
 					JodaBeanUtils.equal(getPriceMax(), other.getPriceMax()) &&
 					JodaBeanUtils.equal(getName(), other.getName()) &&
@@ -266,7 +266,7 @@ public class SendPostRequest implements Bean {
 		int hash = getClass().hashCode();
 		hash = hash * 31 + JodaBeanUtils.hashCode(getTitle());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getDescription());
-		hash = hash * 31 + JodaBeanUtils.hashCode(getZipCode());
+		hash = hash * 31 + JodaBeanUtils.hashCode(getPostalCode());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMin());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMax());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getName());
@@ -290,7 +290,7 @@ public class SendPostRequest implements Bean {
 	protected void toString(StringBuilder buf) {
 		buf.append("title").append('=').append(JodaBeanUtils.toString(getTitle())).append(',').append(' ');
 		buf.append("description").append('=').append(JodaBeanUtils.toString(getDescription())).append(',').append(' ');
-		buf.append("zipCode").append('=').append(JodaBeanUtils.toString(getZipCode())).append(',').append(' ');
+		buf.append("postalCode").append('=').append(JodaBeanUtils.toString(getPostalCode())).append(',').append(' ');
 		buf.append("priceMin").append('=').append(JodaBeanUtils.toString(getPriceMin())).append(',').append(' ');
 		buf.append("priceMax").append('=').append(JodaBeanUtils.toString(getPriceMax())).append(',').append(' ');
 		buf.append("name").append('=').append(JodaBeanUtils.toString(getName())).append(',').append(' ');
@@ -318,10 +318,10 @@ public class SendPostRequest implements Bean {
 		private final MetaProperty<String> description = DirectMetaProperty.ofReadWrite(
 				this, "description", SendPostRequest.class, String.class);
 		/**
-		 * The meta-property for the {@code zipCode} property.
+		 * The meta-property for the {@code postalCode} property.
 		 */
-		private final MetaProperty<String> zipCode = DirectMetaProperty.ofReadWrite(
-				this, "zipCode", SendPostRequest.class, String.class);
+		private final MetaProperty<String> postalCode = DirectMetaProperty.ofReadWrite(
+				this, "postalCode", SendPostRequest.class, String.class);
 		/**
 		 * The meta-property for the {@code priceMin} property.
 		 */
@@ -349,7 +349,7 @@ public class SendPostRequest implements Bean {
 				this, null,
 				"title",
 				"description",
-				"zipCode",
+				"postalCode",
 				"priceMin",
 				"priceMax",
 				"name",
@@ -368,8 +368,8 @@ public class SendPostRequest implements Bean {
 					return title;
 				case -1724546052:  // description
 					return description;
-				case -282099538:  // zipCode
-					return zipCode;
+				case 2011152728:  // postalCode
+					return postalCode;
 				case -1176957879:  // priceMin
 					return priceMin;
 				case -1176958117:  // priceMax
@@ -415,11 +415,11 @@ public class SendPostRequest implements Bean {
 		}
 
 		/**
-		 * The meta-property for the {@code zipCode} property.
+		 * The meta-property for the {@code postalCode} property.
 		 * @return the meta-property, not null
 		 */
-		public final MetaProperty<String> zipCode() {
-			return zipCode;
+		public final MetaProperty<String> postalCode() {
+			return postalCode;
 		}
 
 		/**
@@ -462,8 +462,8 @@ public class SendPostRequest implements Bean {
 					return ((SendPostRequest) bean).getTitle();
 				case -1724546052:  // description
 					return ((SendPostRequest) bean).getDescription();
-				case -282099538:  // zipCode
-					return ((SendPostRequest) bean).getZipCode();
+				case 2011152728:  // postalCode
+					return ((SendPostRequest) bean).getPostalCode();
 				case -1176957879:  // priceMin
 					return ((SendPostRequest) bean).getPriceMin();
 				case -1176958117:  // priceMax
@@ -485,8 +485,8 @@ public class SendPostRequest implements Bean {
 				case -1724546052:  // description
 					((SendPostRequest) bean).setDescription((String) newValue);
 					return;
-				case -282099538:  // zipCode
-					((SendPostRequest) bean).setZipCode((String) newValue);
+				case 2011152728:  // postalCode
+					((SendPostRequest) bean).setPostalCode((String) newValue);
 					return;
 				case -1176957879:  // priceMin
 					((SendPostRequest) bean).setPriceMin((Integer) newValue);

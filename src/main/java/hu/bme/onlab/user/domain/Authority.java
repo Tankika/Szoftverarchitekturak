@@ -15,10 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+@Entity
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"authority"})
 	})
-@Entity(name = "authorities")
 @SequenceGenerator(name="authority_sequence", sequenceName="authority_sequence")
 public class Authority {
 	

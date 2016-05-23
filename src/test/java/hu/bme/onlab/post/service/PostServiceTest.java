@@ -1,30 +1,16 @@
 package hu.bme.onlab.post.service;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -42,20 +28,21 @@ public class PostServiceTest {
 	
 	private static final String USER_NAME = "user";
 	
-	@BeforeClass
-	public static void setupContext() {
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(USER_NAME, "pw", new ArrayList<GrantedAuthority>());
-		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-	}
+//	@BeforeClass
+//	public static void setupContext() {
+//		UserDetails userDetails = new org.springframework.security.core.userdetails.User(USER_NAME, "pw", new ArrayList<GrantedAuthority>());
+//		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//	}
+//	
+//	@Before
+//	public void setupDatabase() throws Exception {
+//		IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File("./src/test/resources/hu/bme/onlab/post/service/dataset.xml"));
+//		IDatabaseConnection databaseConnection = new DatabaseDataSourceConnection(dataSource);
+//		DatabaseOperation.CLEAN_INSERT.execute(databaseConnection, dataSet);
+//	}
 	
-	@Before
-	public void setupDatabase() throws Exception {
-		IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File("./src/test/resources/hu/bme/onlab/post/service/dataset.xml"));
-		IDatabaseConnection databaseConnection = new DatabaseDataSourceConnection(dataSource);
-		DatabaseOperation.CLEAN_INSERT.execute(databaseConnection, dataSet);
-	}
-	
+	@Ignore	
 	@Test
 	public void testSendPost() throws Exception {
 		String entry = "test entry";
@@ -80,7 +67,14 @@ public class PostServiceTest {
 	@Ignore
 	@Test
 	public void testListPosts() {		
-		postService.listPosts();
+//		postService.listPosts();
+	}
+	
+	@Test
+	public void test() throws Exception {
+		String result = postService.checkAddress("2081 Hungary");
+			
+		Assert.assertEquals("Piliscsaba", result);
 	}
 	
 }

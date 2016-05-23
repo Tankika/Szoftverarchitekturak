@@ -1,4 +1,6 @@
 describe('HomeController test', function() {
+	'use strict';
+	
 	beforeEach(module('ServiceFinder.Home'));
 
 	var $controller,

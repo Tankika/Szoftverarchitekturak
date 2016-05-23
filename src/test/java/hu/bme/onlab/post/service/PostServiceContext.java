@@ -14,6 +14,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.google.maps.GeoApiContext;
+
 import hu.bme.onlab.post.repository.PostRepository;
 import hu.bme.onlab.user.repository.UserRepository;
 
@@ -21,6 +23,8 @@ import hu.bme.onlab.user.repository.UserRepository;
 @EnableJpaRepositories(basePackages = {"hu.bme.onlab.post.repository", "hu.bme.onlab.user.repository"})
 public class PostServiceContext {
 
+	private static final String GOOGLE_KEY_PROPERTY = "google.key";
+	
 	@Autowired
 	PostRepository postRepository;
 
@@ -29,7 +33,18 @@ public class PostServiceContext {
 	
 	@Bean
 	public PostService getPostService(){
-		return new PostServiceImpl(postRepository, userRepository);
+		return new PostServiceImpl(postRepository, userRepository, null, getGeoApiContext());
+	}
+	
+	@Bean
+	public GeoApiContext getGeoApiContext() {
+		String apiKey = System.getProperty(GOOGLE_KEY_PROPERTY);
+		
+		if(apiKey == null) {
+			throw new IllegalStateException("Google api key is not set in system properties");
+		} else {
+			return new GeoApiContext().setApiKey(apiKey);	
+		}
 	}
 
 	@Bean

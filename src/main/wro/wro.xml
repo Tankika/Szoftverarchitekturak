@@ -4,6 +4,7 @@
 		<css>webjar:bootstrap/3.3.6/less/bootstrap.less</css>
 		<js>webjar:jquery/2.1.1/jquery.js</js>
 		<js>/src/main/resources/static/js/3rdparty/angular-1.4.10.js</js>
+		<js>/src/main/resources/static/js/3rdparty/angular-locale_hu-hu.js</js>
 		<js>webjar:angularjs/1.4.10/angular-route.js</js>
 		<js>webjar:angularjs/1.4.10/angular-animate.js</js>
 		<js>webjar:angular-ui-bootstrap/1.3.2/ui-bootstrap.js</js>

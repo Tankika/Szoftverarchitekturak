@@ -20,10 +20,10 @@ import javax.validation.constraints.Size;
 
 import hu.bme.onlab.post.domain.Post;
 
+@Entity(name="users")
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"email"})
 	})
-@Entity(name = "users")
 @SequenceGenerator(name="user_sequence", sequenceName="user_sequence")
 public class User {
 

@@ -1,6 +1,8 @@
 angular.module('ServiceFinder.Header')
 
 	.controller('SignupModalController', ['UserService', '$scope', '$q', function(UserService, $scope, $q) {
+		'use strict';
+		
 		var self = this;
 
 		self.error = false;

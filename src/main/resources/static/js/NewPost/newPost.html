@@ -5,7 +5,7 @@
 	     </div>
 	 </div>
 	
-	<form name="new_post_form" novalidate ng-submit="new_post_form.$valid && newPostCtrl.send()">
+	<form name="new_post_form" novalidate ng-submit="!new_post_form.details_form.postal_code.$pending && new_post_form.$valid && newPostCtrl.send()">
 		<div>
 			<uib-accordion>
 			
@@ -71,25 +71,31 @@
 				
 				<uib-accordion-group heading="Szolgáltatás adatai" panel-class="{{ new_post_form.$submitted && new_post_form.details_form.$invalid ? 'panel-danger' : 'panel-default' }}">
 					<form name="details_form" novalidate>
-						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.zip_code.$dirty) && details_form.zip_code.$invalid }">
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.postal_code.$dirty) && details_form.postal_code.$invalid }">
 							<div class="col-xs-4 col-sm-3 col-md-2">
 								<input required
-									id="zip-code"
-									name="zip_code"
+									id="postal-code"
+									name="postal_code"
 									type="text"
 									class="form-control"
 									placeholder="1234"
-									ng-model="newPostCtrl.postData.zipCode"
-									ng-pattern="'\\d{4}'">
+									ng-model="newPostCtrl.postData.postalCode"
+									ng-pattern="'\\d{4}'"
+									ui-validate-async="{ notFound: 'newPostCtrl.checkAddress($value)' }">
 								</input>
 							</div>
 							<div class="col-xs-8 col-sm-9 col-md-10 center-one-line">
-								<div class="error-block">
-									<div ng-show="details_form.zip_code.$error.required">Az irányítószám megadása kötelező!</div>
-									<div ng-show="details_form.zip_code.$error.pattern">Az irányítószám formátuma nem megfelelő!</div>
+								<div ng-show="details_form.postal_code.$pending">
+									<i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
+									<span class="sr-only">Loading...</span>
 								</div>
-								<div class="hidden-xs hidden-xsm">
-									Kérlek add meg a település irányítószámát, aminek a környékén elérhető a szolgáltatás!
+								<div class="error-block" ng-hide="details_form.postal_code.$pending">
+									<div ng-show="details_form.postal_code.$error.required">Az irányítószám megadása kötelező!</div>
+									<div ng-show="details_form.postal_code.$error.pattern">Az irányítószám formátuma nem megfelelő!</div>
+									<div ng-show="details_form.postal_code.$error.notFound">{{ newPostCtrl.cityValidation.notFoundMessage }}</div>
+								</div>
+								<div class="hidden-xs hidden-xsm" ng-hide="details_form.postal_code.$pending">
+									{{ newPostCtrl.cityValidation.city ? newPostCtrl.cityValidation.city : 'Kérlek add meg a település irányítószámát, aminek a környékén elérhető a szolgáltatás!' }}
 								</div>
 							</div>
 						</div>
@@ -105,7 +111,7 @@
 										placeholder="Min"
 										ng-model="newPostCtrl.postData.priceMin"
 										min="0"
-										max="1000000000"
+										max="999999999"
 										size="9"
 										ui-validate="{ 'minLessThanMax': '$value == null || newPostCtrl.postData.priceMax == null || $value <= newPostCtrl.postData.priceMax' }"
 										ui-validate-watch=" 'newPostCtrl.postData.priceMax' ">
@@ -122,7 +128,7 @@
 										placeholder="Max"
 										ng-model="newPostCtrl.postData.priceMax"
 										min="0"
-										max="1000000000"
+										max="999999999"
 										size="9">
 									<span class="input-group-addon">Ft</span>
 								</div>
@@ -130,11 +136,11 @@
 							<div class="col-xs-4 col-sm-6 col-md-8 center-one-line">
 								<div class="error-block">
 									<div ng-show="details_form.price_min.$error.min">A minimum árnak legalább nullának kell lennie!</div>
-									<div ng-show="details_form.price_min.$error.max">A minimum ár legfeljebb egy milliárd forint lehet!</div>
+									<div ng-show="details_form.price_min.$error.max">A minimum árnak egy milliárd forint alatt kell lennie!</div>
 									<div ng-show="details_form.price_min.$error.number">A minimum ár csak szám lehet!</div>
 									<div ng-show="details_form.price_min.$error.minLessThanMax">A minimum árnak kisebbnek kell lennie a maximum árnál!</div>
 									<div ng-show="details_form.price_max.$error.min">A maximum árnak legalább nullának kell lennie!</div>
-									<div ng-show="details_form.price_max.$error.max">A maximum ár legfeljebb egy milliárd forint lehet!</div>
+									<div ng-show="details_form.price_max.$error.max">A maximum árnak egy milliárd forint alatt kell lennie!</div>
 									<div ng-show="details_form.price_max.$error.number">A maximum ár csak szám lehet!</div>
 								</div>
 								<div class="hidden-xs hidden-xsm">
@@ -224,7 +230,7 @@
 				
 			</uib-accordion>
 			<div class="text-right">
-				<button type="submit" class="btn btn-primary">Hírdetés feladása</button>
+				<button type="submit" class="btn btn-primary" ng-disabled="new_post_form.details_form.postal_code.$pending">Hírdetés feladása</button>
 			</div>
 		</div>
 	</form>
