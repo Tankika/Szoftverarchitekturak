@@ -3,6 +3,7 @@ package hu.bme.onlab.post.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +19,14 @@ import javax.validation.constraints.Pattern;
 		@UniqueConstraint(columnNames={"postalCode"})
 	})
 @Entity
-@SequenceGenerator(name="location_sequence", sequenceName="location_sequence")
+@SequenceGenerator(name="location_sequence", sequenceName="location_sequence", allocationSize=1)
 public class Location {
 
 	private Long id;
 	private String postalCode;
 	private String city;
+	private double latitude;
+	private double longitude;
 	
 	private Set<Post> posts;
 	
@@ -56,7 +59,23 @@ public class Location {
 		this.city = city;
 	}
 
-	@OneToMany(mappedBy="location")
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	@OneToMany(mappedBy="location", cascade=CascadeType.REMOVE)
 	public Set<Post> getPosts() {
 		if(posts == null) {
 			posts = new HashSet<Post>();

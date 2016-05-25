@@ -1,7 +1,7 @@
-angular.module('ServiceFinder.User', []);
+angular.module('ServiceFinder.User', [ ]);
 angular.module('ServiceFinder.Home', [ 'ServiceFinder.User' ]);
 angular.module('ServiceFinder.Header', [ 'ServiceFinder.User' ]);
-angular.module('ServiceFinder.NewPost', []);
+angular.module('ServiceFinder.NewPost', [ 'ngFileUpload' ]);
+angular.module('ServiceFinder.Post', [ 'uiGmapgoogle-maps' ]);
 
-
-angular.module('ServiceFinder', [ 'ServiceFinder.Home', 'ServiceFinder.Header', 'ServiceFinder.User', 'ServiceFinder.NewPost', 'ngRoute', 'ui.bootstrap', 'ngAnimate', 'ui.validate' ]);
+angular.module('ServiceFinder', [ 'ServiceFinder.Home', 'ServiceFinder.Header', 'ServiceFinder.User', 'ServiceFinder.NewPost', 'ServiceFinder.Post', 'ngRoute', 'ui.bootstrap', 'ngAnimate', 'ui.validate' ]);

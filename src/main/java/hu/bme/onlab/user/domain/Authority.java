@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"authority"})
 	})
-@SequenceGenerator(name="authority_sequence", sequenceName="authority_sequence")
+@SequenceGenerator(name="authority_sequence", sequenceName="authority_sequence", allocationSize=1)
 public class Authority {
 	
 	private Long id;

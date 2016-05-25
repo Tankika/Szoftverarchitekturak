@@ -15,7 +15,7 @@
 		</div>
 		
 		<div class="modal-body">
-			<div class="alert alert-danger" ng-show="signupModalCtrl.error">
+			<div class="alert alert-danger" ng-show="signupModalCtrl.error" ng-cloak>
 			    Ismeretlen hiba történt regisztráció közben. Kérlek próbáld meg később.
 			</div>
 			
@@ -30,7 +30,7 @@
 					ng-model-options="{ debounce: 250 }"
 					ng-maxlength="254"
 					ui-validate-async="{ 'emailTaken': 'signupModalCtrl.isEmailFree($value)' }") />
-				<div class="error-block">
+				<div class="text-danger error-block">
 					<div ng-show="signup_form.email.$error.required">Kérlek add meg az e-mail címed!</div>
 					<div ng-show="signup_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</div>
 					<div ng-show="signup_form.email.$error.maxlength">Az e-mail cím legfeljebb 254 karakter hosszú lehet!</div>
@@ -47,7 +47,7 @@
 					ng-model="signupModalCtrl.credentials.password"
 					ng-minlength="8"
 					ng-maxlength="100" />
-				<div class="error-block">
+				<div class="text-danger error-block">
 					<div ng-show="signup_form.password.$error.required">Kérlek add meg a jelszavad!</div>
 					<div ng-show="signup_form.password.$error.minlength">A jelszónak minimum 8 karakter hosszúnak kell lennie!</div>
 					<div ng-show="signup_form.password.$error.maxlength">A jelszó legfeljebb 100 karakter hosszú lehet!</div>
@@ -63,7 +63,7 @@
 					ng-model="signupModalCtrl.credentials.password_confirm"
 					ui-validate="{ 'confirmed': '$value == signupModalCtrl.credentials.password' }"
 					ui-validate-watch=" 'signupModalCtrl.credentials.password' " />
-				<div class="error-block">
+				<div class="text-danger error-block">
 					<div ng-show="signup_form.password_confirm.$error.required">Kérlek erősítsd meg a jelszavad!</div>
 					<div ng-show="signup_form.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</div>
 				</div>

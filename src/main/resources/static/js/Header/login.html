@@ -15,10 +15,10 @@
 		</div>
 		
 		<div class="modal-body">
-			<div class="alert alert-danger" ng-show="loginModalCtrl.error">
+			<div class="alert alert-danger" ng-show="loginModalCtrl.error" ng-cloak>
 				Ismeretlen hiba történt bejelentkezés közben. Kérlek próbáld meg később.
 			</div>
-			<div class="alert alert-danger" ng-show="loginModalCtrl.loginFailed">
+			<div class="alert alert-danger" ng-show="loginModalCtrl.loginFailed" ng-cloak>
 				Hibás e-mail címet vagy jelszót adtál meg. Kérlek ellenőrizd őket.
 			</div>
 				
@@ -30,7 +30,7 @@
 					type="email"
 					class="form-control"
 					ng-model="loginModalCtrl.credentials.email" />
-				<div class="error-block">
+				<div class="text-danger error-block">
 					<span ng-show="login_form.email.$error.required">Kérlek add meg az e-mail címed!</span>
 					<span ng-show="login_form.email.$error.email">Az e-mail cím formátuma nem megfelelő!</span>
 				</div>
@@ -43,7 +43,7 @@
 					type="password" 
 					class="form-control"
 					ng-model="loginModalCtrl.credentials.password" />
-				<div class="error-block">
+				<div class="text-danger error-block">
 					<span ng-show="login_form.password.$error.required">Kérlek add meg a jelszavad!</span>
 				</div>
 			</div>

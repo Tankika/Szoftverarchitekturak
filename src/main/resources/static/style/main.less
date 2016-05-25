@@ -1,5 +1,3 @@
-@errorColor: #a94442;
-
 body {
 	padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
@@ -27,6 +25,27 @@ footer {
     }
 }
 
+.drop-box {
+    border: 5px dashed #DDD;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #eee;
+    margin-top: 20px;
+}
+
+.loadmask {
+	opacity: 0;
+
+	&.loaded {
+		opacity: 1;
+	}
+
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+
 .modal-dialog {
 	.modal-content {
 		.modal-header {
@@ -48,8 +67,8 @@ footer {
 	
 	.close-section {
 		a {
-				padding-top: 20px;
-				padding-right: 15px;
+			padding-top: 20px;
+			padding-right: 15px;
 		}
 	}
 
@@ -73,6 +92,24 @@ footer {
 		.center-one-line {
 			line-height: 3.5rem;
 		}
+		
+		.delete-icon {
+			left: -20px;
+			top: -35px;
+		}
+		
+		.preview-container {
+			text-align: center;
+			margin-bottom: 20px;
+			height: 125px;
+		}
+		
+		.has-error {
+			.drop-box {
+				border-color: #a94442;
+				background-color: #ebccd1;
+			}
+		}
 	}
 }
 
@@ -84,7 +121,6 @@ form {
 	.has-error {
 		.error-block {
 			display: initial;
-			color: @errorColor;
 		}
 		
 		.center-one-line {
@@ -92,5 +128,33 @@ form {
 				display: none;
 			}
 		}
+	}
+}
+
+#post-page {
+	@picture-container-height: 500px;
+	
+	.carousel-inner {
+		height: @picture-container-height;
+		
+		img {
+			margin: auto;
+		}
+	}
+	
+	.angular-google-map-container {
+		height: @picture-container-height;
+	}
+
+	.details {
+		magin-top: 15px;
+		
+		.details-header {
+			margin-bottom: 0px;
+		}
+	}
+	
+	.description {
+		white-space: pre-wrap;
 	}
 }

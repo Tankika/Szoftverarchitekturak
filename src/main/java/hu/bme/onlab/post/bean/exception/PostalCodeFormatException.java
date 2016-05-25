@@ -1,4 +1,4 @@
-package hu.bme.onlab.post.bean;
+package hu.bme.onlab.post.bean.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

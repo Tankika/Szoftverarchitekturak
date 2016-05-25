@@ -1,4 +1,4 @@
-package hu.bme.onlab.post.domain;
+package hu.bme.onlab.post.domain.validator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;

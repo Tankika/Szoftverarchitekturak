@@ -24,7 +24,7 @@ import hu.bme.onlab.post.domain.Post;
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"email"})
 	})
-@SequenceGenerator(name="user_sequence", sequenceName="user_sequence")
+@SequenceGenerator(name="user_sequence", sequenceName="user_sequence", allocationSize=1)
 public class User {
 
 	private Long id;

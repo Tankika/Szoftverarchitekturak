@@ -19,6 +19,8 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 @BeanDefinition
 public class ListPostData implements Bean {
 
+	@PropertyDefinition
+	private Long id;
     @PropertyDefinition
     private String title;
     @PropertyDefinition
@@ -59,6 +61,31 @@ public class ListPostData implements Bean {
 	@Override
 	public Set<String> propertyNames() {
 		return metaBean().metaPropertyMap().keySet();
+	}
+
+	//-----------------------------------------------------------------------
+	/**
+	 * Gets the id.
+	 * @return the value of the property
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * Sets the id.
+	 * @param id  the new value of the property
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * Gets the the {@code id} property.
+	 * @return the property, not null
+	 */
+	public final Property<Long> id() {
+		return metaBean().id().createProperty(this);
 	}
 
 	//-----------------------------------------------------------------------
@@ -224,7 +251,8 @@ public class ListPostData implements Bean {
 		}
 		if (obj != null && obj.getClass() == this.getClass()) {
 			ListPostData other = (ListPostData) obj;
-			return JodaBeanUtils.equal(getTitle(), other.getTitle()) &&
+			return JodaBeanUtils.equal(getId(), other.getId()) &&
+					JodaBeanUtils.equal(getTitle(), other.getTitle()) &&
 					JodaBeanUtils.equal(getPriceMin(), other.getPriceMin()) &&
 					JodaBeanUtils.equal(getPriceMax(), other.getPriceMax()) &&
 					JodaBeanUtils.equal(getCreationDateTime(), other.getCreationDateTime()) &&
@@ -237,6 +265,7 @@ public class ListPostData implements Bean {
 	@Override
 	public int hashCode() {
 		int hash = getClass().hashCode();
+		hash = hash * 31 + JodaBeanUtils.hashCode(getId());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getTitle());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMin());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMax());
@@ -248,7 +277,7 @@ public class ListPostData implements Bean {
 
 	@Override
 	public String toString() {
-		StringBuilder buf = new StringBuilder(224);
+		StringBuilder buf = new StringBuilder(256);
 		buf.append("ListPostData{");
 		int len = buf.length();
 		toString(buf);
@@ -260,6 +289,7 @@ public class ListPostData implements Bean {
 	}
 
 	protected void toString(StringBuilder buf) {
+		buf.append("id").append('=').append(JodaBeanUtils.toString(getId())).append(',').append(' ');
 		buf.append("title").append('=').append(JodaBeanUtils.toString(getTitle())).append(',').append(' ');
 		buf.append("priceMin").append('=').append(JodaBeanUtils.toString(getPriceMin())).append(',').append(' ');
 		buf.append("priceMax").append('=').append(JodaBeanUtils.toString(getPriceMax())).append(',').append(' ');
@@ -278,6 +308,11 @@ public class ListPostData implements Bean {
 		 */
 		static final Meta INSTANCE = new Meta();
 
+		/**
+		 * The meta-property for the {@code id} property.
+		 */
+		private final MetaProperty<Long> id = DirectMetaProperty.ofReadWrite(
+				this, "id", ListPostData.class, Long.class);
 		/**
 		 * The meta-property for the {@code title} property.
 		 */
@@ -313,6 +348,7 @@ public class ListPostData implements Bean {
 		 */
 		private final Map<String, MetaProperty<?>> metaPropertyMap$ = new DirectMetaPropertyMap(
 				this, null,
+				"id",
 				"title",
 				"priceMin",
 				"priceMax",
@@ -329,6 +365,8 @@ public class ListPostData implements Bean {
 		@Override
 		protected MetaProperty<?> metaPropertyGet(String propertyName) {
 			switch (propertyName.hashCode()) {
+				case 3355:  // id
+					return id;
 				case 110371416:  // title
 					return title;
 				case -1176957879:  // priceMin
@@ -361,6 +399,14 @@ public class ListPostData implements Bean {
 		}
 
 		//-----------------------------------------------------------------------
+		/**
+		 * The meta-property for the {@code id} property.
+		 * @return the meta-property, not null
+		 */
+		public final MetaProperty<Long> id() {
+			return id;
+		}
+
 		/**
 		 * The meta-property for the {@code title} property.
 		 * @return the meta-property, not null
@@ -413,6 +459,8 @@ public class ListPostData implements Bean {
 		@Override
 		protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
 			switch (propertyName.hashCode()) {
+				case 3355:  // id
+					return ((ListPostData) bean).getId();
 				case 110371416:  // title
 					return ((ListPostData) bean).getTitle();
 				case -1176957879:  // priceMin
@@ -432,6 +480,9 @@ public class ListPostData implements Bean {
 		@Override
 		protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
 			switch (propertyName.hashCode()) {
+				case 3355:  // id
+					((ListPostData) bean).setId((Long) newValue);
+					return;
 				case 110371416:  // title
 					((ListPostData) bean).setTitle((String) newValue);
 					return;

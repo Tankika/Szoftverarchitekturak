@@ -12,7 +12,7 @@ angular.module('ServiceFinder.Home')
 					pageSize: paging.pageSize
 				};
 			
-			$http.post("/listPosts", request).then(function(response) {
+			$http.post("/post/listPosts", request).then(function(response) {
 				deferred.resolve(response.data);
 			}, function(error) {
 				deferred.reject(error);

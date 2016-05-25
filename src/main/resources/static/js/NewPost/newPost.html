@@ -1,4 +1,4 @@
- <div id="new-post-page">
+ <div id="new-post-page" class="loadmask" ng-class="{ 'loaded' : newPostCtrl.loaded }">
 	 <div class="row">
 	     <div class="col-lg-12">
 	         <h1 class="page-header">Új hírdetés feladása</h1>
@@ -10,13 +10,42 @@
 			<uib-accordion>
 			
 				<uib-accordion-group heading="Képek hozzáadása" panel-class="{{ new_post_form.$submitted && new_post_form.picture_form.$invalid ? 'panel-danger' : 'panel-default' }}">
-					<form name="picture_form" novalidate>
-						TODO
-					</form>
+					<ng-form name="picture_form" novalidate>
+						<div class="form-group" ng-class="{ 'has-error': (new_post_form.$submitted || picture_form.file.$dirty) && picture_form.file.$invalid }">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="text-danger">
+										<div ng-show="picture_form.file.$error.maxFiles">Legfeljebb 12 kép tölthető fel!</div>
+										<div ng-show="picture_form.file.$error.maxSize">A képek egyenként legfeljebb 10MB-osak lehetnek!</div>
+										<div ng-show="picture_form.file.$error.pattern">Csak jpeg, png és gif képeket lehet feltölteni!</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" ng-show="picture_form.file.$valid">
+								<a href="" class="col-xs-6 col-sm-4 col-md-2 preview-container" ng-repeat="file in newPostCtrl.postData.files">
+									<img ngf-src="file" ngf-resize="{width: 125, height: 125}"></img>
+								</a>
+							</div>
+							<div ngf-drop
+								ngf-select
+								name="file"
+								multiple="multiple"
+								ngf-accept="'image/jpeg,image/png,image/gif'"
+								ng-model="newPostCtrl.postData.files"
+								ngf-max-files="12"
+								ngf-pattern="'image/jpeg,image/png,image/gif'"
+								ngf-max-size="10MB"
+								class="drop-box">
+									Kattints a keretbe a képek feltöltéséhez, vagy húzd őket bele.
+									<br>
+									Kattints a képekre, hogy töröld őket.
+							</div>
+						</div>
+					</ng-form>
 				</uib-accordion-group>
 				
 				<uib-accordion-group heading="Szolgáltatás leírása" panel-class="{{ new_post_form.$submitted && new_post_form.description_form.$invalid ? 'panel-danger' : 'panel-default' }}">
-					<form name="description_form" novalidate>
+					<ng-form name="description_form" novalidate>
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || description_form.title.$dirty) && description_form.title.$invalid }">
 							<div class="col-xs-12 col-sm-6 col-md-6">							
 								<input required
@@ -31,7 +60,7 @@
 								</input>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
-								<div class="error-block">
+								<div class="text-danger error-block">
 									<div ng-show="description_form.title.$error.required">A cím megadása kötelező!</div>
 									<div ng-show="description_form.title.$error.minlength">A címnek legalább 12 karakter hosszúnak kell lennie!</div>
 									<div ng-show="description_form.title.$error.maxlength">A címn legfeljebb 100 karakter hosszú lehet!</div>
@@ -43,8 +72,8 @@
 						</div>
 						
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || description_form.description.$dirty) && description_form.description.$invalid }">
-							<div class="col-xs-12 col-sm-6 col-md-6">							
-								<textarea required
+							<div class="col-xs-12 col-sm-6 col-md-6">
+							<textarea required
 									id="description"
 									name="description"
 									class="form-control"
@@ -56,7 +85,7 @@
 								</textarea>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6">
-								<div class="error-block">
+								<div class="text-danger error-block">
 									<div ng-show="description_form.description.$error.required">A bővebb leírás megadása kötelező!</div>
 									<div ng-show="description_form.description.$error.minlength">A bővebb leírásnak legalább 20 karakter hosszúnak kell lennie!</div>
 									<div ng-show="description_form.description.$error.maxlength">A bővebb leírás legfeljebb 4000 karakter hosszú lehet!</div>
@@ -66,11 +95,11 @@
 								</div>
 							</div>
 						</div>
-					</form>
+					</ng-form>
 				</uib-accordion-group>
 				
 				<uib-accordion-group heading="Szolgáltatás adatai" panel-class="{{ new_post_form.$submitted && new_post_form.details_form.$invalid ? 'panel-danger' : 'panel-default' }}">
-					<form name="details_form" novalidate>
+					<ng-form name="details_form" novalidate>
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.postal_code.$dirty) && details_form.postal_code.$invalid }">
 							<div class="col-xs-4 col-sm-3 col-md-2">
 								<input required
@@ -89,7 +118,7 @@
 									<i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
 									<span class="sr-only">Loading...</span>
 								</div>
-								<div class="error-block" ng-hide="details_form.postal_code.$pending">
+								<div class="text-danger error-block" ng-hide="details_form.postal_code.$pending">
 									<div ng-show="details_form.postal_code.$error.required">Az irányítószám megadása kötelező!</div>
 									<div ng-show="details_form.postal_code.$error.pattern">Az irányítószám formátuma nem megfelelő!</div>
 									<div ng-show="details_form.postal_code.$error.notFound">{{ newPostCtrl.cityValidation.notFoundMessage }}</div>
@@ -134,7 +163,7 @@
 								</div>
 							</div>
 							<div class="col-xs-4 col-sm-6 col-md-8 center-one-line">
-								<div class="error-block">
+								<div class="text-danger error-block">
 									<div ng-show="details_form.price_min.$error.min">A minimum árnak legalább nullának kell lennie!</div>
 									<div ng-show="details_form.price_min.$error.max">A minimum árnak egy milliárd forint alatt kell lennie!</div>
 									<div ng-show="details_form.price_min.$error.number">A minimum ár csak szám lehet!</div>
@@ -151,7 +180,7 @@
 						
 						<div class="form-group" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.category.$dirty) && details_form.category.$invalid }">
 							<div class="col-lg-12">
-				                <h3>Válassz kategóriát! <small class="error-block" ng-show="details_form.category.$error.required">A kategória megadása kötelező!</small></h3>
+				                <h3>Válassz kategóriát! <small class="text-danger error-block" ng-show="details_form.category.$error.required">A kategória megadása kötelező!</small></h3>
 				            </div>
 							<div class="row">
 								<div class="col-md-2 col-sm-3" ng-repeat="i in [1, 2, 3, 4, 5, 6]">						
@@ -175,11 +204,11 @@
 <!-- 								ng-model="newPostCtrl.postData.category" -->
 <!-- 								hidden /> -->
 						</div>
-					</form>
+					</ng-form>
 				</uib-accordion-group>
 				
 				<uib-accordion-group heading="Hírdető adatai" panel-class="{{ new_post_form.$submitted && new_post_form.advertiser_form.$invalid ? 'panel-danger' : 'panel-default' }}">
-					<form name="advertiser_form" novalidate>
+					<ng-form name="advertiser_form" novalidate>
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || advertiser_form.name.$dirty) && advertiser_form.name.$invalid }">
 							<div class="col-xs-12 col-sm-6 col-md-6">
 								<input required
@@ -193,7 +222,7 @@
 								</input>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
-								<div class="error-block">
+								<div class="text-danger error-block">
 									<div ng-show="advertiser_form.name.$error.required">A név megadása kötelező!</div>
 									<div ng-show="advertiser_form.name.$error.pattern">A név formátuma nem megfelelő</div>
 								</div>
@@ -216,7 +245,7 @@
 								</input>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 center-one-line">
-								<div class="error-block">
+								<div class="text-danger error-block">
 									<div ng-show="advertiser_form.phone.$error.required">A telefonszám megadása kötelező!</div>
 									<div ng-show="advertiser_form.phone.$error.pattern">A telefonszám formátuma nem megfelelő, példa jó formára: +36 12 345 6789</div>
 								</div>
@@ -225,12 +254,24 @@
 								</div>
 							</div>
 						</div>
-					</form>
+					</ng-form>
 				</uib-accordion-group>
 				
 			</uib-accordion>
-			<div class="text-right">
-				<button type="submit" class="btn btn-primary" ng-disabled="new_post_form.details_form.postal_code.$pending">Hírdetés feladása</button>
+			<div class="row">
+				<div class="col-xs-10">
+					<uib-progressbar
+						ng-show="newPostCtrl.progressBar.value"
+						type="{{ newPostCtrl.progressBar.type }}"
+						class="progress-striped active"
+						value="newPostCtrl.progressBar.value">
+							{{ newPostCtrl.progressBar.value + '%' }}
+					</uib-progressbar>
+				</div>
+				<div class="col-xs-2 text-right">
+					<button type="submit" class="btn btn-primary" ng-show="!newPostCtrl.abort" ng-disabled="new_post_form.details_form.postal_code.$pending">Hírdetés feladása</button>
+					<button type="button" class="btn btn-danger" ng-show="newPostCtrl.abort" ng-click="newPostCtrl.abort()">Megszakítás</button>
+				</div>
 			</div>
 		</div>
 	</form>

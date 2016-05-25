@@ -21,7 +21,7 @@ angular.module('ServiceFinder.User')
 				headers.authorization = "Basic " + btoa(credentials.email + ":" + credentials.password);
 			}
 			
-			$http.get("/user", { headers: headers })
+			$http.get("/user/user", { headers: headers })
 			.then(function(response) {
 				changeUser(response.data);
 				deferred.resolve(response.data);
@@ -41,7 +41,7 @@ angular.module('ServiceFinder.User')
 				deferred.resolve(user);
 			} else {
 				// otherwise, fetch from server
-				$http.get("/user")
+				$http.get("/user/user")
 				.then(function(response) {
 					changeUser(response.data);
 					deferred.resolve(user);
@@ -76,7 +76,7 @@ angular.module('ServiceFinder.User')
 					password: credentials.password
 				};
 			
-			$http.post("/signup", request)
+			$http.post("/user/signup", request)
 			.then(function(response) {
 				deferred.resolve(response.data);
 			}, function(error) {
@@ -92,7 +92,7 @@ angular.module('ServiceFinder.User')
 					email: email
 				};
 			
-			$http.post("/checkEmail", request)
+			$http.post("/user/checkEmail", request)
 			.then(function(response) {
 				deferred.resolve(response.data);
 			}, function(error) {

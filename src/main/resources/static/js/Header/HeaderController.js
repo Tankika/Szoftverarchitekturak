@@ -31,7 +31,7 @@ angular.module('ServiceFinder.Header')
 			modal.result.then(function(result) {
 				if(result === "login") {
 					// User successfully logged in on modal.
-					$location.path("/");
+					$route.reload();
 				} else if(result === "signup") {
 					// User clicked the signup link on modal.
 					modal.closed.then(openSignupModal);	

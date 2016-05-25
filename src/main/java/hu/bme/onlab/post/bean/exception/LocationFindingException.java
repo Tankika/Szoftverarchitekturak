@@ -1,4 +1,4 @@
-package hu.bme.onlab.post.bean;
+package hu.bme.onlab.post.bean.exception;
 
 public class LocationFindingException extends Exception {
 

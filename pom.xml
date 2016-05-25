@@ -23,6 +23,8 @@
 		<wro.path.prefix>file:${project.basedir}</wro.path.prefix>
 		<java.version>1.8</java.version>
 		<joda-beans.version>1.7</joda-beans.version>
+		<google-maps-services.version>0.1.14</google-maps-services.version>
+		<ng-file-upload.version>12.0.4</ng-file-upload.version>
 	</properties>
 
 	<dependencies>
@@ -50,9 +52,8 @@
 		<dependency>
 		    <groupId>com.google.maps</groupId>
 		    <artifactId>google-maps-services</artifactId>
-		    <version>0.1.14</version>
+		    <version>${google-maps-services.version}</version>
 		</dependency>
-		
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -99,6 +100,16 @@
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.rometools</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 	</dependencies>
 	
@@ -185,6 +196,26 @@
 			    <groupId>org.webjars.bower</groupId>
 			    <artifactId>angular-ui-validate</artifactId>
 			    <version>1.2.2</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.webjars.bower</groupId>
+			    <artifactId>ng-file-upload</artifactId>
+			    <version>${ng-file-upload.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.webjars.bower</groupId>
+			    <artifactId>lodash</artifactId>
+			    <version>4.12.0</version>
+			</dependency>	
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>angular-simple-logger</artifactId>
+			    <version>0.1.5</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>angular-google-maps</artifactId>
+			    <version>2.3.2</version>
 			</dependency>
 	      </dependencies>
 	    </plugin>

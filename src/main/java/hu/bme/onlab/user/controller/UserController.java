@@ -15,6 +15,7 @@ import hu.bme.onlab.user.bean.SignupRequest;
 import hu.bme.onlab.user.service.UserService;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
 	private UserService userService;

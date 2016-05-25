@@ -15,6 +15,14 @@
 				controller : 'NewPostController',
 				controllerAs: 'newPostCtrl'
 			})
+			.when('/post', {
+				templateUrl : 'js/Post/post.html',
+				controller : 'PostController',
+				controllerAs: 'postCtrl'
+			})
+			.when('/404', {
+				templateUrl : 'js/404/404.html'
+			})
 			.otherwise('/');
 		
 		}])
@@ -27,6 +35,15 @@
 			
 			$locationProvider.html5Mode(true);
 			
-		}]);
+		}])
+		
+		.config(function(uiGmapGoogleMapApiProvider) {
+		    uiGmapGoogleMapApiProvider.configure({
+		        key: '	AIzaSyCPneN_9KImqzqziQviiPcCir6X1F-atrY',
+		        v: '3.20',
+		        language: "hu",
+		        libraries: 'weather,geometry,visualization'
+		    });
+		});
 	
 }());

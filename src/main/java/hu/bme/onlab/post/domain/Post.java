@@ -1,13 +1,17 @@
 package hu.bme.onlab.post.domain;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -15,11 +19,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import hu.bme.onlab.post.domain.validator.MaxGreaterThanMin;
 import hu.bme.onlab.user.domain.User;
 
 @Entity
 @MaxGreaterThanMin
-@SequenceGenerator(name="post_sequence", sequenceName="post_sequence")
+@SequenceGenerator(name="post_sequence", sequenceName="post_sequence", allocationSize=1)
 public class Post {
 
 	private Long id;
@@ -33,6 +38,7 @@ public class Post {
 	
 	private User advertiser;
 	private Location location;
+	private Set<Image> images;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
@@ -66,7 +72,7 @@ public class Post {
 	}
 
 	@Min(0)
-	@Max(999999999)
+	@Max(999_999_999)
 	public Integer getPriceMin() {
 		return priceMin;
 	}
@@ -76,7 +82,7 @@ public class Post {
 	}
 
 	@Min(0)
-	@Max(999999999)
+	@Max(999_999_999)
 	public Integer getPriceMax() {
 		return priceMax;
 	}
@@ -137,6 +143,25 @@ public class Post {
 		this.location = location;
 		if(!location.getPosts().contains(this)) {
 			location.addPost(this);
+		}
+	}
+
+	@OneToMany(mappedBy="post", cascade=CascadeType.ALL)
+	public Set<Image> getImages() {
+		if(images == null) {
+			images = new HashSet<Image>();
+		}
+		return images;
+	}
+
+	public void setImages(Set<Image> images) {
+		this.images = images;
+	}
+
+	public void addImage(Image image) {
+		this.getImages().add(image);
+		if(image.getPost() != this) {
+			image.setPost(this);
 		}
 	}
 }

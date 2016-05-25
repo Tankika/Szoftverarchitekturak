@@ -1,7 +1,9 @@
-package hu.bme.onlab.post.domain;
+package hu.bme.onlab.post.domain.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import hu.bme.onlab.post.domain.Post;
 
 public class MaxGreaterThanMinValidator implements ConstraintValidator<MaxGreaterThanMin, Post> {
 

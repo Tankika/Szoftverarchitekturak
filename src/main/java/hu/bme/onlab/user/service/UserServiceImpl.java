@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hu.bme.onlab.user.bean.CheckEmailRequest;
 import hu.bme.onlab.user.bean.CheckEmailResponse;
@@ -15,6 +16,7 @@ import hu.bme.onlab.user.repository.AuthorityRepository;
 import hu.bme.onlab.user.repository.UserRepository;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	private static final String ROLE_USER = "ROLE_USER";

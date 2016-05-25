@@ -1,5 +1,6 @@
 package hu.bme.onlab.post.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -21,15 +22,19 @@ import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 
 import hu.bme.onlab.ServiceFinder;
-import hu.bme.onlab.post.bean.CityNotFoundException;
+import hu.bme.onlab.post.bean.GetPostResponse;
 import hu.bme.onlab.post.bean.ListPostData;
 import hu.bme.onlab.post.bean.ListPostsRequest;
 import hu.bme.onlab.post.bean.ListPostsResponse;
-import hu.bme.onlab.post.bean.LocationFindingException;
-import hu.bme.onlab.post.bean.PostalCodeFormatException;
 import hu.bme.onlab.post.bean.SendPostRequest;
+import hu.bme.onlab.post.bean.exception.CityNotFoundException;
+import hu.bme.onlab.post.bean.exception.ImageStoringException;
+import hu.bme.onlab.post.bean.exception.LocationFindingException;
+import hu.bme.onlab.post.bean.exception.PostalCodeFormatException;
+import hu.bme.onlab.post.domain.Image;
 import hu.bme.onlab.post.domain.Location;
 import hu.bme.onlab.post.domain.Post;
+import hu.bme.onlab.post.repository.ImageRepository;
 import hu.bme.onlab.post.repository.LocationRepository;
 import hu.bme.onlab.post.repository.PostRepository;
 import hu.bme.onlab.user.domain.User;
@@ -47,14 +52,25 @@ public class PostServiceImpl implements PostService {
 	
 	private LocationRepository locationRepository;
 	
+	private ImageRepository imageRepository;
+	
 	private GeoApiContext geoApiContext;
 	
 	@Autowired
-	public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationRepository locationRepository, GeoApiContext geoApiContext) {
+	public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationRepository locationRepository, ImageRepository imageRepository, GeoApiContext geoApiContext) {
 		this.postRepository = postRepository;
 		this.userRepository = userRepository;
 		this.locationRepository = locationRepository;
+		this.imageRepository = imageRepository;
 		this.geoApiContext = geoApiContext;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Image getImage(long id) {
+		return imageRepository.findOne(id);
 	}
 
 	/**
@@ -63,8 +79,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public void sendPost(SendPostRequest request) throws LocationFindingException {
 
-		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userRepository.findByEmailIgnoreCase(principal.getUsername()).get(0);
+		UserDetails loggedInPrincipal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userRepository.findByEmailIgnoreCase(loggedInPrincipal.getUsername()).get(0);
 		
 		Location location = findOrCreateLocation(request.getPostalCode());
 		
@@ -79,7 +95,51 @@ public class PostServiceImpl implements PostService {
 		post.setAdvertiser(user);
 		post.setLocation(location);
 		
+		request.getImages().stream().forEach(rawImage -> {
+			Image image = new Image();
+			image.setName(rawImage.getOriginalFilename());
+			image.setContentType(rawImage.getContentType());
+			image.setSize(rawImage.getSize());
+			image.setPost(post);
+			
+			try {
+				image.setData(rawImage.getBytes());
+			} catch (IOException e) {
+				throw new ImageStoringException();
+			}
+		});
+		
 		postRepository.save(post);
+	}
+	
+	@Override
+	public GetPostResponse getPost(long id) {
+		GetPostResponse response = new GetPostResponse();
+		response.setImageIds(new ArrayList<>());
+		
+		Post domainObject = postRepository.findOne(id);
+		
+		if(domainObject != null) {
+			response.setTitle(domainObject.getTitle());
+			response.setDescription(domainObject.getDescription());
+			response.setPriceMin(domainObject.getPriceMin());
+			response.setPriceMax(domainObject.getPriceMax());
+			response.setCreationDateTime(domainObject.getCreationDateTime());
+			
+			response.setCity(domainObject.getLocation().getCity());
+			response.setPostalCode(domainObject.getLocation().getPostalCode());
+			response.setLatitude(domainObject.getLocation().getLatitude());
+			response.setLongitude(domainObject.getLocation().getLongitude());
+			
+			domainObject.getImages().forEach(image -> response.getImageIds().add(image.getId()));
+			
+			if(userHasAuthority("ROLE_USER")) {
+				response.setName(domainObject.getName());
+				response.setPhone(domainObject.getPhone());
+			}
+		}
+		
+		return response;
 	}
 
 	/**
@@ -115,6 +175,7 @@ public class PostServiceImpl implements PostService {
 						.toString();
 				
 				ListPostData postBean = new ListPostData();
+				postBean.setId(domainObject.getId());
 				postBean.setTitle(domainObject.getTitle());
 				postBean.setPriceMin(domainObject.getPriceMin());
 				postBean.setPriceMax(domainObject.getPriceMax());
@@ -160,6 +221,7 @@ public class PostServiceImpl implements PostService {
 			throw new PostalCodeFormatException();
 		}
 		
+		// Getting location for postal code, coordinates not very accurate
 		GeocodingResult[] geocodingResultList;
 		try {
 			geocodingResultList = GeocodingApi.geocode(geoApiContext, postalCode + " Hungary").await();
@@ -171,14 +233,30 @@ public class PostServiceImpl implements PostService {
 			throw new CityNotFoundException();
 		} else {
 			GeocodingResult geocodingResult = geocodingResultList[0];
-			
+		
 			// Setting the name of the city.
 			AddressComponent cityAddressComponent = extractAddressComponent(geocodingResult, AddressComponentType.LOCALITY);
 			result.setCity(cityAddressComponent.longName);
 			
-			// Setting the post code of the city.
+			// Setting the postal code of the city.
 			AddressComponent postalCodeAddressComponent = extractAddressComponent(geocodingResult, AddressComponentType.POSTAL_CODE);
 			result.setPostalCode(postalCodeAddressComponent.longName);
+			
+			// Getting coordinates for full address, more accurate
+			try {
+				geocodingResultList = GeocodingApi.geocode(geoApiContext, cityAddressComponent.longName + ", " + postalCode + " Hungary").await();
+			} catch (Exception e) {
+				throw new RuntimeException("Ismeretlen hiba történt!");
+			}
+			
+			if(geocodingResultList.length != 1) {
+				throw new CityNotFoundException();
+			} else {
+				geocodingResult = geocodingResultList[0];
+				
+				result.setLatitude(geocodingResult.geometry.location.lat);
+				result.setLongitude(geocodingResult.geometry.location.lng);
+			}
 		}
 		
 		return result;
@@ -190,6 +268,18 @@ public class PostServiceImpl implements PostService {
 			.findFirst()
 			.orElseThrow(() -> new CityNotFoundException());
 		return cityAddressComponent;
+	}
+	
+	private boolean userHasAuthority(String authority) {
+		Object loggedInPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if(loggedInPrincipal instanceof UserDetails) {
+			// logged in user
+			return ((UserDetails)loggedInPrincipal).getAuthorities().stream().filter(a -> a.getAuthority().equals(authority)).count() > 0;	
+		} else {
+			// anonymous user
+			return false;
+		}
 	}
 	
 }
