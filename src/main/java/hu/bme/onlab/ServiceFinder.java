@@ -68,7 +68,7 @@ public class ServiceFinder {
 				.httpBasic().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
 				.authorizeRequests()
-					.antMatchers("/", "/user/signup", "/user/checkEmail", "/user/user", "/post/listPosts", "/post/**", "/post/downloadImage/**", "/404", "/fonts/**", "/font-awesome/**")
+					.antMatchers("/", "/user/signup", "/user/checkEmail", "/user/user", "post/getCategories", "/post/listPosts", "/post/**", "/post/downloadImage/**", "/404", "/fonts/**", "/font-awesome/**")
 						.permitAll()
 					.anyRequest()
 						.authenticated()

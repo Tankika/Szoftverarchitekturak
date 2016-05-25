@@ -39,6 +39,7 @@ public class Post {
 	private User advertiser;
 	private Location location;
 	private Set<Image> images;
+	private Category category;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
@@ -162,6 +163,18 @@ public class Post {
 		this.getImages().add(image);
 		if(image.getPost() != this) {
 			image.setPost(this);
+		}
+	}
+
+	@ManyToOne
+	@NotNull
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+		if(!category.getPosts().contains(this)) {
+			category.addPost(this);
 		}
 	}
 }

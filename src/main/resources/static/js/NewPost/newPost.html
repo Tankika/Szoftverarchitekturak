@@ -178,31 +178,25 @@
 							</div>
 						</div>
 						
-						<div class="form-group" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.category.$dirty) && details_form.category.$invalid }">
-							<div class="col-lg-12">
-				                <h3>Válassz kategóriát! <small class="text-danger error-block" ng-show="details_form.category.$error.required">A kategória megadása kötelező!</small></h3>
-				            </div>
-							<div class="row">
-								<div class="col-md-2 col-sm-3" ng-repeat="i in [1, 2, 3, 4, 5, 6]">						
-									<div class="panel panel-default text-center">
-					                    <div class="panel-heading">
-					                        <span class="fa-stack fa-4x">
-					                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
-					                              <i class="fa fa-tree fa-stack-1x fa-inverse"></i>
-					                        </span>
-					                    </div>
-					                    <div class="panel-body">
-					                        <h4>{{i}}</h4>
-					                    </div>
-					                </div>
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.category.$dirty) && details_form.category.$invalid }">
+							<div class="col-xs-4 col-sm-3 col-md-2">
+								<select required
+									id="category"
+									name="category"
+									class="form-control"
+									ng-model="newPostCtrl.postData.category"
+									ng-options="category.id as category.name for category in newPostCtrl.categories">
+										<option value="">---Kategóriák---</option>
+								</select>
+							</div>
+							<div class="col-xs-8 col-sm-9 col-md-10 center-one-line">
+								<div class="text-danger error-block">
+									<div ng-show="details_form.category.$error.required">A kategória megadása kötelező!</div>
+								</div>
+								<div class="hidden-xs hidden-xsm">
+									Kérlek válassz kategóriát! 
 								</div>
 							</div>
-<!-- 							<input required -->
-<!-- 								id="category" -->
-<!-- 								name="category" -->
-<!-- 								type="text" -->
-<!-- 								ng-model="newPostCtrl.postData.category" -->
-<!-- 								hidden /> -->
 						</div>
 					</ng-form>
 				</uib-accordion-group>

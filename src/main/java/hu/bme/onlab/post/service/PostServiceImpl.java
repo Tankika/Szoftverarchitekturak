@@ -22,6 +22,8 @@ import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 
 import hu.bme.onlab.ServiceFinder;
+import hu.bme.onlab.post.bean.GetCategoriesData;
+import hu.bme.onlab.post.bean.GetCategoriesResponse;
 import hu.bme.onlab.post.bean.GetPostResponse;
 import hu.bme.onlab.post.bean.ListPostData;
 import hu.bme.onlab.post.bean.ListPostsRequest;
@@ -31,9 +33,11 @@ import hu.bme.onlab.post.bean.exception.CityNotFoundException;
 import hu.bme.onlab.post.bean.exception.ImageStoringException;
 import hu.bme.onlab.post.bean.exception.LocationFindingException;
 import hu.bme.onlab.post.bean.exception.PostalCodeFormatException;
+import hu.bme.onlab.post.domain.Category;
 import hu.bme.onlab.post.domain.Image;
 import hu.bme.onlab.post.domain.Location;
 import hu.bme.onlab.post.domain.Post;
+import hu.bme.onlab.post.repository.CategoryRepository;
 import hu.bme.onlab.post.repository.ImageRepository;
 import hu.bme.onlab.post.repository.LocationRepository;
 import hu.bme.onlab.post.repository.PostRepository;
@@ -54,15 +58,18 @@ public class PostServiceImpl implements PostService {
 	
 	private ImageRepository imageRepository;
 	
+	private CategoryRepository categoryRepository;
+	
 	private GeoApiContext geoApiContext;
 	
 	@Autowired
-	public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationRepository locationRepository, ImageRepository imageRepository, GeoApiContext geoApiContext) {
+	public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationRepository locationRepository, ImageRepository imageRepository, CategoryRepository categoryRepository, GeoApiContext geoApiContext) {
 		this.postRepository = postRepository;
 		this.userRepository = userRepository;
 		this.locationRepository = locationRepository;
 		this.imageRepository = imageRepository;
 		this.geoApiContext = geoApiContext;
+		this.categoryRepository = categoryRepository;
 	}
 	
 	/**
@@ -84,6 +91,8 @@ public class PostServiceImpl implements PostService {
 		
 		Location location = findOrCreateLocation(request.getPostalCode());
 		
+		Category category = categoryRepository.findOne(request.getCategory());
+		
 		Post post = new Post();
 		post.setTitle(request.getTitle());
 		post.setDescription(request.getDescription());
@@ -94,6 +103,7 @@ public class PostServiceImpl implements PostService {
 		post.setCreationDateTime(Calendar.getInstance());
 		post.setAdvertiser(user);
 		post.setLocation(location);
+		post.setCategory(category);
 		
 		request.getImages().stream().forEach(rawImage -> {
 			Image image = new Image();
@@ -125,6 +135,7 @@ public class PostServiceImpl implements PostService {
 			response.setPriceMin(domainObject.getPriceMin());
 			response.setPriceMax(domainObject.getPriceMax());
 			response.setCreationDateTime(domainObject.getCreationDateTime());
+			response.setCategoryName(domainObject.getCategory().getName());
 			
 			response.setCity(domainObject.getLocation().getCity());
 			response.setPostalCode(domainObject.getLocation().getPostalCode());
@@ -187,6 +198,25 @@ public class PostServiceImpl implements PostService {
 			});
 		
 		response.setTotalPosts(postRepository.count());
+		
+		return response;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GetCategoriesResponse getCategories() {
+		GetCategoriesResponse response = new GetCategoriesResponse();
+		response.setCategories(new ArrayList<>());
+		
+		categoryRepository.findAll().forEach(c -> {
+			GetCategoriesData getCategoriesData = new GetCategoriesData();
+			getCategoriesData.setId(c.getId());
+			getCategoriesData.setName(c.getName());
+			
+			response.getCategories().add(getCategoriesData);
+		});
 		
 		return response;
 	}

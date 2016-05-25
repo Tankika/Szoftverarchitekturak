@@ -31,6 +31,8 @@ public class SendPostRequest implements Bean {
 	@PropertyDefinition
 	private Integer priceMax;
 	@PropertyDefinition
+	private Long category;
+	@PropertyDefinition
 	private String name;
 	@PropertyDefinition
 	private String phone;
@@ -193,6 +195,31 @@ public class SendPostRequest implements Bean {
 
 	//-----------------------------------------------------------------------
 	/**
+	 * Gets the category.
+	 * @return the value of the property
+	 */
+	public Long getCategory() {
+		return category;
+	}
+
+	/**
+	 * Sets the category.
+	 * @param category  the new value of the property
+	 */
+	public void setCategory(Long category) {
+		this.category = category;
+	}
+
+	/**
+	 * Gets the the {@code category} property.
+	 * @return the property, not null
+	 */
+	public final Property<Long> category() {
+		return metaBean().category().createProperty(this);
+	}
+
+	//-----------------------------------------------------------------------
+	/**
 	 * Gets the name.
 	 * @return the value of the property
 	 */
@@ -284,6 +311,7 @@ public class SendPostRequest implements Bean {
 					JodaBeanUtils.equal(getPostalCode(), other.getPostalCode()) &&
 					JodaBeanUtils.equal(getPriceMin(), other.getPriceMin()) &&
 					JodaBeanUtils.equal(getPriceMax(), other.getPriceMax()) &&
+					JodaBeanUtils.equal(getCategory(), other.getCategory()) &&
 					JodaBeanUtils.equal(getName(), other.getName()) &&
 					JodaBeanUtils.equal(getPhone(), other.getPhone()) &&
 					JodaBeanUtils.equal(getImages(), other.getImages());
@@ -299,6 +327,7 @@ public class SendPostRequest implements Bean {
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPostalCode());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMin());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPriceMax());
+		hash = hash * 31 + JodaBeanUtils.hashCode(getCategory());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getName());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPhone());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getImages());
@@ -307,7 +336,7 @@ public class SendPostRequest implements Bean {
 
 	@Override
 	public String toString() {
-		StringBuilder buf = new StringBuilder(288);
+		StringBuilder buf = new StringBuilder(320);
 		buf.append("SendPostRequest{");
 		int len = buf.length();
 		toString(buf);
@@ -324,6 +353,7 @@ public class SendPostRequest implements Bean {
 		buf.append("postalCode").append('=').append(JodaBeanUtils.toString(getPostalCode())).append(',').append(' ');
 		buf.append("priceMin").append('=').append(JodaBeanUtils.toString(getPriceMin())).append(',').append(' ');
 		buf.append("priceMax").append('=').append(JodaBeanUtils.toString(getPriceMax())).append(',').append(' ');
+		buf.append("category").append('=').append(JodaBeanUtils.toString(getCategory())).append(',').append(' ');
 		buf.append("name").append('=').append(JodaBeanUtils.toString(getName())).append(',').append(' ');
 		buf.append("phone").append('=').append(JodaBeanUtils.toString(getPhone())).append(',').append(' ');
 		buf.append("images").append('=').append(JodaBeanUtils.toString(getImages())).append(',').append(' ');
@@ -365,6 +395,11 @@ public class SendPostRequest implements Bean {
 		private final MetaProperty<Integer> priceMax = DirectMetaProperty.ofReadWrite(
 				this, "priceMax", SendPostRequest.class, Integer.class);
 		/**
+		 * The meta-property for the {@code category} property.
+		 */
+		private final MetaProperty<Long> category = DirectMetaProperty.ofReadWrite(
+				this, "category", SendPostRequest.class, Long.class);
+		/**
 		 * The meta-property for the {@code name} property.
 		 */
 		private final MetaProperty<String> name = DirectMetaProperty.ofReadWrite(
@@ -390,6 +425,7 @@ public class SendPostRequest implements Bean {
 				"postalCode",
 				"priceMin",
 				"priceMax",
+				"category",
 				"name",
 				"phone",
 				"images");
@@ -413,6 +449,8 @@ public class SendPostRequest implements Bean {
 					return priceMin;
 				case -1176958117:  // priceMax
 					return priceMax;
+				case 50511102:  // category
+					return category;
 				case 3373707:  // name
 					return name;
 				case 106642798:  // phone
@@ -480,6 +518,14 @@ public class SendPostRequest implements Bean {
 		}
 
 		/**
+		 * The meta-property for the {@code category} property.
+		 * @return the meta-property, not null
+		 */
+		public final MetaProperty<Long> category() {
+			return category;
+		}
+
+		/**
 		 * The meta-property for the {@code name} property.
 		 * @return the meta-property, not null
 		 */
@@ -517,6 +563,8 @@ public class SendPostRequest implements Bean {
 					return ((SendPostRequest) bean).getPriceMin();
 				case -1176958117:  // priceMax
 					return ((SendPostRequest) bean).getPriceMax();
+				case 50511102:  // category
+					return ((SendPostRequest) bean).getCategory();
 				case 3373707:  // name
 					return ((SendPostRequest) bean).getName();
 				case 106642798:  // phone
@@ -545,6 +593,9 @@ public class SendPostRequest implements Bean {
 					return;
 				case -1176958117:  // priceMax
 					((SendPostRequest) bean).setPriceMax((Integer) newValue);
+					return;
+				case 50511102:  // category
+					((SendPostRequest) bean).setCategory((Long) newValue);
 					return;
 				case 3373707:  // name
 					((SendPostRequest) bean).setName((String) newValue);

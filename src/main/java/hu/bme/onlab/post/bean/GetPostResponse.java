@@ -35,6 +35,8 @@ public class GetPostResponse implements Bean {
 	@PropertyDefinition
 	private Calendar creationDateTime;
 	@PropertyDefinition
+	private String categoryName;
+	@PropertyDefinition
 	private String postalCode;
 	@PropertyDefinition
 	private String city;
@@ -251,6 +253,31 @@ public class GetPostResponse implements Bean {
 
 	//-----------------------------------------------------------------------
 	/**
+	 * Gets the categoryName.
+	 * @return the value of the property
+	 */
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	/**
+	 * Sets the categoryName.
+	 * @param categoryName  the new value of the property
+	 */
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	/**
+	 * Gets the the {@code categoryName} property.
+	 * @return the property, not null
+	 */
+	public final Property<String> categoryName() {
+		return metaBean().categoryName().createProperty(this);
+	}
+
+	//-----------------------------------------------------------------------
+	/**
 	 * Gets the postalCode.
 	 * @return the value of the property
 	 */
@@ -394,6 +421,7 @@ public class GetPostResponse implements Bean {
 					JodaBeanUtils.equal(getName(), other.getName()) &&
 					JodaBeanUtils.equal(getPhone(), other.getPhone()) &&
 					JodaBeanUtils.equal(getCreationDateTime(), other.getCreationDateTime()) &&
+					JodaBeanUtils.equal(getCategoryName(), other.getCategoryName()) &&
 					JodaBeanUtils.equal(getPostalCode(), other.getPostalCode()) &&
 					JodaBeanUtils.equal(getCity(), other.getCity()) &&
 					JodaBeanUtils.equal(getLatitude(), other.getLatitude()) &&
@@ -413,6 +441,7 @@ public class GetPostResponse implements Bean {
 		hash = hash * 31 + JodaBeanUtils.hashCode(getName());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPhone());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getCreationDateTime());
+		hash = hash * 31 + JodaBeanUtils.hashCode(getCategoryName());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getPostalCode());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getCity());
 		hash = hash * 31 + JodaBeanUtils.hashCode(getLatitude());
@@ -423,7 +452,7 @@ public class GetPostResponse implements Bean {
 
 	@Override
 	public String toString() {
-		StringBuilder buf = new StringBuilder(416);
+		StringBuilder buf = new StringBuilder(448);
 		buf.append("GetPostResponse{");
 		int len = buf.length();
 		toString(buf);
@@ -442,6 +471,7 @@ public class GetPostResponse implements Bean {
 		buf.append("name").append('=').append(JodaBeanUtils.toString(getName())).append(',').append(' ');
 		buf.append("phone").append('=').append(JodaBeanUtils.toString(getPhone())).append(',').append(' ');
 		buf.append("creationDateTime").append('=').append(JodaBeanUtils.toString(getCreationDateTime())).append(',').append(' ');
+		buf.append("categoryName").append('=').append(JodaBeanUtils.toString(getCategoryName())).append(',').append(' ');
 		buf.append("postalCode").append('=').append(JodaBeanUtils.toString(getPostalCode())).append(',').append(' ');
 		buf.append("city").append('=').append(JodaBeanUtils.toString(getCity())).append(',').append(' ');
 		buf.append("latitude").append('=').append(JodaBeanUtils.toString(getLatitude())).append(',').append(' ');
@@ -495,6 +525,11 @@ public class GetPostResponse implements Bean {
 		private final MetaProperty<Calendar> creationDateTime = DirectMetaProperty.ofReadWrite(
 				this, "creationDateTime", GetPostResponse.class, Calendar.class);
 		/**
+		 * The meta-property for the {@code categoryName} property.
+		 */
+		private final MetaProperty<String> categoryName = DirectMetaProperty.ofReadWrite(
+				this, "categoryName", GetPostResponse.class, String.class);
+		/**
 		 * The meta-property for the {@code postalCode} property.
 		 */
 		private final MetaProperty<String> postalCode = DirectMetaProperty.ofReadWrite(
@@ -532,6 +567,7 @@ public class GetPostResponse implements Bean {
 				"name",
 				"phone",
 				"creationDateTime",
+				"categoryName",
 				"postalCode",
 				"city",
 				"latitude",
@@ -561,6 +597,8 @@ public class GetPostResponse implements Bean {
 					return phone;
 				case 1501934490:  // creationDateTime
 					return creationDateTime;
+				case 426048681:  // categoryName
+					return categoryName;
 				case 2011152728:  // postalCode
 					return postalCode;
 				case 3053931:  // city
@@ -648,6 +686,14 @@ public class GetPostResponse implements Bean {
 		}
 
 		/**
+		 * The meta-property for the {@code categoryName} property.
+		 * @return the meta-property, not null
+		 */
+		public final MetaProperty<String> categoryName() {
+			return categoryName;
+		}
+
+		/**
 		 * The meta-property for the {@code postalCode} property.
 		 * @return the meta-property, not null
 		 */
@@ -705,6 +751,8 @@ public class GetPostResponse implements Bean {
 					return ((GetPostResponse) bean).getPhone();
 				case 1501934490:  // creationDateTime
 					return ((GetPostResponse) bean).getCreationDateTime();
+				case 426048681:  // categoryName
+					return ((GetPostResponse) bean).getCategoryName();
 				case 2011152728:  // postalCode
 					return ((GetPostResponse) bean).getPostalCode();
 				case 3053931:  // city
@@ -743,6 +791,9 @@ public class GetPostResponse implements Bean {
 					return;
 				case 1501934490:  // creationDateTime
 					((GetPostResponse) bean).setCreationDateTime((Calendar) newValue);
+					return;
+				case 426048681:  // categoryName
+					((GetPostResponse) bean).setCategoryName((String) newValue);
 					return;
 				case 2011152728:  // postalCode
 					((GetPostResponse) bean).setPostalCode((String) newValue);

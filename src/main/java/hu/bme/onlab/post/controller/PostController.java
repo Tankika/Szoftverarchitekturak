@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import hu.bme.onlab.post.bean.CheckAddressRequest;
 import hu.bme.onlab.post.bean.CheckAddressResponse;
+import hu.bme.onlab.post.bean.GetCategoriesResponse;
 import hu.bme.onlab.post.bean.GetPostResponse;
 import hu.bme.onlab.post.bean.ListPostsRequest;
 import hu.bme.onlab.post.bean.ListPostsResponse;
@@ -64,6 +65,7 @@ public class PostController {
 		sendPostRequest.setPostalCode(parameterMap.getOrDefault("post[postalCode]", new String[0]).length > 0 ? parameterMap.get("post[postalCode]")[0] : "");
 		sendPostRequest.setPriceMin(parameterMap.getOrDefault("post[priceMin]", new String[0]).length > 0 ? Integer.parseInt(parameterMap.get("post[priceMin]")[0]) : 0);
 		sendPostRequest.setPriceMax(parameterMap.getOrDefault("post[priceMax]", new String[0]).length > 0 ? Integer.parseInt(parameterMap.get("post[priceMax]")[0]) : 0);
+		sendPostRequest.setCategory(parameterMap.getOrDefault("post[category]", new String[0]).length > 0 ? Long.parseLong(parameterMap.get("post[category]")[0]) : 0L);
 		sendPostRequest.setName(parameterMap.getOrDefault("post[name]", new String[0]).length > 0 ? parameterMap.get("post[name]")[0] : "");
 		sendPostRequest.setPhone(parameterMap.getOrDefault("post[phone]", new String[0]).length > 0 ? parameterMap.get("post[phone]")[0] : "");
 		sendPostRequest.setImages(request.getFileMap().values());
@@ -79,6 +81,11 @@ public class PostController {
 	@RequestMapping(path = "/listPosts", method = RequestMethod.POST)
 	public ListPostsResponse listPosts(@RequestBody ListPostsRequest request) {
 		return postService.listPosts(request);
+	}
+	
+	@RequestMapping(path = "/getCategories", method = RequestMethod.GET)
+	public GetCategoriesResponse getCategories() {
+		return postService.getCategories();
 	}
 	
 	@RequestMapping(path = "/checkAddress", method = RequestMethod.POST)

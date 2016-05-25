@@ -1,5 +1,6 @@
 package hu.bme.onlab.post.service;
 
+import hu.bme.onlab.post.bean.GetCategoriesResponse;
 import hu.bme.onlab.post.bean.GetPostResponse;
 import hu.bme.onlab.post.bean.ListPostsRequest;
 import hu.bme.onlab.post.bean.ListPostsResponse;
@@ -26,6 +27,8 @@ public interface PostService {
 	 * @return
 	 */
 	ListPostsResponse listPosts(ListPostsRequest request);
+	
+	public GetCategoriesResponse getCategories();
 	
 	/**
 	 * 

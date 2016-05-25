@@ -33,7 +33,7 @@ public class PostServiceContext {
 	
 	@Bean
 	public PostService getPostService(){
-		return new PostServiceImpl(postRepository, userRepository, null, null, getGeoApiContext());
+		return new PostServiceImpl(postRepository, userRepository, null, null, null, getGeoApiContext());
 	}
 	
 	@Bean

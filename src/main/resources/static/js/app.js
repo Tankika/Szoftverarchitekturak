@@ -23,7 +23,7 @@
 			.when('/404', {
 				templateUrl : 'js/404/404.html'
 			})
-			.otherwise('/');
+			.otherwise('/404');
 		
 		}])
 		.config(['$httpProvider', function($httpProvider) {

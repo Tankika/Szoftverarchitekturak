@@ -10,13 +10,17 @@ angular.module('ServiceFinder.NewPost')
 			invalidFiles: []
 		};
 		self.cityValidation = {};
+		self.categories = [];
 		self.notFoundMessage = "";
 		self.progressBar = new ProgressBar();
 		
 		self.send = send;
 		self.checkAddress = checkAddress;
 		
-		self.loaded = true;
+		NewPostService.getCategories().then(function(data) {
+			self.categories = data.categories;
+			self.loaded = true;
+		});
 		
 		function send() {
 			self.progressBar.reset();
@@ -31,6 +35,7 @@ angular.module('ServiceFinder.NewPost')
     					postalCode: self.postData.postalCode,
     					priceMin: self.postData.priceMin,
     					priceMax: self.postData.priceMax,
+    					category: self.postData.category,
     					name: self.postData.name,
     					phone: self.postData.phone
     				}
