@@ -70,6 +70,7 @@ public class PostServiceTest {
 //		postService.listPosts();
 	}
 	
+	@Ignore
 	@Test
 	public void test() throws Exception {
 		String result = postService.checkAddress("2081 Hungary");

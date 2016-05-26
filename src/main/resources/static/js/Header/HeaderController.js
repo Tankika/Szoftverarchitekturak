@@ -19,7 +19,7 @@ angular.module('ServiceFinder.Header')
 		userChangedUnsubscriber = UserService.subscribe(userChangedListener);
 		$scope.$on('$destroy', onScopeDestroy);
 		
-		function openLoginModal() {
+		function openLoginModal(targetPath) {
 			var modal = $uibModal.open({
 				templateUrl: 'js/Header/login.html',
 				controller: 'LoginModalController',
@@ -31,7 +31,11 @@ angular.module('ServiceFinder.Header')
 			modal.result.then(function(result) {
 				if(result === "login") {
 					// User successfully logged in on modal.
-					$route.reload();
+					if(angular.isString(targetPath)) {
+						$location.path(targetPath);
+					} else {
+						$route.reload();
+					}
 				} else if(result === "signup") {
 					// User clicked the signup link on modal.
 					modal.closed.then(openSignupModal);	
@@ -49,10 +53,12 @@ angular.module('ServiceFinder.Header')
 		}
 		
 		function onNewPostClick() {
+			var newPostPath = "/newPost";
+			
 			if(self.user.authenticated === true) {
-				$location.path("/newPost");
+				$location.path(newPostPath);
 			} else {
-				openLoginModal();
+				openLoginModal(newPostPath);
 			}
 		}
 		

@@ -19,8 +19,8 @@
 			    Ismeretlen hiba történt regisztráció közben. Kérlek próbáld meg később.
 			</div>
 			
-			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$error.emailTaken) && signup_form.email.$invalid }">
-				<label for="email">E-mail cím:</label>
+			<div class="form-group" ng-class="{ 'has-error': (signup_form.$submitted || signup_form.email.$error.emailTaken) && signup_form.email.$invalid }" ng-cloak>
+				<label for="email">E-mail cím: <span ng-show="signup_form.email.$pending"><i class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span></label>
 				<input required
 					id="email"
 					name="email"

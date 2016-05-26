@@ -9,7 +9,7 @@
 		<div>
 			<uib-accordion>
 			
-				<uib-accordion-group heading="Képek hozzáadása" panel-class="{{ new_post_form.$submitted && new_post_form.picture_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+				<uib-accordion-group heading="Képek hozzáadása" panel-class="{{ newPostCtrl.getPanelClass(new_post_form, new_post_form.picture_form) }}">
 					<ng-form name="picture_form" novalidate>
 						<div class="form-group" ng-class="{ 'has-error': (new_post_form.$submitted || picture_form.file.$dirty) && picture_form.file.$invalid }">
 							<div class="row">
@@ -21,7 +21,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="row" ng-show="picture_form.file.$valid">
+							<div class="row" ng-show="picture_form.file.$valid" ng-cloak>
 								<a href="" class="col-xs-6 col-sm-4 col-md-2 preview-container" ng-repeat="file in newPostCtrl.postData.files">
 									<img ngf-src="file" ngf-resize="{width: 125, height: 125}"></img>
 								</a>
@@ -44,7 +44,7 @@
 					</ng-form>
 				</uib-accordion-group>
 				
-				<uib-accordion-group heading="Szolgáltatás leírása" panel-class="{{ new_post_form.$submitted && new_post_form.description_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+				<uib-accordion-group heading="Szolgáltatás leírása" panel-class="{{ newPostCtrl.getPanelClass(new_post_form, new_post_form.description_form) }}">
 					<ng-form name="description_form" novalidate>
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || description_form.title.$dirty) && description_form.title.$invalid }">
 							<div class="col-xs-12 col-sm-6 col-md-6">							
@@ -98,9 +98,9 @@
 					</ng-form>
 				</uib-accordion-group>
 				
-				<uib-accordion-group heading="Szolgáltatás adatai" panel-class="{{ new_post_form.$submitted && new_post_form.details_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+				<uib-accordion-group heading="Szolgáltatás adatai" panel-class="{{ newPostCtrl.getPanelClass(new_post_form, new_post_form.details_form) }}">
 					<ng-form name="details_form" novalidate>
-						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.postal_code.$dirty) && details_form.postal_code.$invalid }">
+						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || details_form.postal_code.$dirty) && details_form.postal_code.$invalid }" ng-cloak>
 							<div class="col-xs-4 col-sm-3 col-md-2">
 								<input required
 									id="postal-code"
@@ -201,7 +201,7 @@
 					</ng-form>
 				</uib-accordion-group>
 				
-				<uib-accordion-group heading="Hírdető adatai" panel-class="{{ new_post_form.$submitted && new_post_form.advertiser_form.$invalid ? 'panel-danger' : 'panel-default' }}">
+				<uib-accordion-group heading="Hírdető adatai" panel-class="{{ newPostCtrl.getPanelClass(new_post_form, new_post_form.advertiser_form) }}">
 					<ng-form name="advertiser_form" novalidate>
 						<div class="form-group row" ng-class="{ 'has-error': (new_post_form.$submitted || advertiser_form.name.$dirty) && advertiser_form.name.$invalid }">
 							<div class="col-xs-12 col-sm-6 col-md-6">

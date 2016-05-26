@@ -1,6 +1,6 @@
 angular.module('ServiceFinder.NewPost')
 
-	.controller('NewPostController', ['NewPostService', 'UserService', '$location', '$q', 'Upload', function(NewPostService, UserService, $location, $q, Upload) {
+	.controller('NewPostController', ['NewPostService', 'UserService', '$location', '$q', 'Upload', '$uibModal', function(NewPostService, UserService, $location, $q, Upload, $uibModal) {
 		'use strict';
 		
 		var self = this;
@@ -16,6 +16,7 @@ angular.module('ServiceFinder.NewPost')
 		
 		self.send = send;
 		self.checkAddress = checkAddress;
+		self.getPanelClass = getPanelClass; 
 		
 		NewPostService.getCategories().then(function(data) {
 			self.categories = data.categories;
@@ -47,6 +48,17 @@ angular.module('ServiceFinder.NewPost')
 			upload.then(function(response) {
 				delete self.abort;
             	self.progressBar.type = "success";
+
+    			var modal = $uibModal.open({
+    				templateUrl: 'js/NewPost/success.html',
+    				size: 'sm'
+    			})
+    			
+    			modal.result.then(handleCloseModal, handleCloseModal);
+    			
+    			function handleCloseModal() {
+    				$location.path("/");
+    			}
             }, function(error) {
             	delete self.abort;
         		self.progressBar.type = "danger";
@@ -76,6 +88,20 @@ angular.module('ServiceFinder.NewPost')
 			});
 			
 			return deferred.promise;
+		}
+		
+		function getPanelClass(rootForm, actualForm) {
+			if(angular.isUndefined(rootForm) || angular.isUndefined(actualForm)) {
+				return;
+			}
+			
+			if(rootForm.$submitted && actualForm.$invalid) {
+				return 'panel-danger';
+			} else if(actualForm.$valid) {
+				return 'panel-success';				
+			} else {
+				return 'panel-default';
+			}
 		}
 		
 		function ProgressBar() {

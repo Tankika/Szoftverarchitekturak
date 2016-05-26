@@ -20,6 +20,8 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.model.AddressComponent;
 import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
+import com.mysema.query.types.ExpressionUtils;
+import com.mysema.query.types.Predicate;
 
 import hu.bme.onlab.ServiceFinder;
 import hu.bme.onlab.post.bean.GetCategoriesData;
@@ -37,6 +39,7 @@ import hu.bme.onlab.post.domain.Category;
 import hu.bme.onlab.post.domain.Image;
 import hu.bme.onlab.post.domain.Location;
 import hu.bme.onlab.post.domain.Post;
+import hu.bme.onlab.post.domain.PostPredicates;
 import hu.bme.onlab.post.repository.CategoryRepository;
 import hu.bme.onlab.post.repository.ImageRepository;
 import hu.bme.onlab.post.repository.LocationRepository;
@@ -161,7 +164,14 @@ public class PostServiceImpl implements PostService {
 		ListPostsResponse response = new ListPostsResponse();
 		response.setPosts(new ArrayList<>());
 		
-		List<Post> postDomains = postRepository.findAll(new PageRequest(request.getPage() - 1, request.getPageSize(), Direction.DESC, "creationDateTime")).getContent();
+		Predicate predicate = ExpressionUtils
+				.allOf(PostPredicates.titleLike(request.getTitle()),
+						PostPredicates.cityLike(request.getCity()),
+						PostPredicates.priceBetween(request.getPriceMin(),	request.getPriceMax()),
+						PostPredicates.categoryEquals(request.getCategory()),
+						PostPredicates.dateBetween(request.getStartDate(), request.getEndDate()));
+		
+		List<Post> postDomains = postRepository.findAll(predicate, new PageRequest(request.getPage() - 1, request.getPageSize(), Direction.DESC, "creationDateTime")).getContent();
 		postDomains
 			.stream()
 			.forEach(domainObject -> {
@@ -193,11 +203,12 @@ public class PostServiceImpl implements PostService {
 				postBean.setCreationDateTime(domainObject.getCreationDateTime());
 				postBean.setCity(domainObject.getLocation().getCity());
 				postBean.setMapUrl(mapUrl);
+				postBean.setCategoryName(domainObject.getCategory().getName());
 				
 				response.getPosts().add(postBean);	
 			});
 		
-		response.setTotalPosts(postRepository.count());
+		response.setTotalPosts(postRepository.count(predicate));
 		
 		return response;
 	}
@@ -311,5 +322,5 @@ public class PostServiceImpl implements PostService {
 			return false;
 		}
 	}
-	
+
 }

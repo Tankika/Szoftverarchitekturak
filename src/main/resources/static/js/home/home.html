@@ -4,51 +4,168 @@
      </div>
  </div>
       
-<div class="row loadmask" ng-class="{ 'loaded' : homeCtrl.loaded }">
+<div class="row loadmask" ng-class="{ 'loaded' : !homeCtrl.loading }">
 
 	<div class="col-md-3">
 		<div class="well">
-			FILTER PANEL
+			<form name="filter_form" ng-submit="filter_form.$valid && homeCtrl.doFilter()">
+				<div class="form-group">
+					<label for="title">Cím:</label>
+					<input
+						id="title"
+						name="title"
+						type="text"
+						class="form-control"
+						placeholder="Keress a címben!"
+						ng-model="homeCtrl.filter.title">
+					</input>
+				</div>
+				
+				<div class="form-group">
+					<label for="city">Város:</label>
+					<input
+						id="city"
+						name="city"
+						type="text"
+						class="form-control"
+						placeholder="Keress a városra!"
+						ng-model="homeCtrl.filter.city">
+					</input>
+				</div>
+				
+				<div class="form-group">
+					<label for="category">Kategória:</label>
+					<select
+						id="category"
+						name="category"
+						class="form-control"
+						ng-model="homeCtrl.filter.category"
+						ng-options="category.id as category.name for category in homeCtrl.categories">
+							<option value="">---Kategóriák---</option>
+					</select>
+				</div>
+				
+				<div class="form-group well">
+					<div ng-class="{ 'has-error': filter_form.price_min.$invalid }">
+						<label for="price-min">Minimum ár:</label>
+						<input
+							id="price-min"
+							name="price_min"
+							type="number"
+							class="form-control"
+							min="0"
+							max="1000000000"
+							ng-model="homeCtrl.filter.priceMin">
+						</input>
+					</div>
+					
+					<div ng-class="{ 'has-error': filter_form.price_max.$invalid }">
+						<label for="price-max">Maximum ár:</label>
+						<input
+							id="price-max"
+							name="price_max"
+							type="number"
+							class="form-control"
+							min="0"
+							max="1000000000"
+							ng-model="homeCtrl.filter.priceMax">
+						</input>
+					</div>
+				</div>
+				
+				<div class="form-group well">
+					<label for="price-max">Kezdő dátum:</label>
+        			<p class="input-group">
+	          			<input type="text"
+	          				id="start-date"
+	          				name="start_date"
+	        				class="form-control"
+	        				uib-datepicker-popup
+	        				is-open="startDateOpened"
+	        				ng-model="homeCtrl.filter.startDate"
+	        				close-text="Bezárás"
+	        				current-text="Ma" 
+	        				clear-text="Törlés" />
+				        <span class="input-group-btn">
+				          	<button type="button" class="btn btn-default" ng-click="startDateOpened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+				        </span>
+			        </p>
+			        
+					<label for="price-max">Végső dátum:</label>
+        			<p class="input-group">
+	          			<input type="text"
+	          				id="end-date"
+	          				name="end_date"
+	        				class="form-control"
+	        				uib-datepicker-popup
+	        				is-open="endDateOpened"
+	        				ng-model="homeCtrl.filter.endDate"
+	        				close-text="Bezárás"
+	        				current-text="Ma" 
+	        				clear-text="Törlés" />
+				        <span class="input-group-btn">
+				          	<button type="button" class="btn btn-default" ng-click="endDateOpened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+				        </span>
+			        </p>
+				</div>
+				
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-6">
+							<button type="reset" class="btn btn-default" ng-click="homeCtrl.resetFilter()">Törlés</button>
+						</div>
+						<div class="col-xs-6 text-right">
+							<button type="submit" class="btn btn-primary">Szűrés</button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 	
 	<div class="col-md-9">
-		<div class="well">
-			<div ng-repeat="post in homeCtrl.posts">
-		        <div class="row">
-		            <div class="col-md-3">
-		                <a href="/post?id={{post.id}}">
-		                    <img class="img-responsive" ng-src="{{ post.mapUrl }}" alt="">
-		                </a>
-		            </div>
-		            <div class="col-md-9">
-		                <h3><a href="/post?id={{post.id}}">{{ post.title }}</a></h3>
-		                <h4>
-		                	<span ng-show="post.priceMin">{{ (post.priceMin | currency:undefined:0) + '-tól' }}</span>
-		                	<span ng-show="post.priceMax">{{ (post.priceMax | currency:undefined:0) + '-ig' }}</span>
-		                </h4>
-		                <h5>{{ post.city }}</h5>
-		                <h5>{{ post.creationDateTime | date:'yyyy.MM.dd HH:mm:ss' }}</h5>
-	<!--                 	<uib-rating class="rating" ng-model="post.rating" titles="[1, 2, 3, 4, 5]"></uib-rating> -->
-		            </div>
+		<div class="well" ng-cloak>
+			<div class="alert alert-info text-center" ng-show="!homeCtrl.posts.length">
+				<h2>Sajnos nincs a keresésnek megfelelő hírdetés a rendszerben!</h2>
+			</div>
+			<div ng-show="homeCtrl.posts.length">
+				<div ng-repeat="post in homeCtrl.posts">
+			        <div class="row">
+			            <div class="col-md-3">
+			                <a href="/post?id={{post.id}}">
+			                    <img class="img-responsive" ng-src="{{ post.mapUrl }}" alt="">
+			                </a>
+			            </div>
+			            <div class="col-md-9">
+			                <h3><a href="/post?id={{post.id}}">{{ post.title }}</a></h3>
+			                <h4>
+			                	<span ng-show="post.priceMin">{{ (post.priceMin | currency:undefined:0) + '-tól' }}</span>
+			                	<span ng-show="post.priceMax">{{ (post.priceMax | currency:undefined:0) + '-ig' }}</span>
+			                </h4>
+			                <h5>{{ post.city }}</h5>
+			                <h5>{{ post.creationDateTime | date:'yyyy.MM.dd HH:mm:ss' }}</h5>
+			                <h4>{{ post.categoryName }}</h4>
+		<!--                 	<uib-rating class="rating" ng-model="post.rating" titles="[1, 2, 3, 4, 5]"></uib-rating> -->
+			            </div>
+			        </div>
+			
+			        <hr>
 		        </div>
 		
-		        <hr>
-	        </div>
-	
-	        <div class="row text-center">
-	            <div class="col-lg-12">
-	                <uib-pagination
-	                		ng-model="homeCtrl.paging.page"
-	                		ng-change="homeCtrl.getPosts()"
-	                		items-per-page="homeCtrl.paging.pageSize"
-	                		total-items="homeCtrl.paging.totalPosts"
-	                		max-size="5"
-	                		force-ellipses="true"
-	                		previous-text="&lsaquo;"
-	                		next-text="&rsaquo;">
-	               		</uib-pagination>
-	            </div>
+		        <div class="row text-center">
+		            <div class="col-lg-12">
+		                <uib-pagination
+		                		ng-model="homeCtrl.paging.page"
+		                		ng-change="homeCtrl.getPosts()"
+		                		items-per-page="homeCtrl.paging.pageSize"
+		                		total-items="homeCtrl.paging.totalPosts"
+		                		max-size="5"
+		                		force-ellipses="true"
+		                		previous-text="&lsaquo;"
+		                		next-text="&rsaquo;">
+		               		</uib-pagination>
+		            </div>
+		        </div>
 	        </div>
         </div>
 	</div>
