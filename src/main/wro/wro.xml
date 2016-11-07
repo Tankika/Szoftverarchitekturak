@@ -19,9 +19,9 @@
 		<css>/src/main/resources/static/style/main.less</css>
 		<js>/src/main/resources/static/js/modules.js</js>
 		<js>/src/main/resources/static/js/app.js</js>
-		<js>/src/main/resources/static/js/Home/*.js</js>
+		<js>/src/main/resources/static/js/home/*.js</js>
 		<js>/src/main/resources/static/js/Header/*.js</js>
-		<js>/src/main/resources/static/js/User/*.js</js>
+		<js>/src/main/resources/static/js/user/*.js</js>
 		<js>/src/main/resources/static/js/NewPost/*.js</js>
 		<js>/src/main/resources/static/js/Post/*.js</js>
 	</group>
