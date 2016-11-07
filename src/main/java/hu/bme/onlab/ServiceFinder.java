@@ -39,7 +39,7 @@ public class ServiceFinder {
 	public static final String API_KEY;
 	
 	static {
-		API_KEY = System.getProperty("google.key");
+		API_KEY = System.getenv("google.key");
 		
 		if(API_KEY == null) {
 			throw new IllegalStateException("Google api key is not set in system properties");
