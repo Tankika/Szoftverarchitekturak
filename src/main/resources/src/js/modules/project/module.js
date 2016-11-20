@@ -1,0 +1,1 @@
+angular.module('BugTracker.Project', []);

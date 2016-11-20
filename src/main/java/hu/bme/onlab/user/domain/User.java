@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -32,7 +34,7 @@ public class User {
 	private String password;
 	private boolean enabled;
 	
-	private Set<Authority> authorities;
+	private Set<Role> roles;
 	private Set<Post> posts;
 
 	@Id
@@ -75,22 +77,26 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	@OneToMany(mappedBy = "users")
-	public Set<Authority> getAuthorities() {
-		if(authorities == null) {
-			authorities = new HashSet<Authority>();
+	@ManyToMany
+	@JoinTable(
+			name="USER_ROLE",
+			joinColumns=@JoinColumn(name="USER_ID", referencedColumnName="ID"),
+			inverseJoinColumns=@JoinColumn(name="ROLE_ID", referencedColumnName="ID"))
+	public Set<Role> getRoles() {
+		if(roles == null) {
+			roles = new HashSet<Role>();
 		}
-		return authorities;
+		return roles;
 	}
 
-	public void setAuthorities(Set<Authority> authorities) {
-		this.authorities = authorities;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 	
-	public void addAuthority(Authority authority) {
-		this.getAuthorities().add(authority);
-		if(!authority.getUsers().contains(this)) {
-			authority.addUser(this);
+	public void addRole(Role role) {
+		this.getRoles().add(role);
+		if(!role.getUsers().contains(this)) {
+			role.addUser(this);
 		}
 	}
 	

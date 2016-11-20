@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 		user.setEnabled(true);
 		Authority userAuthority = authorityRepository.findByAuthorityIgnoreCase(ROLE_USER).get(0);
-		user.addAuthority(userAuthority);
+		//user.addAuthority(userAuthority);
 		
 		userRepository.save(user);
 	}

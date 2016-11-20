@@ -41,9 +41,9 @@ public class ServiceFinder {
 	static {
 		API_KEY = System.getenv("google.key");
 		
-		if(API_KEY == null) {
+		/*if(API_KEY == null) {
 			throw new IllegalStateException("Google api key is not set in system properties");
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {		
@@ -68,7 +68,7 @@ public class ServiceFinder {
 				.httpBasic().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
 				.authorizeRequests()
-					.antMatchers("/", "/user/signup", "/user/checkEmail", "/user/user", "post/getCategories", "/post/listPosts", "/post/**", "/post/downloadImage/**", "/404", "/fonts/**", "/font-awesome/**")
+					.antMatchers("/", "/bundled.js", "/bundled.css", "/user/signup", "/user/checkEmail", "/user/user", "post/getCategories", "/post/listPosts", "/post/**", "/post/downloadImage/**", "/404", "/fonts/**", "/font-awesome/**")
 						.permitAll()
 					.anyRequest()
 						.authenticated()

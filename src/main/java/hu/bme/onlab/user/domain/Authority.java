@@ -25,7 +25,7 @@ public class Authority {
 	private Long id;
 	private String authority;
 	
-	private Set<User> users;
+	private Set<Role> roles;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="authority_sequence")
@@ -46,24 +46,24 @@ public class Authority {
 	
 	@ManyToMany
 	@JoinTable(
-			name="USER_AUTH",
+			name="ROLE_AUTH",
 			joinColumns=@JoinColumn(name="AUTH_ID", referencedColumnName="ID"),
-			inverseJoinColumns=@JoinColumn(name="USER_ID", referencedColumnName="ID"))
-	public Set<User> getUsers() {
-		if(users == null) {
-			users = new HashSet<User>();
+			inverseJoinColumns=@JoinColumn(name="ROLE_ID", referencedColumnName="ID"))
+	public Set<Role> getRoles() {
+		if(roles == null) {
+			roles = new HashSet<Role>();
 		}
-		return users;
+		return roles;
 	}
 	
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 	
-	public void addUser(User user) {
-		this.getUsers().add(user);
-		if(!user.getAuthorities().contains(this)) {
-			user.addAuthority(this);
+	public void addRole(Role role) {
+		this.getRoles().add(role);
+		if(!role.getAuthorities().contains(this)) {
+			role.addAuthority(this);
 		}
 	}
 }
