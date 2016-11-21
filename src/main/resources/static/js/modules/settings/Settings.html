@@ -1,3 +1,15 @@
 <div class="settings">
-	Settings
+	<div class="col-xs-12 col-md-3 well">
+		<ul>
+			<li>
+				<a ui-sref="main.settings.personal">Személyes beállítások</a>
+			</li>
+			<li>
+				<a ui-sref="main.settings.usermanagement">Felhasználók kezelése</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-xs-12 col-md-9">
+		<ui-view></ui-view>
+	</div>
 </div>

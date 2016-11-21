@@ -10,6 +10,12 @@ footer {
 	cursor: pointer;
 }
 
+[ng-click],
+[ui-sref],
+a {
+	cursor: pointer;
+}
+
 .well {
     min-height: 20px;
     padding: 19px;
@@ -138,18 +144,6 @@ form {
 #post-page {
 	@picture-container-height: 500px;
 	
-	.carousel-inner {
-		height: @picture-container-height;
-		
-		img {
-			margin: auto;
-		}
-	}
-	
-	.angular-google-map-container {
-		height: @picture-container-height;
-	}
-
 	.details {
 		magin-top: 15px;
 		

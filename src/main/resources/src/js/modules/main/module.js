@@ -5,6 +5,6 @@ angular.module('BugTracker.Main', [])
 		url: '/',
 		abstract: true,
 		templateUrl: 'js/modules/main/Main.html',
-		controller: 'MainController as vm'
+		controller: 'MainController as mainController'
 	})
 }]);

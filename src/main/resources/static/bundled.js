@@ -1588,19 +1588,42 @@ angular.module('BugTracker.Main', [])
 		url: '/',
 		abstract: true,
 		templateUrl: 'js/modules/main/Main.html',
-		controller: 'MainController as vm'
+		controller: 'MainController as mainController'
 	})
 }]);
 angular.module('BugTracker.Main')
-	.service('MainService', [function() {
+	.service('MainService', ['$state', function($state) {
 		'use strict';
-				
+
+		this.navigateToProject = navigateToProject;
+		
+		function navigateToProject(projectId) {
+			$state.go('main.project', {
+				projectId: projectId
+			});
+		}
 	}]);
 angular.module('BugTracker.Main')
-	.controller('MainController', [function() {
+	.controller('MainController', ['UserHandlerService', 'MainService', function(UserHandlerService, MainService) {
 		'use strict';
 		
-		var vm = this;
+		var mainController = this;
+		mainController.isLoggedIn = true;
+		mainController.logout = logout;
+		mainController.addNewProject = addNewProject;
+		mainController.onClickOnProject = onClickOnProject;
+		
+		function logout() {
+			
+		}
+		
+		function addNewProject() {
+			
+		}
+		
+		function onClickOnProject(project) {
+			MainService.navigateToProject(project.id);
+		}
 	}]);
 angular.module('BugTracker.Project', []);
 angular.module('BugTracker.Project')
@@ -1618,10 +1641,21 @@ angular.module('BugTracker.Project')
 angular.module('BugTracker.Settings', [])
 
 .config(['$stateProvider', function($stateProvider) {
-	$stateProvider.state('main.settings', {
-		url: '/settings',
+	$stateProvider
+	.state('main.settings', {
+		url: 'settings/',
 		templateUrl: 'js/modules/settings/Settings.html',
 		controller: 'SettingsController as vm'
+	})
+	.state('main.settings.personal', {
+		url: 'personal/',
+		templateUrl: 'js/modules/settings/personal/Personal.html',
+		controller: 'PersonalController as PersonalSettingsController'
+	})
+	.state('main.settings.usermanagement', {
+		url: 'usermanagement/',
+		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
+		controller: 'UserManagementController as UserManagementSettingsController'
 	})
 }]);
 angular.module('BugTracker.Settings')
@@ -1636,21 +1670,37 @@ angular.module('BugTracker.Settings')
 		var vm = this;
 		
 	}]);
+angular.module('BugTracker.Settings')
+	.service('UserManagementService', [function() {
+		'use strict';
+				
+	}]);
+angular.module('BugTracker.Settings')
+	.controller('UserManagementController', [function() {
+		'use strict';
+		
+		var vm = this;
+		
+	}]);
 angular.module('BugTracker.WelcomeScreen', [])
 
 .config(['$stateProvider', function($stateProvider) {
 	$stateProvider.state('main.welcomescreen', {
-		url: '/welcome',
+		url: 'welcome/',
 		templateUrl: 'js/modules/welcomescreen/WelcomeScreen.html',
-		controller: 'WelcomeScreenController as vm'
+		controller: 'WelcomeScreenController as welcomeScreenController'
 	})
 }]);
 angular.module('BugTracker.WelcomeScreen')
 	.controller('WelcomeScreenController', [function() {
 		'use strict';
 		
-		var vm = this;
-		console.log("ASD");
+		var welcomeScreenController = this;
+		welcomeScreenController.login = login;
+		
+		function login() {
+			
+		}
 	}]);
 (function() {
 	'use strict';
