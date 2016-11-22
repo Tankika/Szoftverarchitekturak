@@ -104,7 +104,7 @@ public class PostServiceImpl implements PostService {
 		post.setName(request.getName());
 		post.setPhone(request.getPhone());
 		post.setCreationDateTime(Calendar.getInstance());
-		post.setAdvertiser(user);
+//		post.setAdvertiser(user);
 		post.setLocation(location);
 		post.setCategory(category);
 		
