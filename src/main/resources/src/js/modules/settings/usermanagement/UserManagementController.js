@@ -1,11 +1,12 @@
 angular.module('BugTracker.Settings')
-	.controller('UserManagementController', ['UserManagementService', 'UserHandlerService', function(UserManagementService, UserHandlerService) {
+	.controller('UserManagementController', ['UserManagementService', 'UserHandlerService', 'userManagementPreload', function(UserManagementService, UserHandlerService, userManagementPreload) {
 		'use strict';
 		
 		var vm = this;
 		
 		vm.onSignupButtonClick = onSignupButtonClick;
 		vm.isEmailFree = isEmailFree;
+		vm.roles = userManagementPreload.roles;
 		
 		vm.credentials = {};
 		
@@ -24,4 +25,5 @@ angular.module('BugTracker.Settings')
 				return error;
 			});
 		}
+
 	}]);

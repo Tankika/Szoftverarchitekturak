@@ -1,7 +1,21 @@
--- test user
-insert into authority (id, authority) values (nextval('authority_sequence'), 'ROLE_USER');
-insert into users (id, email, password, enabled) values (nextval('user_sequence'), 'user@test.hu', '$2a$10$JgzUSFgxLodg.R4xmZXvB.sRmJ1LtHXuVPOndRec13K13hykLyqqW', true);
-insert into user_auth (user_id, auth_id) values (currval('user_sequence'), currval('authority_sequence'));
+--- authorities
+insert into authority (id, authority) values (nextval('authority_sequence'), 'ADD_NEW_USER');
+insert into authority (id, authority) values (nextval('authority_sequence'), 'CREATE_NEW_PROJECT');
+
+--- roles
+insert into role(id, role_name) values (nextval('role_sequence'), 'DEVELOPER');
+insert into role(id, role_name) values (nextval('role_sequence'), 'ADMIN');
+insert into role_auth(role_id, auth_id) values ((select ID FROM ROLE WHERE ROLE_NAME='DEVELOPER'), (select ID from AUTHORITY where AUTHORITY='CREATE_NEW_PROJECT'));
+insert into role_auth(role_id, auth_id) values ((select ID FROM ROLE WHERE ROLE_NAME='ADMIN'), (select ID from AUTHORITY where AUTHORITY='ADD_NEW_USER'));
+insert into role_auth(role_id, auth_id) values ((select ID FROM ROLE WHERE ROLE_NAME='ADMIN'), (select ID from AUTHORITY where AUTHORITY='CREATE_NEW_PROJECT'));
+
+--- developer@asd.com asdasdasd
+insert into users (id, email, password, enabled) values (nextval('user_sequence'), 'developer@asd.com', '$2a$10$2SKf9tcOgm4ZCMVancksI.42goBX7W3ckqDNh31wZ6hltQLH9LILu', true);
+insert into user_role(user_id, role_id) values (currval('user_sequence'), (SELECT ID FROM ROLE WHERE ROLE_NAME='DEVELOPER'));
+
+--- admin@asd.com asdasdasd
+insert into users (id, email, password, enabled) values (nextval('user_sequence'), 'admin@asd.com', '$2a$10$2SKf9tcOgm4ZCMVancksI.42goBX7W3ckqDNh31wZ6hltQLH9LILu', true);
+insert into user_role(user_id, role_id) values (currval('user_sequence'), (SELECT ID FROM ROLE WHERE ROLE_NAME='ADMIN'));
 
 insert into location (id, city, postal_code, latitude, longitude) values (nextval('location_sequence'), 'Piliscsaba', '2081', 47.6356691, 18.8335907);
 insert into category (id, name) values (nextval('category_sequence'), 'Villanyszerelés');
@@ -19,13 +33,6 @@ insert into location (id, city, postal_code, latitude, longitude) values (nextva
 insert into category (id, name) values (nextval('category_sequence'), 'Informatika');
 insert into post (id, title, name, location_id, phone, price_min, price_max, creation_date_time, advertiser_id, category_id, description) values (nextval('post_sequence'), E'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris dignissim tristique neque, in metus.', 'Mekk Elek', currval('location_sequence'), '+36 12 432 2344', 5000, 100000, current_timestamp, currval('user_sequence'), currval('category_sequence'), E'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mi est, rutrum a leo non, molestie imperdiet libero. Proin elit turpis, fermentum eu tortor sit amet, rutrum dictum nibh. Proin commodo placerat dolor, sed vestibulum erat condimentum ac. Aliquam a arcu ac magna viverra mollis. Nunc facilisis velit arcu, nec dapibus sapien efficitur tempus. Sed eu mauris auctor, luctus orci ut, bibendum risus. Phasellus quis nibh et justo porttitor suscipit et vel tortor. Aenean vitae tortor congue, facilisis lacus sed, tempor erat. Nulla euismod aliquet tellus. Suspendisse turpis leo, venenatis non diam sed, viverra iaculis dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras a risus venenatis, auctor tortor non, efficitur neque. Nunc consequat placerat mauris ut facilisis. Aliquam auctor a diam ornare euismod. Pellentesque consequat sem ac massa consectetur, quis molestie elit consectetur. Morbi sit amet facilisis elit, a maximus leo.\n\nIn ac dictum ipsum. Aliquam ut venenatis nisl, eget viverra magna. Aenean fringilla in sem sed finibus. Nunc sit amet eleifend diam, ut rhoncus ligula. Morbi sed quam at velit lobortis scelerisque non et magna. Quisque faucibus, urna non sodales auctor, nisl ligula luctus libero, vitae sollicitudin turpis est et nunc. Nulla facilisis at lectus vel sollicitudin. Aliquam erat volutpat. Integer quis feugiat augue. Aenean quis justo laoreet, auctor libero vitae, iaculis orci. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in accumsan turpis, ac gravida massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas cursus lacinia odio, non placerat augue maximus vulputate. Curabitur aliquet lacus volutpat velit suscipit, eget porttitor turpis sollicitudin.\n\nPraesent eu gravida ex, vel commodo justo. Suspendisse pharetra lectus vitae leo viverra, id fringilla elit varius. Fusce elementum molestie venenatis. Pellentesque in pretium turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus a sapien id elementum. Aliquam euismod tempor tortor pretium tristique. Suspendisse non nunc accumsan, euismod nisl ac, molestie purus. Morbi non efficitur justo, ac efficitur nisi. Aliquam ullamcorper molestie aliquam. Quisque dignissim convallis velit, nec venenatis eros euismod ut. Phasellus cursus tortor ut laoreet consectetur.\n\nVestibulum elementum turpis volutpat eleifend maximus. Aenean sit amet eleifend ligula. Maecenas id turpis convallis, commodo diam a, pulvinar tellus. Duis eu quam fringilla, mattis risus at, rutrum felis. Pellentesque sed massa a ipsum ultrices sagittis vitae ac massa. Fusce auctor libero id tellus interdum rutrum. Donec consectetur ligula elit, quis congue nunc imperdiet id. Nunc nec orci vitae metus vulputate sollicitudin vel eget tortor. Vestibulum facilisis, lorem in hendrerit venenatis, lorem elit finibus ante, ac blandit eros ante nec dolor. Vivamus aliquet, erat quis ornare tincidunt, neque quam tincidunt nulla, in ornare arcu metus quis nisi. Duis est nunc, faucibus vel eros id, efficitur dignissim orci. Phasellus quis cursus tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus.\n\nIn non leo nunc. Donec non ultricies dui, et auctor ipsum. Mauris iaculis neque ac lectus lobortis congue in dictum ante. Aliquam egestas nisl dui, non blandit nisi venenatis porta. Pellentesque volutpat turpis nec enim ornare, ac blandit elit pulvinar. Nunc justo nisl, vulputate nec faucibus eget, bibendum ut lorem. Morbi at dapibus risus, id posuere neque. Duis gravida convallis odio.');
 INSERT INTO public.image( id, content_type, data, name, size, post_id ) SELECT nextval('image_sequence'), content_type, data, name, size, currval('post_sequence') FROM tmp_image;
-
-
--- admin user
-insert into users (id, email, password, enabled) values (nextval('user_sequence'), 'admin@test.hu', '$2a$10$cEan6k0hSBWgarnhZiXRs.vtMCyu2TGheF7i6j5IErkORfHDIjp6G', true);
-insert into user_auth (user_id, auth_id) values (currval('user_sequence'), currval('authority_sequence'));
-insert into authority (id, authority) values (nextval('authority_sequence'), 'ROLE_ADMIN');
-insert into user_auth (user_id, auth_id) values (currval('user_sequence'), currval('authority_sequence'));
 
 insert into category (id, name) values (nextval('category_sequence'), 'Kertészet');
 insert into category (id, name) values (nextval('category_sequence'), 'Pénzügy');

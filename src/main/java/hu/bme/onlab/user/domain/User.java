@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+
 import hu.bme.onlab.post.domain.Post;
 
 @Entity(name="users")
@@ -95,9 +96,6 @@ public class User {
 	
 	public void addRole(Role role) {
 		this.getRoles().add(role);
-		if(!role.getUsers().contains(this)) {
-			role.addUser(this);
-		}
 	}
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "advertiser")

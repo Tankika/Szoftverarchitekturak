@@ -9,5 +9,6 @@ import hu.bme.onlab.user.domain.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	List<User> findByEmailIgnoreCase(String email);
-
+	
+	User findByEmail(String email);
 }

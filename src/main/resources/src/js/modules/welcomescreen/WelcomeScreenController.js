@@ -5,6 +5,8 @@ angular.module('BugTracker.WelcomeScreen')
 		var vm = this;
 		vm.login = login;
 		
+		vm.isLoggedIn = UserHandlerService.isLoggedIn;
+		
 		vm.credentials = {};
 		
 		function login() {
@@ -14,7 +16,6 @@ angular.module('BugTracker.WelcomeScreen')
 				if (angular.isObject(data) && data.authenticated === true) {
 					vm.error = false;
 					vm.loginFailed = false;
-					
 				} else {
 					vm.error = true;
 				}
