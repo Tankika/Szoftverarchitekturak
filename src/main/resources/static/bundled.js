@@ -1567,12 +1567,35 @@ angular.module('BugTracker.Common')
 	.service('UserHandlerService', ['$http', '$q', function($http, $q) {
 		'use strict';
 		
-		this.getUserAuthorities = getUserAuthorities;
 		this.isEmailFree = isEmailFree;
 		this.login = login;
+		this.logout = logout;
+		this.isAuthorised = isAuthorised;
+		this.isLoggedIn = isLoggedIn;
 		
-		function getUserAuthorities() {
-			
+		var authorities = [];
+		var loggedIn = false;
+		checkAuthentication();
+		
+		function checkAuthentication() {
+			return $http.get("/user/checklogin").then(function(response) {
+				storeAuthorities(response.data.authorities);
+				console.log(response.data);
+				//storeUserData(
+				loggedIn = true;
+				return response.data;
+			}, function(error) {
+				// setUserLoggedOff()
+				return error;
+			});
+		}
+		
+		function isLoggedIn() {
+			return loggedIn; 
+		}
+		
+		function isAuthorised(authority) {
+			return authorities.indexOf(authority) !== -1;
 		}
 		
 		function isEmailFree(email) {
@@ -1584,23 +1607,37 @@ angular.module('BugTracker.Common')
 		}
 		
 		function login(credentials) {
-			var deferred = $q.defer(),
-				headers = {};
+			var headers = {};
 			
-			if(angular.isObject(credentials)) {
+			if (angular.isObject(credentials)) {
 				headers.authorization = "Basic " + btoa(credentials.email + ":" + credentials.password);
 			}
 			
-			$http.get("/user/user", { headers: headers })
-			.then(function(response) {
-				changeUser(response.data);
-				deferred.resolve(response.data);
+			return $http.get("/user/user", { headers: headers }).then(function(response) {
+				storeAuthorities(response.data.authorities);
+				console.log(response.data);
+				//storeUserData(
+				loggedIn = true;
+				return response.data;
 			}, function(error) {
-				setUserLoggedOff();
-				deferred.reject(error);
+				// setUserLoggedOff()
+				return error;
 			});
-			
-			return deferred.promise;
+		}
+		
+		function logout() {		
+			return $http.get("/user/logout").then(function() {
+				loggedIn = false;
+			});
+		}
+		
+		function storeAuthorities(authorityData) {
+			authorities = [];
+			if (angular.isArray(authorityData)) {
+				for(var i = 0; i < authorityData.length; i++) {
+					authorities.push(authorityData[i].authority);
+				}
+			}
 		}
 	}]);
 angular.module('BugTracker.Issue', [])
@@ -1643,17 +1680,20 @@ angular.module('BugTracker.Main')
 		}
 	}]);
 angular.module('BugTracker.Main')
-	.controller('MainController', ['UserHandlerService', 'MainService', function(UserHandlerService, MainService) {
+	.controller('MainController', ['UserHandlerService', 'MainService', '$state', function(UserHandlerService, MainService, $state) {
 		'use strict';
 		
 		var mainController = this;
-		mainController.isLoggedIn = true;
+		mainController.isLoggedIn = UserHandlerService.isLoggedIn;
+		mainController.isAuthorised = UserHandlerService.isAuthorised;
 		mainController.logout = logout;
 		mainController.addNewProject = addNewProject;
 		mainController.onClickOnProject = onClickOnProject;
 		
 		function logout() {
-			
+			UserHandlerService.logout().then(function() {
+				$state.go('main.welcomescreen');
+			});
 		}
 		
 		function addNewProject() {
@@ -1694,7 +1734,12 @@ angular.module('BugTracker.Settings', [])
 	.state('main.settings.usermanagement', {
 		url: 'usermanagement/',
 		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
-		controller: 'UserManagementController as vm'
+		controller: 'UserManagementController as vm',
+		resolve: {
+			userManagementPreload: ['UserManagementService', function(userManagementService) {
+				return userManagementService.getUserManagementPreload();
+			}]
+		}
 	})
 }]);
 angular.module('BugTracker.Settings')
@@ -1710,15 +1755,48 @@ angular.module('BugTracker.Settings')
 		
 	}]);
 angular.module('BugTracker.Settings')
+	.service('PersonalService', ['$http', function($http) {
+		'use strict';
+	
+		this.changeUserPassword = changeUserPassword;
+		
+		function changeUserPassword(newPassword) {
+			return $http.post('/user/changePassword', {newPassword: newPassword});
+		}
+	}]);
+angular.module('BugTracker.Settings')
+	.controller('PersonalController', ['PersonalService', function(PersonalService) {
+		'use strict';
+		
+		var vm = this;
+
+		vm.onSavePersonalSettings = onSavePersonalSettings;
+		vm.onChangePasswordButtonClick = onChangePasswordButtonClick;
+		
+		vm.credentials = {};
+		
+		function onSavePersonalSettings() {
+			// TODO
+		}
+		
+		function onChangePasswordButtonClick() {
+			PersonalService.changeUserPassword(vm.newPassword).then(function() {
+				console.log("000");
+			});
+		}
+	}]);
+angular.module('BugTracker.Settings')
 	.service('UserManagementService', ['$http', function($http) {
 		'use strict';
 		
 		this.signup = signup;
+		this.getUserManagementPreload = getUserManagementPreload;
 		
 		function signup(credentials) {
 			var request = {
 				email: credentials.email,
-				password: credentials.password
+				password: credentials.password,
+				roleId: credentials.selectedRole
 			};
 			
 			return $http.post("/user/signup", request).then(function(response) {
@@ -1727,15 +1805,23 @@ angular.module('BugTracker.Settings')
 				return error;
 			});
 		}
+		
+		function getUserManagementPreload() {
+			return $http.get('/user/usermanagementpreload').then(function(response) {
+				return response.data;
+			});
+		}
+		
 	}]);
 angular.module('BugTracker.Settings')
-	.controller('UserManagementController', ['UserManagementService', 'UserHandlerService', function(UserManagementService, UserHandlerService) {
+	.controller('UserManagementController', ['UserManagementService', 'UserHandlerService', 'userManagementPreload', function(UserManagementService, UserHandlerService, userManagementPreload) {
 		'use strict';
 		
 		var vm = this;
 		
 		vm.onSignupButtonClick = onSignupButtonClick;
 		vm.isEmailFree = isEmailFree;
+		vm.roles = userManagementPreload.roles;
 		
 		vm.credentials = {};
 		
@@ -1754,6 +1840,7 @@ angular.module('BugTracker.Settings')
 				return error;
 			});
 		}
+
 	}]);
 
 
@@ -1773,6 +1860,8 @@ angular.module('BugTracker.WelcomeScreen')
 		var vm = this;
 		vm.login = login;
 		
+		vm.isLoggedIn = UserHandlerService.isLoggedIn;
+		
 		vm.credentials = {};
 		
 		function login() {
@@ -1782,7 +1871,6 @@ angular.module('BugTracker.WelcomeScreen')
 				if (angular.isObject(data) && data.authenticated === true) {
 					vm.error = false;
 					vm.loginFailed = false;
-					
 				} else {
 					vm.error = true;
 				}

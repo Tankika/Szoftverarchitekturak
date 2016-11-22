@@ -1,15 +1,18 @@
 angular.module('BugTracker.Main')
-	.controller('MainController', ['UserHandlerService', 'MainService', function(UserHandlerService, MainService) {
+	.controller('MainController', ['UserHandlerService', 'MainService', '$state', function(UserHandlerService, MainService, $state) {
 		'use strict';
 		
 		var mainController = this;
-		mainController.isLoggedIn = true;
+		mainController.isLoggedIn = UserHandlerService.isLoggedIn;
+		mainController.isAuthorised = UserHandlerService.isAuthorised;
 		mainController.logout = logout;
 		mainController.addNewProject = addNewProject;
 		mainController.onClickOnProject = onClickOnProject;
 		
 		function logout() {
-			
+			UserHandlerService.logout().then(function() {
+				$state.go('main.welcomescreen');
+			});
 		}
 		
 		function addNewProject() {

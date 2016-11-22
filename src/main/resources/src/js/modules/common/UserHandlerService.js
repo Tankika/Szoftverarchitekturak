@@ -2,12 +2,35 @@ angular.module('BugTracker.Common')
 	.service('UserHandlerService', ['$http', '$q', function($http, $q) {
 		'use strict';
 		
-		this.getUserAuthorities = getUserAuthorities;
 		this.isEmailFree = isEmailFree;
 		this.login = login;
+		this.logout = logout;
+		this.isAuthorised = isAuthorised;
+		this.isLoggedIn = isLoggedIn;
 		
-		function getUserAuthorities() {
-			
+		var authorities = [];
+		var loggedIn = false;
+		checkAuthentication();
+		
+		function checkAuthentication() {
+			return $http.get("/user/checklogin").then(function(response) {
+				storeAuthorities(response.data.authorities);
+				console.log(response.data);
+				//storeUserData(
+				loggedIn = true;
+				return response.data;
+			}, function(error) {
+				// setUserLoggedOff()
+				return error;
+			});
+		}
+		
+		function isLoggedIn() {
+			return loggedIn; 
+		}
+		
+		function isAuthorised(authority) {
+			return authorities.indexOf(authority) !== -1;
 		}
 		
 		function isEmailFree(email) {
@@ -19,22 +42,36 @@ angular.module('BugTracker.Common')
 		}
 		
 		function login(credentials) {
-			var deferred = $q.defer(),
-				headers = {};
+			var headers = {};
 			
-			if(angular.isObject(credentials)) {
+			if (angular.isObject(credentials)) {
 				headers.authorization = "Basic " + btoa(credentials.email + ":" + credentials.password);
 			}
 			
-			$http.get("/user/user", { headers: headers })
-			.then(function(response) {
-				changeUser(response.data);
-				deferred.resolve(response.data);
+			return $http.get("/user/user", { headers: headers }).then(function(response) {
+				storeAuthorities(response.data.authorities);
+				console.log(response.data);
+				//storeUserData(
+				loggedIn = true;
+				return response.data;
 			}, function(error) {
-				setUserLoggedOff();
-				deferred.reject(error);
+				// setUserLoggedOff()
+				return error;
 			});
-			
-			return deferred.promise;
+		}
+		
+		function logout() {		
+			return $http.get("/user/logout").then(function() {
+				loggedIn = false;
+			});
+		}
+		
+		function storeAuthorities(authorityData) {
+			authorities = [];
+			if (angular.isArray(authorityData)) {
+				for(var i = 0; i < authorityData.length; i++) {
+					authorities.push(authorityData[i].authority);
+				}
+			}
 		}
 	}]);

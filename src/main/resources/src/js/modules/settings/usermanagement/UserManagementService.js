@@ -3,11 +3,13 @@ angular.module('BugTracker.Settings')
 		'use strict';
 		
 		this.signup = signup;
+		this.getUserManagementPreload = getUserManagementPreload;
 		
 		function signup(credentials) {
 			var request = {
 				email: credentials.email,
-				password: credentials.password
+				password: credentials.password,
+				roleId: credentials.selectedRole
 			};
 			
 			return $http.post("/user/signup", request).then(function(response) {
@@ -16,4 +18,11 @@ angular.module('BugTracker.Settings')
 				return error;
 			});
 		}
+		
+		function getUserManagementPreload() {
+			return $http.get('/user/usermanagementpreload').then(function(response) {
+				return response.data;
+			});
+		}
+		
 	}]);

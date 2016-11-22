@@ -52,6 +52,13 @@
 			</div>
 		</div>
 		
+		<div class="form-group">
+			<label for="role">Szerepkör:</label>
+			<select ng-model="vm.credentials.selectedRole">
+				<option ng-repeat="role in vm.roles">{{role.id}}</option>
+			</select>
+		</div>
+		
 		<button class="btn btn-primary pull-right" ng-disabled="vm.addUserForm.email.$pending" ng-click="vm.onSignupButtonClick()">Hozzáadás</button>
 	</form>
 </div>

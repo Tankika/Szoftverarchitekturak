@@ -11,7 +11,7 @@
 					name="password"
 					type="password"
 					class="form-control"
-					ng-model="vm.credentials.password"
+					ng-model="vm.newPassword"
 					ng-minlength="8"
 					ng-maxlength="100" />
 				<div class="text-danger error-block">
@@ -26,8 +26,8 @@
 					name="password_confirm"
 					type="password"
 					class="form-control"
-					ng-model="vm.credentials.password_confirm"
-					ui-validate="{ 'confirmed': '$value == vm.credentials.password' }"
+					ng-model="vm.newPasswordConfirm"
+					ui-validate="{ 'confirmed': '$value == vm.newPassword' }"
 					ui-validate-watch=" 'vm.credentials.password' " />
 				<div class="text-danger error-block">
 					<div ng-if="vm.changeUserDetails.password_confirm.$error.required">Kérlek erősítsd meg a jelszavad!</div>
@@ -35,6 +35,6 @@
 				</div>
 			</div>
 		
-    	<button class="btn btn-primary pull-right" type="button" ng-click="vm.onSavePersonalSettings()">Mentés</button>
+    	<button class="btn btn-primary pull-right" type="button" ng-click="vm.onChangePasswordButtonClick()">Mentés</button>
    	</form>
 </div>
