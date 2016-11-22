@@ -20,6 +20,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import hu.bme.onlab.issue.domain.Issue;
+import hu.bme.onlab.issue.domain.Project;
 import hu.bme.onlab.post.domain.Post;
 
 @Entity(name="users")
@@ -35,7 +37,8 @@ public class User {
 	private boolean enabled;
 	
 	private Set<Role> roles;
-	private Set<Post> posts;
+	private Set<Project> projects;
+	private Set<Issue> issues;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user_sequence")
@@ -99,23 +102,39 @@ public class User {
 			role.addUser(this);
 		}
 	}
-	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "advertiser")
-	public Set<Post> getPosts() {
-		if(posts == null) {
-			posts = new HashSet<Post>();
-		}
-		return posts;
-	}
 
-	public void setPosts(Set<Post> posts) {
-		this.posts = posts;
+	@ManyToMany
+	public Set<Project> getProjects() {
+		if(projects == null) {
+			projects = new HashSet<>();
+		}
+		return projects;
+	}
+	public void setProjects(Set<Project> projects) {
+		this.projects = projects;
 	}
 	
-	public void addPost(Post post) {
-		this.getPosts().add(post);
-		if(post.getAdvertiser() != this) {
-			post.setAdvertiser(this);
+	public void addProject(Project project) {
+		this.getProjects().add(project);
+		if(!project.getUsers().contains(this)) {
+			project.addUser(this);
+		}
+	}
+	
+	@OneToMany(mappedBy="assignee")
+	public Set<Issue> getIssues() {
+		if(issues == null) {
+			issues = new HashSet<>();
+		}
+		return issues;
+	}
+	public void setIssues(Set<Issue> issues) {
+		this.issues = issues;
+	}
+	public void addIssue(Issue issue) {
+		this.getIssues().add(issue);
+		if(!this.equals(issue.getProject())) {
+			issue.setAssignee(this);
 		}
 	}
 }

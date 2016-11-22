@@ -36,7 +36,7 @@ public class Post {
 	private String phone;
 	private Calendar creationDateTime;
 	
-	private User advertiser;
+//	private User advertiser;
 	private Location location;
 	private Set<Image> images;
 	private Category category;
@@ -121,18 +121,18 @@ public class Post {
 		this.creationDateTime = creationDateTime;
 	}
 
-	@ManyToOne
-	@NotNull
-	public User getAdvertiser() {
-		return advertiser;
-	}
-
-	public void setAdvertiser(User advertiser) {
-		this.advertiser = advertiser;
-		if(!advertiser.getPosts().contains(this)) {
-			advertiser.addPost(this);
-		}
-	}
+//	@ManyToOne
+//	@NotNull
+//	public User getAdvertiser() {
+//		return advertiser;
+//	}
+//
+//	public void setAdvertiser(User advertiser) {
+//		this.advertiser = advertiser;
+//		if(!advertiser.getPosts().contains(this)) {
+//			advertiser.addPost(this);
+//		}
+//	}
 
 	@ManyToOne
 	@NotNull
