@@ -15,6 +15,7 @@ gulp.task('aggregateJs', function() {
 	return gulp.src([
 			'src/main/resources/src/js/3rdparty/angular/angular.min.js',
 			'src/main/resources/src/js/3rdparty/angular/angular-ui-router.min.js',
+			'src/main/resources/src/js/3rdparty/angular/validate.min.js',
 			'src/main/resources/src/js/3rdparty/angular/ui-bootstrap-2.2.0.min.js',
 			'src/main/resources/src/js/3rdparty/jquery/jquery-3.1.1.min.js',
 			'src/main/resources/src/js/3rdparty/momentjs/moment-with-locales.min.js',
@@ -37,6 +38,8 @@ gulp.task('aggregateJs', function() {
 			'src/main/resources/src/js/modules/settings/peronal/PersonalController.js',
 			'src/main/resources/src/js/modules/settings/usermanagement/UserManagementService.js',
 			'src/main/resources/src/js/modules/settings/usermanagement/UserManagementController.js',
+			'src/main/resources/src/js/modules/settings/userprojects/UserProjectsService.js',
+			'src/main/resources/src/js/modules/settings/userprojects/UserProjectsController.js',
 			'src/main/resources/src/js/modules/welcomescreen/module.js',
 			'src/main/resources/src/js/modules/welcomescreen/WelcomeScreenService.js',
 			'src/main/resources/src/js/modules/welcomescreen/WelcomeScreenController.js',

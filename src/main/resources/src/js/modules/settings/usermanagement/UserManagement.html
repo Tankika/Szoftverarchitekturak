@@ -1,3 +1,57 @@
-<div class="settings-usermanagement">
-
+<div class="settings-usermanagement well clearfix">
+	<h3>Új felhasználó regisztrálása</h3>
+	<form novalidate name="vm.addUserForm" role="form">
+		<div class="alert alert-danger" ng-if="vm.error">
+		    Ismeretlen hiba történt regisztráció közben. Kérlek próbáld meg később.
+		</div>
+		
+		<div class="form-group" ng-class="{ 'has-error': (vm.addUserForm.$submitted || vm.addUserForm.email.$error.emailTaken) && vm.addUserForm.email.$invalid }">
+			<label for="email">E-mail cím: <span ng-if="vm.addUserForm.email.$pending"><i class="fa fa-refresh fa-spin fa-1x fa-fw"></i></span></label>
+			<input required
+				name="email"
+				type="email" 
+				class="form-control"
+				ng-model="vm.credentials.email"
+				ng-model-options="{ debounce: 250 }"
+				ng-maxlength="254"
+				ui-validate-async="{ 'emailTaken': 'vm.isEmailFree($value)' }" />
+			<div class="text-danger error-block">
+				<div ng-if="vm.addUserForm.email.$error.required">Kérlek add meg az e-mail címed</div>
+				<div ng-if="vm.addUserForm.email.$error.email">Az e-mail cím formátuma nem megfelelő!</div>
+				<div ng-if="vm.addUserForm.email.$error.maxlength">Az e-mail cím legfeljebb 254 karakter hosszú lehet!</div>
+				<div ng-if="vm.addUserForm.email.$error.emailTaken">A megadott e-mail cím már szerepel a rendszerben!</div>
+			</div>
+		</div>
+		<div class="form-group" ng-class="{ 'has-error': vm.addUserForm.$submitted && vm.addUserForm.password.$invalid }">
+			<label for="password">Jelszó:</label>
+			<input required
+				name="password"
+				type="password"
+				class="form-control"
+				ng-model="vm.credentials.password"
+				ng-minlength="8"
+				ng-maxlength="100" />
+			<div class="text-danger error-block">
+				<div ng-if="vm.addUserForm.password.$error.required">Kérlek add meg a jelszavad!</div>
+				<div ng-if="vm.addUserForm.password.$error.minlength">A jelszónak minimum 8 karakter hosszúnak kell lennie!</div>
+				<div ng-if="vm.addUserForm.password.$error.maxlength">A jelszó legfeljebb 100 karakter hosszú lehet!</div>
+			</div>
+		</div>
+		<div class="form-group" ng-class="{ 'has-error': vm.addUserForm.$submitted && vm.addUserForm.password_confirm.$invalid }">
+			<label for="password-confirm">Jelszó megerősítése:</label>
+			<input required
+				name="password_confirm"
+				type="password"
+				class="form-control"
+				ng-model="vm.credentials.password_confirm"
+				ui-validate="{ 'confirmed': '$value == vm.credentials.password' }"
+				ui-validate-watch=" 'vm.credentials.password' " />
+			<div class="text-danger error-block">
+				<div ng-if="vm.addUserForm.password_confirm.$error.required">Kérlek erősítsd meg a jelszavad!</div>
+				<div ng-if="vm.addUserForm.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</div>
+			</div>
+		</div>
+		
+		<button class="btn btn-primary pull-right" ng-disabled="vm.addUserForm.email.$pending" ng-click="vm.onSignupButtonClick()">Hozzáadás</button>
+	</form>
 </div>

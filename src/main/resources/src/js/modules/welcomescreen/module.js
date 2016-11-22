@@ -4,6 +4,6 @@ angular.module('BugTracker.WelcomeScreen', [])
 	$stateProvider.state('main.welcomescreen', {
 		url: 'welcome/',
 		templateUrl: 'js/modules/welcomescreen/WelcomeScreen.html',
-		controller: 'WelcomeScreenController as welcomeScreenController'
+		controller: 'WelcomeScreenController as vm'
 	})
 }]);

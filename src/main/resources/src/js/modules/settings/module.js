@@ -10,11 +10,11 @@ angular.module('BugTracker.Settings', [])
 	.state('main.settings.personal', {
 		url: 'personal/',
 		templateUrl: 'js/modules/settings/personal/Personal.html',
-		controller: 'PersonalController as PersonalSettingsController'
+		controller: 'PersonalController as vm'
 	})
 	.state('main.settings.usermanagement', {
 		url: 'usermanagement/',
 		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
-		controller: 'UserManagementController as UserManagementSettingsController'
+		controller: 'UserManagementController as vm'
 	})
 }]);
