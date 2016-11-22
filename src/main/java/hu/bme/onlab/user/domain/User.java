@@ -98,9 +98,6 @@ public class User {
 	
 	public void addRole(Role role) {
 		this.getRoles().add(role);
-		if(!role.getUsers().contains(this)) {
-			role.addUser(this);
-		}
 	}
 
 	@ManyToMany
