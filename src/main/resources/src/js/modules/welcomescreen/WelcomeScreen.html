@@ -1,4 +1,4 @@
 <div class="welcomescreen clearfix">
 	<ng-include ng-if="!vm.isLoggedIn()" src="'js/modules/welcomescreen/LoginForm.html'"></ng-include>
-	<h3 ng-if="vm.isLoggedIn()">Üdv, asd!</h3>
+	<h3 ng-if="vm.isLoggedIn()">Üdv, {{vm.getUsername()}}!</h3>
 </div>

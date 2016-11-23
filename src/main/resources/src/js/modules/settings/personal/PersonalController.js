@@ -1,21 +1,21 @@
 angular.module('BugTracker.Settings')
-	.controller('PersonalController', ['PersonalService', function(PersonalService) {
+	.controller('PersonalController', ['PersonalService', 'UserHandlerService', function(PersonalService, UserHandlerService) {
 		'use strict';
 		
 		var vm = this;
 
-		vm.onSavePersonalSettings = onSavePersonalSettings;
 		vm.onChangePasswordButtonClick = onChangePasswordButtonClick;
-		
+		vm.email = UserHandlerService.getUsername();
 		vm.credentials = {};
 		
-		function onSavePersonalSettings() {
-			// TODO
-		}
 		
 		function onChangePasswordButtonClick() {
 			PersonalService.changeUserPassword(vm.newPassword).then(function() {
-				console.log("000");
+				vm.success = true;
+				vm.error = false;
+			}, function() {
+				vm.success = false;
+				vm.error = true;
 			});
 		}
 	}]);

@@ -42,16 +42,6 @@ public class UserController {
 		return user;
 	}
 	
-	@RequestMapping(path = "/checklogin")
-	public Principal checkLogin() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			return (Principal) authentication.getPrincipal();
-		} else {
-			return null;
-		}
-	}
-	
 	@RequestMapping(path = "/logout")
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

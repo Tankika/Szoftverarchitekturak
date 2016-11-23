@@ -7,23 +7,11 @@ angular.module('BugTracker.Common')
 		this.logout = logout;
 		this.isAuthorised = isAuthorised;
 		this.isLoggedIn = isLoggedIn;
+		this.getUsername = getUsername;
 		
 		var authorities = [];
+		var principal = {};
 		var loggedIn = false;
-		checkAuthentication();
-		
-		function checkAuthentication() {
-			return $http.get("/user/checklogin").then(function(response) {
-				storeAuthorities(response.data.authorities);
-				console.log(response.data);
-				//storeUserData(
-				loggedIn = true;
-				return response.data;
-			}, function(error) {
-				// setUserLoggedOff()
-				return error;
-			});
-		}
 		
 		function isLoggedIn() {
 			return loggedIn; 
@@ -31,6 +19,10 @@ angular.module('BugTracker.Common')
 		
 		function isAuthorised(authority) {
 			return authorities.indexOf(authority) !== -1;
+		}
+		
+		function getUsername() {
+			return principal.username;
 		}
 		
 		function isEmailFree(email) {
@@ -50,8 +42,7 @@ angular.module('BugTracker.Common')
 			
 			return $http.get("/user/user", { headers: headers }).then(function(response) {
 				storeAuthorities(response.data.authorities);
-				console.log(response.data);
-				//storeUserData(
+				storeUserData(response.data.principal);
 				loggedIn = true;
 				return response.data;
 			}, function(error) {
@@ -73,5 +64,9 @@ angular.module('BugTracker.Common')
 					authorities.push(authorityData[i].authority);
 				}
 			}
+		}
+		
+		function storeUserData(data) {
+			principal = data;
 		}
 	}]);

@@ -12,9 +12,11 @@ angular.module('BugTracker.Settings')
 		
 		function onSignupButtonClick() {
 			UserManagementService.signup(vm.credentials).then(function(data) {
-				// empty
+				vm.success = true;
+				vm.error = false;
 			}, function(error) {
 				vm.error = true;
+				vm.success = false;
 			});
 		}
 		

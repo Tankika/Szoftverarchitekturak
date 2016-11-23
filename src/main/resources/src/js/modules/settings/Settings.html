@@ -5,7 +5,7 @@
 				<a ui-sref="main.settings.personal">Személyes beállítások</a>
 			</li>
 			<li>
-				<a ui-sref="main.settings.usermanagement">Felhasználók kezelése</a>
+				<a ng-if="vm.isAuthorised('ADD_NEW_USER')" ui-sref="main.settings.usermanagement">Felhasználók kezelése</a>
 			</li>
 		</ul>
 	</div>

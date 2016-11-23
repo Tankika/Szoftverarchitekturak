@@ -6,7 +6,7 @@ angular.module('BugTracker.WelcomeScreen')
 		vm.login = login;
 		
 		vm.isLoggedIn = UserHandlerService.isLoggedIn;
-		
+		vm.getUsername = UserHandlerService.getUsername;
 		vm.credentials = {};
 		
 		function login() {
