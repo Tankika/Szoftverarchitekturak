@@ -1,5 +1,8 @@
 package hu.bme.onlab.issue.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
@@ -17,15 +21,6 @@ import hu.bme.onlab.user.domain.User;
 @SequenceGenerator(name="issue_sequence", sequenceName="issue_sequence", allocationSize=1)
 public class Issue {
 	private Long id;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="issue_sequence")
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	private String name;
 	private String description;
@@ -43,6 +38,16 @@ public class Issue {
 	
 	private Project project;
 	private User assignee;
+	private Set<Comment> comments;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="issue_sequence")
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	public String getName() {
 		return name;
@@ -107,8 +112,24 @@ public class Issue {
 	public User getAssignee() {
 		return assignee;
 	}
-	public void setAssignee(User user) {
+	public void setAssignee(User assignee) {
 		this.assignee = assignee;
 	}
 	
+	@OneToMany(mappedBy="issue")
+	public Set<Comment> getComments() {
+		if(comments == null) {
+			comments = new HashSet<>();
+		}
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+	public void addComment(Comment comment) {
+		this.getComments().add(comment);
+		if(!this.equals(comment.getIssue())) {
+			comment.setIssue(this);
+		}
+	}
 }

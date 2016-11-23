@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import hu.bme.onlab.issue.domain.Comment;
 import hu.bme.onlab.issue.domain.Issue;
 import hu.bme.onlab.issue.domain.Project;
 import hu.bme.onlab.post.domain.Post;
@@ -39,6 +40,7 @@ public class User {
 	private Set<Role> roles;
 	private Set<Project> projects;
 	private Set<Issue> issues;
+	private Set<Comment> comments;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user_sequence")
@@ -132,6 +134,23 @@ public class User {
 		this.getIssues().add(issue);
 		if(!this.equals(issue.getProject())) {
 			issue.setAssignee(this);
+		}
+	}
+	
+	@OneToMany(mappedBy="author")
+	public Set<Comment> getComments() {
+		if(comments == null) {
+			comments = new HashSet<>();
+		}
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+	public void addComment(Comment comment) {
+		this.getComments().add(comment);
+		if(!this.equals(comment.getAuthor())) {
+			comment.setAuthor(this);
 		}
 	}
 }
