@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import hu.bme.onlab.issue.repository.ProjectRepository;
 import hu.bme.onlab.user.bean.CheckEmailRequest;
 import hu.bme.onlab.user.bean.CheckEmailResponse;
 import hu.bme.onlab.user.bean.PasswordChangeRequest;
@@ -30,12 +32,15 @@ public class UserServiceImpl implements UserService {
 	
 	private PasswordEncoder passwordEncoder;
 	
+	private ProjectRepository projectRepository;
+	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, ProjectRepository projectRepository) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.authorityRepository = authorityRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.projectRepository = projectRepository;
 	}
 	
 	/**
@@ -55,6 +60,9 @@ public class UserServiceImpl implements UserService {
 		else {
 			user.addRole(role);
 		}
+		
+		projectRepository.findAll(signupRequest.getProjectIds()).forEach(project -> user.addProject(project));
+		
 		userRepository.save(user);
 	}
 

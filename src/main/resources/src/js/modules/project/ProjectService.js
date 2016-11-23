@@ -9,4 +9,5 @@ angular.module('BugTracker.Project')
 				return response.data;
 			});
 		}
+		
 	}]);

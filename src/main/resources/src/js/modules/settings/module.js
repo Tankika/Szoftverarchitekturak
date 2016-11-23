@@ -17,8 +17,11 @@ angular.module('BugTracker.Settings', [])
 		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
 		controller: 'UserManagementController as vm',
 		resolve: {
-			userManagementPreload: ['UserManagementService', function(userManagementService) {
-				return userManagementService.getUserManagementPreload();
+			userManagementPreload: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getUserManagementPreload();
+			}],
+			projectList: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getProjectList();
 			}]
 		}
 	})

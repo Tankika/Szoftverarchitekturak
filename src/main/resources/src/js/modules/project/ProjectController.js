@@ -13,6 +13,7 @@ angular.module('BugTracker.Project')
 			demoIssueList.push({name:'A' + i, type:'bug', priority:'low', severity:'low', status:'OPEN'});
 		}
 		
+		vm.projectName = issueList.projectName;
 		vm.issueList =  issueList.issues.length > 0 ? issueList.issues : demoIssueList;
 		vm.getTableHeight = getTableHeight;
 		
