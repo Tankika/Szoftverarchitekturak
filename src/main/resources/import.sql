@@ -20,15 +20,15 @@ insert into user_role(user_id, role_id) values (currval('user_sequence'), (SELEC
 --- project + issue
 insert into project(id, name) values (nextval('project_sequence'), 'Teszt projekt 1');
 insert into issue(id, name, description, reproductionSteps, version, type, status, priority, severity, assignee_id, project_id)
-		  values (nextval(issue_sequence), 'Teszt issue 1', 'ASD', 'ASD', '1.0.0', 'BUG', 'OPEN', 'LOW', 'LOW', (SELECT id FROM users WHERE email='developer@asd.com'), currval('project_sequence'));
+		  values (nextval('issue_sequence'), 'Teszt issue 1', 'ASD', 'ASD', '1.0.0', 'BUG', 'OPEN', 'LOW', 'LOW', (SELECT id FROM users WHERE email='developer@asd.com'), currval('project_sequence'));
 insert into issue(id, name, description, reproductionSteps, version, type, status, priority, severity, assignee_id, project_id)
-		  values (nextval(issue_sequence), 'Teszt issue 2', 'ASD2', 'ASD2', '1.0.0', 'BUG', 'RESOLVED', 'MEDIUM', 'HIGH', (SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
+		  values (nextval('issue_sequence'), 'Teszt issue 2', 'ASD2', 'ASD2', '1.0.0', 'BUG', 'RESOLVED', 'MEDIUM', 'HIGH', (SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
 insert into users_projects(users_id, projects_id) values ((SELECT id FROM users WHERE email='developer@asd.com'), currval('project_sequence'));
 insert into users_projects(users_id, projects_id) values ((SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
 
 insert into project(id, name) values (nextval('project_sequence'), 'Teszt projekt 2');
 insert into issue(id, name, description, reproductionSteps, version, type, status, priority, severity, assignee_id, project_id)
-		  values (nextval(issue_sequence), 'TP2I1', 'Teszt leírás', 'Repro', '1.0.0', 'TASK', 'OPEN', 'CRITICAL', 'CRITICAL', (SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
+		  values (nextval('issue_sequence'), 'TP2I1', 'Teszt leírás', 'Repro', '1.0.0', 'TASK', 'OPEN', 'CRITICAL', 'CRITICAL', (SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
 insert into users_projects(users_id, projects_id) values ((SELECT id FROM users WHERE email='admin@asd.com'), currval('project_sequence'));
 
 insert into location (id, city, postal_code, latitude, longitude) values (nextval('location_sequence'), 'Piliscsaba', '2081', 47.6356691, 18.8335907);

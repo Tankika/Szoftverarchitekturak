@@ -25,4 +25,9 @@ angular.module('BugTracker.Settings', [])
 			}]
 		}
 	})
+	.state('main.settings.projectmanagement', {
+		url: 'projectmanagement/',
+		templateUrl: 'js/modules/settings/projectmanagement/ProjectManagement.html',
+		controller: 'ProjectManagementController as vm'
+	});
 }]);

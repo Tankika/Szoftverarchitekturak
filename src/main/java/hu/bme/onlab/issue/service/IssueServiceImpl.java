@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.bme.onlab.issue.bean.Comment;
+import hu.bme.onlab.issue.bean.CreateNewProjectRequest;
 import hu.bme.onlab.issue.bean.ListIssuesData;
 import hu.bme.onlab.issue.bean.ListIssuesResponse;
 import hu.bme.onlab.issue.bean.ListProjectsData;
 import hu.bme.onlab.issue.bean.ListProjectsResponse;
+import hu.bme.onlab.issue.domain.Project;
 import hu.bme.onlab.issue.repository.IssueRepository;
 import hu.bme.onlab.issue.repository.ProjectRepository;
 
@@ -70,6 +72,13 @@ public class IssueServiceImpl implements IssueService {
 		});
 		
 		return listIssuesResponse;
+	}
+
+	@Override
+	public void createNewProject(CreateNewProjectRequest createNewProjectRequest) {
+		Project project = new Project();
+		project.setName(createNewProjectRequest.getName());
+		projectRepository.save(project);
 	}
 
 }
