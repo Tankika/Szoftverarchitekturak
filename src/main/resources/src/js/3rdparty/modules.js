@@ -3,4 +3,6 @@ angular.module('BugTracker.3rdparty', ['ui.bootstrap',
 									   'ui.validate',
 									   'ui.select',
 									   'ui.grid',
+									   'ui.grid.pagination',
+									   'ui.grid.autoResize',
 									   'ngSanitize']);

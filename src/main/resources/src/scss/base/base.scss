@@ -19,12 +19,27 @@ a {
 	background: #fff;
 	position: relative;
 }
-
-.project-grid-size {
-	width: 800px;
-	height: 500px;
+.project-grid-pagination {
+	margin-top: 8px;
+	display: table;
+	.project-grid-pagination-button {
+		display: table-cell;
+	}
+	.project-grid-pagination-text {
+		display: table-cell;
+		text-align: center;
+		width: 100%;
+	}
 }
 
+.project {
+	div[ui-grid] {
+		.glyphicon {
+			font-size: 16px;
+			margin: 6px 10px;
+		}
+	}
+}
 .well {
     min-height: 20px;
     padding: 19px;

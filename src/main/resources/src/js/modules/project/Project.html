@@ -1,9 +1,21 @@
 <div class="project clearfix">
 	<div class="row">
-		<button class="btn btn-primary" ng-click="vm.onCreateNewIssueButtonClick()">Create new issue</button>
+		<button class="btn btn-primary pull-right" ng-click="vm.onCreateNewIssueButtonClick()">Új issue létrehozása</button>
 	</div>
 	
 	<hr>
 	
-	<div ui-grid="vm.gridOptions" class="project-grid-size"></div>
+	<div ui-grid="vm.gridOptions" ui-grid-pagination ui-grid-auto-resize ng-style="{height: vm.getTableHeight() + 'px'}"></div>
+	<div class="project-grid-pagination">
+		<div class="project-grid-pagination-button">
+			<button type="button" class="btn btn-primary" ng-click="vm.gridApi.pagination.previousPage()">Előző oldal</button>
+		</div>
+		<div class="project-grid-pagination-text">
+			<p>{{ vm.gridApi.pagination.getPage() }}/{{ vm.gridApi.pagination.getTotalPages() }}</p>
+		</div>
+		<div class="project-grid-pagination-button">
+			<button type="button" class="btn btn-primary" ng-click="vm.gridApi.pagination.nextPage()">Következő oldal</button>
+		</div>
+	</div>
+		
 </div>
