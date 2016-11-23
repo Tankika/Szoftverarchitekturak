@@ -6,8 +6,6 @@ angular.module('BugTracker.Main')
 		mainController.isLoggedIn = UserHandlerService.isLoggedIn;
 		mainController.isAuthorised = UserHandlerService.isAuthorised;
 		mainController.logout = logout;
-		mainController.addNewProject = addNewProject;
-		mainController.onClickOnProject = onClickOnProject;
 		
 		function logout() {
 			UserHandlerService.logout().then(function() {
@@ -15,11 +13,4 @@ angular.module('BugTracker.Main')
 			});
 		}
 		
-		function addNewProject() {
-			
-		}
-		
-		function onClickOnProject(project) {
-			MainService.navigateToProject(project.id);
-		}
 	}]);

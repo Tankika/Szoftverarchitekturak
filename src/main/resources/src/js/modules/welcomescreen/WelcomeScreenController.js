@@ -1,5 +1,5 @@
 angular.module('BugTracker.WelcomeScreen')
-	.controller('WelcomeScreenController', ['UserHandlerService', function(UserHandlerService) {
+	.controller('WelcomeScreenController', ['UserHandlerService', 'WelcomeScreenService', '$state', function(UserHandlerService, WelcomeScreenService, $state) {
 		'use strict';
 		
 		var vm = this;
@@ -8,6 +8,24 @@ angular.module('BugTracker.WelcomeScreen')
 		vm.isLoggedIn = UserHandlerService.isLoggedIn;
 		vm.getUsername = UserHandlerService.getUsername;
 		vm.credentials = {};
+		vm.projectList = [];
+		vm.openProjectDetails = openProjectDetails;
+		
+		if (vm.isLoggedIn()) {
+			getProjects();
+		}		
+		
+		function getProjects() {
+			WelcomeScreenService.listProjects().then(function(data) {
+				vm.projectList = data.projects;
+			});
+		}
+		
+		function openProjectDetails(index) {
+			$state.go('main.project', {
+				id: vm.projectList[index].id
+			});
+		}
 		
 		function login() {
 			UserHandlerService.login(vm.credentials).then(handleSuccess, handleError);
@@ -16,6 +34,7 @@ angular.module('BugTracker.WelcomeScreen')
 				if (angular.isObject(data) && data.authenticated === true) {
 					vm.error = false;
 					vm.loginFailed = false;
+					getProjects();
 				} else {
 					vm.error = true;
 				}
