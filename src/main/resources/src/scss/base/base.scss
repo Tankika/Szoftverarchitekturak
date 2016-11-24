@@ -19,6 +19,17 @@ a {
 	background: #fff;
 	position: relative;
 }
+
+.ui-grid-render-container-body {
+	&.ui-grid-render-container {
+		height: 100% !important;
+	}
+	
+	& > .ui-grid-viewport {
+		height: calc(100% - 31px) !important;
+	}
+}
+
 .project-grid-pagination {
 	margin-top: 8px;
 	display: table;
