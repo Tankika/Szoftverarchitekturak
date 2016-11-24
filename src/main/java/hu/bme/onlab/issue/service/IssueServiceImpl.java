@@ -92,6 +92,9 @@ public class IssueServiceImpl implements IssueService {
 		listIssuesData.setStatus(issue.getStatus());
 		listIssuesData.setPriority(issue.getPriority());
 		listIssuesData.setSeverity(issue.getSeverity());
+		listIssuesData.setCreationTimeStamp(issue.getCreationTimeStamp());
+		listIssuesData.setAssigneeEmail(issue.getAssignee().getEmail());
+		listIssuesData.setAssigneeId(issue.getAssignee().getId());
 		listIssuesData.setComment(mapCommentDataToBean(issue.getComments()));
 		return listIssuesData;
 	}

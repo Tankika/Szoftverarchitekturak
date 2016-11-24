@@ -1,0 +1,17 @@
+.display-issue {
+	.details {
+		.form-group {
+			label {
+				margin: 0;
+			}
+			
+			.form-control-static{
+				padding: 0;
+			}
+		}
+	}
+	
+	hr {
+		border-top-color: #cccccc;
+	}
+}

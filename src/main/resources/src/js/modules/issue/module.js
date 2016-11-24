@@ -12,6 +12,9 @@ angular.module('BugTracker.Issue', [])
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
 				return IssueService.getConstants();
+			}],
+			isEdit: [function() {
+				return false;
 			}]
 		}
 	})
@@ -25,6 +28,9 @@ angular.module('BugTracker.Issue', [])
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
 				return IssueService.getConstants();
+			}],
+			isEdit: [function() {
+				return false;
 			}]
 		}
 	})
@@ -38,6 +44,9 @@ angular.module('BugTracker.Issue', [])
 			}],
 			preloadedChoices: [function() {
 				return null;
+			}],
+			isEdit: [function() {
+				return false;
 			}]
 		}
 	});

@@ -4,8 +4,11 @@
 			<li>
 				<a ui-sref="main.settings.personal">Személyes beállítások</a>
 			</li>
-			<li>
+			<li ng-if="vm.isAuthorised('ADD_NEW_USER')">
 				<a ui-sref="main.settings.usermanagement">Felhasználók kezelése</a>
+			</li>
+			<li ng-if="vm.isAuthorised('CREATE_NEW_PROJECT')">
+				<a ui-sref="main.settings.projectmanagement">Projekt létrehozása</a>
 			</li>
 		</ul>
 	</div>

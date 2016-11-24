@@ -1,9 +1,9 @@
 package hu.bme.onlab.issue.domain;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,6 +26,7 @@ public class Issue {
 	private String description;
 	private String reproductionSteps;
 	private String version;
+	private Calendar creationTimeStamp;
 	
 	@Enumerated(EnumType.STRING)
 	private Type type;
@@ -96,6 +97,12 @@ public class Issue {
 	}
 	public void setSeverity(Severity severity) {
 		this.severity = severity;
+	}
+	public Calendar getCreationTimeStamp() {
+		return creationTimeStamp;
+	}
+	public void setCreationTimeStamp(Calendar creationTimeStamp) {
+		this.creationTimeStamp = creationTimeStamp;
 	}
 	
 	@ManyToOne
