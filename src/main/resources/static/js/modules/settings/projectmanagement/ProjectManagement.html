@@ -1,0 +1,19 @@
+<div class="settings-projectmanagement well clearfix">
+	<h3>Új projekt létrehozása</h3>
+	<form novalidate name="vm.newProjectForm" role="form">
+	
+		<div class="alert alert-danger" ng-if="vm.error">
+		    Ismeretlen hiba történt a projekt létrehozása közben. Kérlek próbáld meg később.
+		</div>
+		<div class="alert alert-success" ng-if="vm.success">
+			Az új projekt sikeresen felvételre került.
+		</div>
+		
+		<div class="form-group">
+			<label for="project">Projekt neve:</label>
+			<input class="form-control" type="text" ng-model="vm.projectName">
+		</div>
+		
+		<button class="btn btn-primary pull-right" ng-click="vm.newProjectForm.$valid && vm.onCreateNewProjectButtonClick()">Projekt lérehozása</button>
+	</form>
+</div>
