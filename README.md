@@ -1,2 +1,5 @@
-# MSC-Onlab1
-Önálló laboratórium 1
+# Software Architectures homework
+
+## Introduction
+
+## Used technologies
