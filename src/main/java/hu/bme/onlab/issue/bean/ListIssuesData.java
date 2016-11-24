@@ -29,7 +29,9 @@ import hu.bme.onlab.issue.domain.Type;
 public class ListIssuesData implements Bean {
     
     @PropertyDefinition
-    String name;
+    private Long id;
+    @PropertyDefinition
+    private String name;
     @PropertyDefinition
     private String description;
     @PropertyDefinition
@@ -73,6 +75,31 @@ public class ListIssuesData implements Bean {
     @Override
     public Set<String> propertyNames() {
         return metaBean().metaPropertyMap().keySet();
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Gets the id.
+     * @return the value of the property
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the id.
+     * @param id  the new value of the property
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the the {@code id} property.
+     * @return the property, not null
+     */
+    public final Property<Long> id() {
+        return metaBean().id().createProperty(this);
     }
 
     //-----------------------------------------------------------------------
@@ -313,7 +340,8 @@ public class ListIssuesData implements Bean {
         }
         if (obj != null && obj.getClass() == this.getClass()) {
             ListIssuesData other = (ListIssuesData) obj;
-            return JodaBeanUtils.equal(getName(), other.getName()) &&
+            return JodaBeanUtils.equal(getId(), other.getId()) &&
+                    JodaBeanUtils.equal(getName(), other.getName()) &&
                     JodaBeanUtils.equal(getDescription(), other.getDescription()) &&
                     JodaBeanUtils.equal(getReproductionSteps(), other.getReproductionSteps()) &&
                     JodaBeanUtils.equal(getVersion(), other.getVersion()) &&
@@ -329,6 +357,7 @@ public class ListIssuesData implements Bean {
     @Override
     public int hashCode() {
         int hash = getClass().hashCode();
+        hash = hash * 31 + JodaBeanUtils.hashCode(getId());
         hash = hash * 31 + JodaBeanUtils.hashCode(getName());
         hash = hash * 31 + JodaBeanUtils.hashCode(getDescription());
         hash = hash * 31 + JodaBeanUtils.hashCode(getReproductionSteps());
@@ -343,7 +372,7 @@ public class ListIssuesData implements Bean {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(320);
+        StringBuilder buf = new StringBuilder(352);
         buf.append("ListIssuesData{");
         int len = buf.length();
         toString(buf);
@@ -355,6 +384,7 @@ public class ListIssuesData implements Bean {
     }
 
     protected void toString(StringBuilder buf) {
+        buf.append("id").append('=').append(JodaBeanUtils.toString(getId())).append(',').append(' ');
         buf.append("name").append('=').append(JodaBeanUtils.toString(getName())).append(',').append(' ');
         buf.append("description").append('=').append(JodaBeanUtils.toString(getDescription())).append(',').append(' ');
         buf.append("reproductionSteps").append('=').append(JodaBeanUtils.toString(getReproductionSteps())).append(',').append(' ');
@@ -376,6 +406,11 @@ public class ListIssuesData implements Bean {
          */
         static final Meta INSTANCE = new Meta();
 
+        /**
+         * The meta-property for the {@code id} property.
+         */
+        private final MetaProperty<Long> id = DirectMetaProperty.ofReadWrite(
+                this, "id", ListIssuesData.class, Long.class);
         /**
          * The meta-property for the {@code name} property.
          */
@@ -427,6 +462,7 @@ public class ListIssuesData implements Bean {
          */
         private final Map<String, MetaProperty<?>> metaPropertyMap$ = new DirectMetaPropertyMap(
                 this, null,
+                "id",
                 "name",
                 "description",
                 "reproductionSteps",
@@ -446,6 +482,8 @@ public class ListIssuesData implements Bean {
         @Override
         protected MetaProperty<?> metaPropertyGet(String propertyName) {
             switch (propertyName.hashCode()) {
+                case 3355:  // id
+                    return id;
                 case 3373707:  // name
                     return name;
                 case -1724546052:  // description
@@ -484,6 +522,14 @@ public class ListIssuesData implements Bean {
         }
 
         //-----------------------------------------------------------------------
+        /**
+         * The meta-property for the {@code id} property.
+         * @return the meta-property, not null
+         */
+        public final MetaProperty<Long> id() {
+            return id;
+        }
+
         /**
          * The meta-property for the {@code name} property.
          * @return the meta-property, not null
@@ -560,6 +606,8 @@ public class ListIssuesData implements Bean {
         @Override
         protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
             switch (propertyName.hashCode()) {
+                case 3355:  // id
+                    return ((ListIssuesData) bean).getId();
                 case 3373707:  // name
                     return ((ListIssuesData) bean).getName();
                 case -1724546052:  // description
@@ -586,6 +634,9 @@ public class ListIssuesData implements Bean {
         @Override
         protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
             switch (propertyName.hashCode()) {
+                case 3355:  // id
+                    ((ListIssuesData) bean).setId((Long) newValue);
+                    return;
                 case 3373707:  // name
                     ((ListIssuesData) bean).setName((String) newValue);
                     return;

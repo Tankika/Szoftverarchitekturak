@@ -4,17 +4,13 @@ angular.module('BugTracker.Project')
 		
 		var vm = this;
 		vm.onCreateNewIssueButtonClick = onCreateNewIssueButtonClick;
-		vm.projectId = $stateParams.projectId;
+		vm.projectId = $stateParams.id;
 		vm.onOpenButtonClick = onOpenButtonClick;
 		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onRemoveButtonClick = onRemoveButtonClick;
-		var demoIssueList = [];
-		for(var i = 0; i < 86; i++) {
-			demoIssueList.push({name:'A' + i, type:'bug', priority:'low', severity:'low', status:'OPEN'});
-		}
-		
+
 		vm.projectName = issueList.projectName;
-		vm.issueList =  issueList.issues.length > 0 ? issueList.issues : demoIssueList;
+		vm.issueList =  issueList.issues;
 		vm.getTableHeight = getTableHeight;
 		
 		vm.gridOptions = {
@@ -34,27 +30,35 @@ angular.module('BugTracker.Project')
 				{ name: 'status', fieldName: 'status'},
 				{
 					name: 'Action',
-					cellTemplate: '<span class=\"glyphicon glyphicon-eye-open\" ng-click=\"grid.appScope.onOpenButtonClick(row)\"></span>' +
-								  '<span class=\"glyphicon glyphicon-pencil\" ng-click=\"grid.appScope.onModifyButtonClick(row)"\></span>' +
-								  '<span class=\"glyphicon glyphicon-remove\" ng-click=\"grid.appScope.onRemoveButtonClick(row)"\></span>'
+					cellTemplate: '<span class=\"glyphicon glyphicon-eye-open\" ng-click=\"grid.appScope.onOpenButtonClick(row.entity)\"></span>' +
+								  '<span class=\"glyphicon glyphicon-pencil\" ng-click=\"grid.appScope.onModifyButtonClick(row.entity)"\></span>' +
+								  '<span class=\"glyphicon glyphicon-remove\" ng-click=\"grid.appScope.onRemoveButtonClick(row.entity)"\></span>'
 				}
 			]
 		};
 		
-		function onOpenButtonClick(row) {
-			console.log(row);
+		function onOpenButtonClick(rowEntity) {
+			$state.go('main.displayissue', {
+				projectId: vm.projectId,
+				issueId: rowEntity.id
+			});
 		}
 		
-		function onModifyButtonClick(row) {
-			console.log(row);
+		function onModifyButtonClick(rowEntity) {
+			$state.go('main.modifyissue', {
+				projectId: vm.projectId,
+				issueId: rowEntity.id
+			});
 		}
 		
-		function onRemoveButtonClick(row) {
-			console.log(row);
+		function onRemoveButtonClick(rowEntity) {
+			// TODO: show modal confirmation screen
 		}
 		
 		function onCreateNewIssueButtonClick() {
-			//$state.go('main.issedet)
+			$state.go('main.createissue', {
+				projectId: vm.projectId
+			});
 		}
 		
 	    function getTableHeight() {

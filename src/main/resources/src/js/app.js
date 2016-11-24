@@ -10,7 +10,6 @@
 								  'BugTracker.WelcomeScreen'])
 
 		.config(['$urlRouterProvider', '$httpProvider', function ($urlRouterProvider, $httpProvider) {
-			console.log("ASD");
 			$urlRouterProvider.otherwise(function ($injector, $location) {
 				$injector.get('$state').go('main.welcomescreen');
 			});

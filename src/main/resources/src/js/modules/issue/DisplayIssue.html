@@ -1,0 +1,21 @@
+<div class="display-issue clearfix">
+	<div>
+		<div class="col-xs-12 col-md-6">
+			{{vm.issue}}
+		</div>
+		<div class="col-xs-12 col-md-6">
+			{{vm.issue}}
+		</div>
+	</div>
+	
+	<div class="display-issue-comments">
+		<div class="display-issue-comment" ng-repeat="comment in vm.issue.comments">
+			{{comment}}
+		</div>
+		
+		<div>
+			textarea
+			button
+		</div>
+	</div>
+</div>
