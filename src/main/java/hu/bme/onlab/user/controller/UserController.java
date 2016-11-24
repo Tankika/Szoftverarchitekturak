@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.bme.onlab.user.bean.CheckEmailRequest;
 import hu.bme.onlab.user.bean.CheckEmailResponse;
+import hu.bme.onlab.user.bean.CreateUserRequest;
+import hu.bme.onlab.user.bean.ModifyUserRequest;
 import hu.bme.onlab.user.bean.PasswordChangeRequest;
-import hu.bme.onlab.user.bean.SignupRequest;
+import hu.bme.onlab.user.bean.UserDataRequest;
+import hu.bme.onlab.user.bean.UserDataResponse;
 import hu.bme.onlab.user.bean.UserManagementPreloadReply;
 import hu.bme.onlab.user.service.UserService;
 
@@ -49,12 +52,7 @@ public class UserController {
 			new SecurityContextLogoutHandler().logout(request, response, authentication);
 		}
 	}
-	
-	@RequestMapping(path = "/signup", method = RequestMethod.POST)
-	public void signup(@RequestBody SignupRequest signupRequest) {
-		userService.signup(signupRequest);
-	}
-	
+		
 	@RequestMapping(path = "/checkEmail", method = RequestMethod.POST)
 	public CheckEmailResponse checkEmail(@RequestBody CheckEmailRequest checkEmailRequest) {
 		return userService.checkEmail(checkEmailRequest);
@@ -70,5 +68,20 @@ public class UserController {
 		UserManagementPreloadReply reply =  new UserManagementPreloadReply();
 		reply.setRoles(userService.getRoles());
 		return reply;
+	}
+	
+	@RequestMapping(path = "/getUserDataByEmail", method = RequestMethod.POST)
+	public UserDataResponse getUserDataByEmail(@RequestBody UserDataRequest userDataRequest) {
+		return userService.getUserData(userDataRequest);
+	}
+	
+	@RequestMapping(path = "/createUser", method = RequestMethod.POST)
+	public void createUser(@RequestBody CreateUserRequest createUserRequest) {
+		userService.createUser(createUserRequest);
+	}
+	
+	@RequestMapping(path = "/modifyUser", method = RequestMethod.POST)
+	public void modifyUser(@RequestBody ModifyUserRequest modifyUserRequest) {
+		userService.modifyUser(modifyUserRequest);
 	}
 }

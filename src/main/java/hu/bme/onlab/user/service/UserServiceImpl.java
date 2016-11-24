@@ -8,13 +8,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Sets;
+
 import hu.bme.onlab.issue.repository.ProjectRepository;
 import hu.bme.onlab.user.bean.CheckEmailRequest;
 import hu.bme.onlab.user.bean.CheckEmailResponse;
+import hu.bme.onlab.user.bean.CreateUserRequest;
+import hu.bme.onlab.user.bean.ModifyUserRequest;
 import hu.bme.onlab.user.bean.PasswordChangeRequest;
 import hu.bme.onlab.user.bean.RoleDTO;
-import hu.bme.onlab.user.bean.SignupRequest;
-import hu.bme.onlab.user.domain.Role;
+import hu.bme.onlab.user.bean.UserDataRequest;
+import hu.bme.onlab.user.bean.UserDataResponse;
 import hu.bme.onlab.user.domain.User;
 import hu.bme.onlab.user.repository.AuthorityRepository;
 import hu.bme.onlab.user.repository.RoleRepository;
@@ -43,32 +47,19 @@ public class UserServiceImpl implements UserService {
 		this.projectRepository = projectRepository;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void signup(SignupRequest signupRequest) {
+	public void createUser(CreateUserRequest createUserRequest) {
 		User user = new User();
-		user.setEmail(signupRequest.getEmail());
-		user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+		
+		user.setEmail(createUserRequest.getEmail());
+		user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
 		user.setEnabled(true);
-		
-		Role role = roleRepository.findOne(signupRequest.getRoleId());
-		if (role == null) {
-			throw new IllegalArgumentException("Role not found by role id.");
-		}
-		else {
-			user.addRole(role);
-		}
-		
-		projectRepository.findAll(signupRequest.getProjectIds()).forEach(project -> user.addProject(project));
+		user.setRoles(Sets.newHashSet(roleRepository.findAll(createUserRequest.getRoleIds())));
+		user.setProjects(Sets.newHashSet(projectRepository.findAll(createUserRequest.getProjectIds())));
 		
 		userRepository.save(user);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public CheckEmailResponse checkEmail(CheckEmailRequest checkEmailRequest) {
 		CheckEmailResponse response = new CheckEmailResponse();
@@ -89,15 +80,37 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<RoleDTO> getRoles() {
 		List<RoleDTO> response = new ArrayList<RoleDTO>();
-		Iterable<Role> queryResult = roleRepository.findAll();
-		for(Role role : queryResult) {
+		
+		roleRepository.findAll().forEach(role -> {
 			RoleDTO roleDTO = new RoleDTO();
 			roleDTO.setId(role.getId());
 			roleDTO.setRoleName(role.getRoleName());
 			response.add(roleDTO);
-		}
+		});
 		
 		return response;
+	}
+
+	@Override
+	public UserDataResponse getUserData(UserDataRequest userDataRequest) {
+		UserDataResponse userDataResponse = new UserDataResponse();
+		userDataResponse.setProjectIds(new ArrayList<Long>());
+		userDataResponse.setRoleIds(new ArrayList<Long>());
+		User user = userRepository.findByEmail(userDataRequest.getEmail());
+		user.getProjects().forEach(p -> userDataResponse.getProjectIds().add(p.getId()));
+		user.getRoles().forEach(r -> userDataResponse.getRoleIds().add(r.getId()));
+		
+		return userDataResponse;
+	}
+
+	@Override
+	public void modifyUser(ModifyUserRequest modifyUserRequest) {
+		User userToModify = userRepository.findByEmail(modifyUserRequest.getEmail());
+		
+		userToModify.setProjects(Sets.newHashSet(projectRepository.findAll(modifyUserRequest.getProjectIds())));
+		userToModify.setRoles(Sets.newHashSet(roleRepository.findAll(modifyUserRequest.getRoleIds())));
+		
+		userRepository.save(userToModify);
 	}
 	
 }

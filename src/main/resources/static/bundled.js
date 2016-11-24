@@ -1935,9 +1935,22 @@ angular.module('BugTracker.Settings', [])
 		templateUrl: 'js/modules/settings/personal/Personal.html',
 		controller: 'PersonalController as vm'
 	})
-	.state('main.settings.usermanagement', {
-		url: 'usermanagement/',
-		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
+	.state('main.settings.modifyuser', {
+		url: 'modifyuser/',
+		templateUrl: 'js/modules/settings/usermanagement/ModifyUser.html',
+		controller: 'UserManagementController as vm',
+		resolve: {
+			userManagementPreload: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getUserManagementPreload();
+			}],
+			projectList: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getProjectList();
+			}]
+		}
+	})
+	.state('main.settings.createuser', {
+		url: 'createuser/',
+		templateUrl: 'js/modules/settings/usermanagement/CreateUser.html',
 		controller: 'UserManagementController as vm',
 		resolve: {
 			userManagementPreload: ['UserManagementService', function(UserManagementService) {
@@ -2002,20 +2015,40 @@ angular.module('BugTracker.Settings')
 	.service('UserManagementService', ['$http', '$q', function($http, $q) {
 		'use strict';
 		
-		this.signup = signup;
+		this.createUser = createUser;
+		this.modifyUser = modifyUser;
 		this.getUserManagementPreload = getUserManagementPreload;
 		this.getProjectList = getProjectList;
+		this.getUserData = getUserData;
 		
-		function signup(credentials, userProjectList) {
+		function getUserData(email) {
+			return $http.post("/user/getUserDataByEmail", {
+				email: email
+			}).then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function modifyUser(email, roleList, userProjectList) {
+			var request = {
+				email: email,
+				roleIds: mapRoleIds(roleList),
+				projectIds: mapProjectIds(userProjectList)
+			};
+			
+			return $http.post('/user/modifyUser', request);
+		}
+		
+		function createUser(credentials, roleList, userProjectList) {
 			var deferred = $q.defer();
 			var request = {
 				email: credentials.email,
 				password: credentials.password,
-				roleId: credentials.selectedRole.id,
+				roleIds: mapRoleIds(roleList),
 				projectIds: mapProjectIds(userProjectList)
 			};
 			
-			$http.post("/user/signup", request).then(function(response) {
+			$http.post("/user/createUser", request).then(function(response) {
 				if (response.status === 200) {
 					deferred.resolve(response.data);
 				} else {
@@ -2027,6 +2060,14 @@ angular.module('BugTracker.Settings')
 			});
 			
 			return deferred.promise;
+		}
+		
+		function mapRoleIds(roleList) {
+			var roleIds = [];
+			for(var i = 0; i < roleList.length; i++) {
+				roleIds.push(roleList[i].id);
+			}
+			return roleIds;
 		}
 		
 		function mapProjectIds(userProjectList) {
@@ -2061,23 +2102,84 @@ angular.module('BugTracker.Settings')
 		vm.roles = userManagementPreload.roles;
 		vm.userProjectList = [];
 		vm.selectedProject = {};
+		vm.selectedRoles = [];
+		vm.selectedRole = {};
 		vm.projectList = projectList;
 		
 		vm.removeUserFromProject = removeUserFromProject;
 		vm.addUserToProject = addUserToProject;
+		vm.addRoleToUser = addRoleToUser;
+		vm.removeRoleFromUser = removeRoleFromUser;
+		vm.onModifyUserButtonClick = onModifyUserButtonClick;
+		vm.getUserData = getUserData;
 		
 		vm.credentials = {};
 		
 		function addUserToProject() {
-			vm.userProjectList.push(vm.selectedProject);
+			var found = false;
+			for(var i = 0; i < vm.userProjectList.length; i++) {
+				if (vm.selectedProject.id === vm.userProjectList[i].id) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				vm.userProjectList.push(vm.selectedProject);
+			}
 		}
 		
 		function removeUserFromProject(index) {
 			vm.userProjectList.splice(index, 1);
 		}
 		
+		function addRoleToUser() {
+			var found = false;
+			for(var i = 0; i < vm.selectedRoles.length; i++) {
+				if (vm.selectedRole.id === vm.selectedRoles[i].id) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				vm.selectedRoles.push(vm.selectedRole);
+			}
+		}
+		
+		function removeRoleFromUser(index) {
+			vm.selectedRoles.splice(index, 1);
+		}
+		
+		function getUserData() {
+			UserManagementService.getUserData(vm.userEmail).then(function(data) {
+				vm.userProjectList = [];
+				vm.selectedRoles = [];
+				for (var i = 0; i < vm.projectList.length; i++) {
+					if (data.projectIds.indexOf(vm.projectList[i].id) !== -1) {
+						vm.userProjectList.push(vm.projectList[i]);
+					}
+				}
+				for (var i = 0; i < vm.roles.length; i++) {
+					if (data.roleIds.indexOf(vm.roles[i].id) !== -1) {
+						vm.selectedRoles.push(vm.roles[i]);
+					} 
+				}
+			});
+		}
+		
 		function onSignupButtonClick() {
-			UserManagementService.signup(vm.credentials, vm.userProjectList).then(function(data) {
+			UserManagementService.createUser(vm.credentials, vm.selectedRoles, vm.userProjectList).then(function(data) {
+				vm.success = true;
+				vm.error = false;
+			}, function(error) {
+				vm.error = true;
+				vm.success = false;
+			});
+		}
+		
+		function onModifyUserButtonClick() {
+			UserManagementService.modifyUser(vm.userEmail, vm.selectedRoles, vm.userProjectList).then(function(data) {
 				vm.success = true;
 				vm.error = false;
 			}, function(error) {

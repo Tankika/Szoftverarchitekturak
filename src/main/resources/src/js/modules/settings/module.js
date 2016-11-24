@@ -12,9 +12,22 @@ angular.module('BugTracker.Settings', [])
 		templateUrl: 'js/modules/settings/personal/Personal.html',
 		controller: 'PersonalController as vm'
 	})
-	.state('main.settings.usermanagement', {
-		url: 'usermanagement/',
-		templateUrl: 'js/modules/settings/usermanagement/UserManagement.html',
+	.state('main.settings.modifyuser', {
+		url: 'modifyuser/',
+		templateUrl: 'js/modules/settings/usermanagement/ModifyUser.html',
+		controller: 'UserManagementController as vm',
+		resolve: {
+			userManagementPreload: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getUserManagementPreload();
+			}],
+			projectList: ['UserManagementService', function(UserManagementService) {
+				return UserManagementService.getProjectList();
+			}]
+		}
+	})
+	.state('main.settings.createuser', {
+		url: 'createuser/',
+		templateUrl: 'js/modules/settings/usermanagement/CreateUser.html',
 		controller: 'UserManagementController as vm',
 		resolve: {
 			userManagementPreload: ['UserManagementService', function(UserManagementService) {

@@ -2,20 +2,40 @@ angular.module('BugTracker.Settings')
 	.service('UserManagementService', ['$http', '$q', function($http, $q) {
 		'use strict';
 		
-		this.signup = signup;
+		this.createUser = createUser;
+		this.modifyUser = modifyUser;
 		this.getUserManagementPreload = getUserManagementPreload;
 		this.getProjectList = getProjectList;
+		this.getUserData = getUserData;
 		
-		function signup(credentials, userProjectList) {
+		function getUserData(email) {
+			return $http.post("/user/getUserDataByEmail", {
+				email: email
+			}).then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function modifyUser(email, roleList, userProjectList) {
+			var request = {
+				email: email,
+				roleIds: mapRoleIds(roleList),
+				projectIds: mapProjectIds(userProjectList)
+			};
+			
+			return $http.post('/user/modifyUser', request);
+		}
+		
+		function createUser(credentials, roleList, userProjectList) {
 			var deferred = $q.defer();
 			var request = {
 				email: credentials.email,
 				password: credentials.password,
-				roleId: credentials.selectedRole.id,
+				roleIds: mapRoleIds(roleList),
 				projectIds: mapProjectIds(userProjectList)
 			};
 			
-			$http.post("/user/signup", request).then(function(response) {
+			$http.post("/user/createUser", request).then(function(response) {
 				if (response.status === 200) {
 					deferred.resolve(response.data);
 				} else {
@@ -27,6 +47,14 @@ angular.module('BugTracker.Settings')
 			});
 			
 			return deferred.promise;
+		}
+		
+		function mapRoleIds(roleList) {
+			var roleIds = [];
+			for(var i = 0; i < roleList.length; i++) {
+				roleIds.push(roleList[i].id);
+			}
+			return roleIds;
 		}
 		
 		function mapProjectIds(userProjectList) {

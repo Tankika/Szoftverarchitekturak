@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group clearfix">
 			<label for="project">Projektekhez való hozzárendelés:</label>
 			<div class="clearfix" ng-repeat="project in vm.userProjectList">
 				<span>{{project.name}}</span> <span class="glyphicon glyphicon-remove pull-right" ng-click="vm.removeUserFromProject($index)"></span>
@@ -70,14 +70,19 @@
 			<button type="button" class="btn btn-primary pull-right btn-margin" ng-click="vm.addUserToProject()">Projekt felvétele</button>  			
 		</div>
 		
-		<div class="form-group">
-			<label for="role">Szerepkör:</label>			
-			<ui-select ng-model="vm.credentials.selectedRole" theme="bootstrap" title="Válassz szerepkört!" required>
+		<div class="form-group clearfix">
+			<label for="role">Szerepkör:</label>
+			<div class="clearfix" ng-repeat="role in vm.selectedRoles">
+				<span>{{role.roleName}}</span> <span class="glyphicon glyphicon-remove pull-right" ng-click="vm.removeRoleFromUser($index)"></span>
+			</div>			
+			<ui-select ng-model="vm.selectedRole" theme="bootstrap" title="Válassz szerepkört!" required>
     			<ui-select-match placeholder="Válassz ki vagy írj be egy szerepkört!">{{$select.selected.roleName}}</ui-select-match>
     			<ui-select-choices repeat="role in vm.roles | filter: $select.search">
       				<span ng-bind-html="role.roleName | highlight: $select.search"></span>
     			</ui-select-choices>
   			</ui-select>
+  			
+  			<button type="button" class="btn btn-primary pull-right btn-margin" ng-click="vm.addRoleToUser()">Szerepkör felvétele</button>
 		</div>
 		
 		<button class="btn btn-primary pull-right" ng-disabled="vm.addUserForm.email.$pending" ng-click="vm.addUserForm.$valid && vm.onSignupButtonClick()">Hozzáadás</button>
