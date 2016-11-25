@@ -1,0 +1,39 @@
+<div class="login-form">
+	<h3>Bejelentkezés</h3>
+	<form name="vm.loginForm" role="form" ng-submit="vm.loginForm.$valid && vm.login()">
+		<div class="alert alert-danger" ng-if="vm.error || vm.loginFailed">
+			<span ng-if="vm.error">Ismeretlen hiba történt bejelentkezés közben. Kérlek próbáld meg később.</span>
+			<span ng-if="vm.loginFailed">Hibás e-mail címet vagy jelszót adátl meg.</span>
+		</div>
+
+		<div class="form-group" ng-class="{ 'has-error': vm.loginForm.$submitted && vm.loginForm.email.$invalid }">
+			<label for="email">E-mail cím:</label>
+			<input required
+				id="email"
+				name="email" 
+				type="email"
+				class="form-control"
+				ng-model="vm.credentials.email" />
+			<div class="text-danger error-block">
+				<span ng-if="vm.loginForm.email.$error.required">Kérlek add meg az e-mail címed!</span>
+				<span ng-if="vm.loginForm.email.$error.email">Az e-mail cím formátuma nem megfelelő!</span>
+			</div>
+		</div>
+		<div class="form-group" ng-class="{ 'has-error': vm.loginForm.$submitted && vm.loginForm.password.$invalid }">
+			<label for="password">Jelszó:</label>
+			<input required
+				id="password"
+				name="password"
+				type="password" 
+				class="form-control"
+				ng-model="vm.credentials.password" />
+			<div class="text-danger error-block">
+				<span ng-if="vm.loginForm.password.$error.required">Kérlek add meg a jelszavad!</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<button type="submit" class="btn btn-primary btn-block pull-right">Belépés</button>
+		</div>
+	</form>
+</div>

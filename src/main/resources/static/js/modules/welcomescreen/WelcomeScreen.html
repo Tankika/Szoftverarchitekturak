@@ -1,0 +1,18 @@
+<div class="welcomescreen clearfix">
+	<ng-include ng-if="!vm.isLoggedIn()" src="'js/modules/welcomescreen/LoginForm.html'"></ng-include>
+	<div ng-if="vm.isLoggedIn()">
+		<h3>Üdv, {{vm.getUsername()}}!</h3>
+		
+		<hr>
+		
+		<h3>Projektek:</h3>
+		<ul>
+			<li ng-repeat="project in vm.projectList">
+				<span ng-click="vm.openProjectDetails($index)">{{project.name}} - {{project.description}}</span>
+			</li>
+		</div>
+		</ul>
+		
+	</div> 
+	
+</div>

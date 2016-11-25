@@ -1,0 +1,48 @@
+<div class="settings-personal well clearfix">
+	<h3>Személyes beállítások</h3>
+	<form name="vm.changeUserDetails">
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" class="form-control" ng-model="vm.email" disabled>
+		</div>
+		
+		<div class="alert alert-danger" ng-if="vm.error">
+		    Ismeretlen hiba történt jelszó változtatás közben. Kérlek próbáld meg később.
+		</div>
+		<div class="alert alert-success" ng-if="vm.success">
+			A jelszó sikeresen megváltoztatásra került.
+		</div>
+		
+		<div class="form-group" ng-class="{ 'has-error': vm.changeUserDetails.$submitted && vm.changeUserDetails.password.$invalid }">
+				<label for="password">Jelszó:</label>
+				<input required
+					name="password"
+					type="password"
+					class="form-control"
+					ng-model="vm.newPassword"
+					ng-minlength="8"
+					ng-maxlength="100" />
+				<div class="text-danger error-block">
+					<div ng-if="vm.changeUserDetails.password.$error.required">Kérlek add meg a jelszavad!</div>
+					<div ng-if="vm.changeUserDetails.password.$error.minlength">A jelszónak minimum 8 karakter hosszúnak kell lennie!</div>
+					<div ng-if="vm.changeUserDetails.password.$error.maxlength">A jelszó legfeljebb 100 karakter hosszú lehet!</div>
+				</div>
+			</div>
+			<div class="form-group" ng-class="{ 'has-error': vm.changeUserDetails.$submitted && vm.changeUserDetails.password_confirm.$invalid }">
+				<label for="password-confirm">Jelszó megerősítése:</label>
+				<input required
+					name="password_confirm"
+					type="password"
+					class="form-control"
+					ng-model="vm.newPasswordConfirm"
+					ui-validate="{ 'confirmed': '$value == vm.newPassword' }"
+					ui-validate-watch=" 'vm.credentials.password' " />
+				<div class="text-danger error-block">
+					<div ng-if="vm.changeUserDetails.password_confirm.$error.required">Kérlek erősítsd meg a jelszavad!</div>
+					<div ng-if="vm.changeUserDetails.password_confirm.$error.confirmed">A jelszavak nem egyeznek!</div>
+				</div>
+			</div>
+		
+    	<button class="btn btn-primary pull-right" type="button" ng-click="vm.onChangePasswordButtonClick()">Mentés</button>
+   	</form>
+</div>
