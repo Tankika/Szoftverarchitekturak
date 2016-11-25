@@ -1,7 +1,7 @@
 {
-  "name": "service-finder",
+  "name": "issuetracker",
   "version": "0.0.1",
-  "description": "MSC - Onallo labor 1 projekt",
+  "description": "Szoftverarchitektúrák home assignment",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
@@ -21,12 +21,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tankika/MSC-Onlab1.git"
+    "url": "git+https://github.com/Tankika/Szoftverarchitekturak.git"
   },
   "author": "Tamás Perlaki",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Tankika/MSC-Onlab1/issues"
+    "url": "https://github.com/Tankika/Szoftverarchitekturak/issues"
   },
-  "homepage": "https://github.com/Tankika/MSC-Onlab1#readme"
+  "homepage": "https://github.com/Tankika/Szoftverarchitekturak#readme"
 }
