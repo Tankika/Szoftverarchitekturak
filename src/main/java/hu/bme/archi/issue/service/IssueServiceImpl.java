@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.bme.archi.exception.InsufficientAuthoritesException;
+import hu.bme.archi.issue.bean.AssignUserToIssueRequest;
 import hu.bme.archi.issue.bean.ConstantsResponse;
 import hu.bme.archi.issue.bean.CreateNewProjectRequest;
 import hu.bme.archi.issue.bean.ListIssuesData;
@@ -28,7 +30,9 @@ import hu.bme.archi.issue.domain.Type;
 import hu.bme.archi.issue.repository.CommentRepository;
 import hu.bme.archi.issue.repository.IssueRepository;
 import hu.bme.archi.issue.repository.ProjectRepository;
+import hu.bme.archi.user.domain.Authority;
 import hu.bme.archi.user.domain.User;
+import hu.bme.archi.user.repository.AuthorityRepository;
 import hu.bme.archi.user.repository.UserRepository;
 
 @Service
@@ -39,13 +43,15 @@ public class IssueServiceImpl implements IssueService {
 	private IssueRepository issueRepository;
 	private CommentRepository commentRepository;
 	private UserRepository userRepository;
+	private AuthorityRepository authorityRepository;
 
 	@Autowired
-	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository) {
+	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository, AuthorityRepository authorityRepository) {
 		this.projectRepository = projectRepository;
 		this.issueRepository = issueRepository;
 		this.commentRepository = commentRepository;
 		this.userRepository = userRepository;
+		this.authorityRepository = authorityRepository;
 	}
 	
 	@Override
@@ -91,8 +97,7 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public List<hu.bme.archi.issue.bean.Comment> sendComment(SendCommentRequest sendCommentRequest) {
-		UserDetails loggedInPrincipal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userRepository.findByEmailIgnoreCase(loggedInPrincipal.getUsername()).get(0);
+		User user = getLoggedInUser();
 		Issue issue = issueRepository.findOne(sendCommentRequest.getIssueId());
 		
 		Comment comment = new Comment();
@@ -122,8 +127,7 @@ public class IssueServiceImpl implements IssueService {
 		listIssuesData.setPriority(issue.getPriority());
 		listIssuesData.setSeverity(issue.getSeverity());
 		listIssuesData.setCreationTimeStamp(issue.getCreationTimeStamp());
-		listIssuesData.setAssigneeEmail(issue.getAssignee().getEmail());
-		listIssuesData.setAssigneeId(issue.getAssignee().getId());
+		listIssuesData.setAssignee(mapUserDataToBean(issue.getAssignee()));
 		listIssuesData.setComment(mapCommentDataToBean(issue.getComments()));
 		return listIssuesData;
 	}
@@ -134,12 +138,19 @@ public class IssueServiceImpl implements IssueService {
 			hu.bme.archi.issue.bean.Comment comment = new hu.bme.archi.issue.bean.Comment();
 			comment.setMessage(c.getMessage());
 			comment.setTimeStamp(c.getTimeStamp());
-			comment.setAuthorEmail(c.getAuthor().getEmail());
-			comment.setAuthorRole(c.getAuthor().getRole().getRoleName());
+			comment.setAuthor(mapUserDataToBean(c.getAuthor()));
 			commentList.add(comment);
 		});
 		commentList.sort((c1, c2) -> c1.getTimeStamp().compareTo(c2.getTimeStamp()));
 		return commentList;
+	}
+	
+	private hu.bme.archi.issue.bean.User mapUserDataToBean(User src) {
+		hu.bme.archi.issue.bean.User trg = new hu.bme.archi.issue.bean.User();
+		trg.setId(src.getId());
+		trg.setEmail(src.getEmail());
+		trg.setRole(src.getRole().getRoleName());
+		return trg;
 	}
 
 	@Override
@@ -150,6 +161,42 @@ public class IssueServiceImpl implements IssueService {
 		response.setSeverities(Severity.values());
 		response.setStatuses(Status.values());
 		return response;
+	}
+	
+	@Override
+	public List<hu.bme.archi.issue.bean.User> listAssignableUsers(long projectId) {
+		List<hu.bme.archi.issue.bean.User> userList = new ArrayList<hu.bme.archi.issue.bean.User>();
+		userRepository.findByProjectsId(projectId).forEach(u -> {
+			userList.add(mapUserDataToBean(u));
+		});
+		
+		return userList;
+	}
+
+	@Override
+	public void assignUserToIssue(AssignUserToIssueRequest assignUserToIssueRequest) {
+		if(!userHasAuthority(getLoggedInUser(), "MODIFY_ISSUE")) {
+			throw new InsufficientAuthoritesException();
+		}
+		
+		Issue issue = issueRepository.findOne(assignUserToIssueRequest.getIssueId());
+		User user = userRepository.findOne(assignUserToIssueRequest.getUserId());
+
+		List<User> assignableUsers = userRepository.findByProjectsId(issue.getProject().getId());
+		if(assignableUsers.contains(user)) {
+			issue.getAssignee().getIssues().remove(issue);
+			issue.setAssignee(user);
+		}
+	}
+
+	private User getLoggedInUser() {
+		UserDetails loggedInPrincipal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userRepository.findByEmailIgnoreCase(loggedInPrincipal.getUsername()).get(0);
+		return user;
+	}
+	
+	private boolean userHasAuthority(User user, String authority) {
+		return user.getRole().getAuthorities().contains(authorityRepository.findByAuthorityIgnoreCase(authority));
 	}
 
 }

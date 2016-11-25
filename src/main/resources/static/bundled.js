@@ -1693,10 +1693,10 @@ angular.module('BugTracker.Issue', [])
 				return null;
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
-				return IssueService.getConstants();
+				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers;
 			}]
 		}
 	})
@@ -1709,10 +1709,10 @@ angular.module('BugTracker.Issue', [])
 				return IssueService.getIssueById($stateParams.issueId);
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
-				return IssueService.getConstants();
+				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers;
 			}]
 		}
 	})
@@ -1727,8 +1727,8 @@ angular.module('BugTracker.Issue', [])
 			preloadedChoices: [function() {
 				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers($stateParams.projectId);
 			}]
 		}
 	});
@@ -1739,6 +1739,8 @@ angular.module('BugTracker.Issue')
 		
 		this.getIssueById = getIssueById;
 		this.getConstants = getConstants;
+		this.listAssignableUsers = listAssignableUsers;
+		this.assignUserToIssue = assignUserToIssue;
 		
 		this.createIssue = createIssue;
 		this.modifyIssue = modifyIssue;
@@ -1753,6 +1755,21 @@ angular.module('BugTracker.Issue')
 		
 		function getConstants() {
 			return $http.get('/issue/getConstants').then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function listAssignableUsers(projectId) {
+			return $http.get('/issue/listAssignableUsers/' + projectId).then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function assignUserToIssue(issueId, userId) {
+			return $http.post('/issue/assignUserToIssue', {
+				issueId: issueId,
+				userId: userId
+			}).then(function(response) {
 				return response.data;
 			});
 		}
@@ -1776,7 +1793,7 @@ angular.module('BugTracker.Issue')
 		
 	}]);
 angular.module('BugTracker.Issue')
-	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'isEdit', 'IssueService', '$stateParams', 'UserHandlerService', function(preloadedIssue, preloadedChoices, isEdit, IssueService, $stateParams, UserHandlerService) {
+	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $stateParams, UserHandlerService, assignableUsers) {
 		'use strict';
 		
 		var vm = this;
@@ -1784,6 +1801,8 @@ angular.module('BugTracker.Issue')
 		vm.issue = angular.isObject(preloadedIssue) ? preloadedIssue : {};
 		vm.projectId = $stateParams.projectId;
 		vm.constants = preloadedChoices;
+		vm.assignableUsers = assignableUsers;
+		vm.assignUserToIssue = assignUserToIssue;
 		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
 		vm.onModifyButtonClick = onModifyButtonClick;
@@ -1803,6 +1822,10 @@ angular.module('BugTracker.Issue')
 				vm.issue.comment = result;
 			});
 			vm.newComment = undefined;
+		}
+		
+		function assignUserToIssue(assignee) {
+			IssueService.assignUserToIssue($stateParams.issueId, assignee.id);
 		}
 		
 		function navigateToIssueList() {

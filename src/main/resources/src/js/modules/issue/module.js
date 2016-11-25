@@ -11,10 +11,10 @@ angular.module('BugTracker.Issue', [])
 				return null;
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
-				return IssueService.getConstants();
+				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers;
 			}]
 		}
 	})
@@ -27,10 +27,10 @@ angular.module('BugTracker.Issue', [])
 				return IssueService.getIssueById($stateParams.issueId);
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
-				return IssueService.getConstants();
+				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers;
 			}]
 		}
 	})
@@ -45,8 +45,8 @@ angular.module('BugTracker.Issue', [])
 			preloadedChoices: [function() {
 				return null;
 			}],
-			isEdit: [function() {
-				return false;
+			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
+				return IssueService.listAssignableUsers($stateParams.projectId);
 			}]
 		}
 	});

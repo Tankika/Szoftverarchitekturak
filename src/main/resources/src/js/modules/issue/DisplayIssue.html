@@ -13,7 +13,7 @@
 			</div>
 			<div class="form-group">
 				<label>Létrehozva:</label>
-				<p class="form-control-static">{{vm.issue.creationTimeStamp | date:'yyyy. MM. dd. hh:mm'}}</p>
+				<p class="form-control-static">{{vm.issue.creationTimeStamp | date:'yyyy. MM. dd. HH:mm'}}</p>
 			</div>
 			<div class="form-group">
 				<label>Verzió:</label>
@@ -22,8 +22,13 @@
 		</div>
 		<div class="col-xs-12 col-md-6">
 			<div class="form-group">
-				<label>Felelős:</label>
-				<p class="form-control-static">{{vm.issue.assigneeEmail}}</p>
+				<label>Felelős:</label>			
+				<ui-select ng-model="vm.issue.assignee" theme="bootstrap" on-select="vm.assignUserToIssue($item)">
+					<ui-select-match>{{$select.selected.email}}</ui-select-match>
+	    			<ui-select-choices repeat="user in vm.assignableUsers | filter: $select.search">
+	      				<span ng-bind-html="user.email | highlight: $select.search"></span>
+	    			</ui-select-choices>
+	  			</ui-select>
 			</div>
 			<div class="form-group">
 				<label>Státusz:</label>
@@ -45,8 +50,8 @@
 	<div class="display-issue-comments" ng-show="0 < vm.issue.comment.length">
 		<div class="comment" ng-repeat="comment in vm.issue.comment">
 			<div class="header row">
-				<span class="col-md-6"><strong>{{comment.authorEmail}}</strong> - {{comment.authorRole}}</span>
-				<span class="col-md-6 text-right">{{comment.timeStamp | date:'yyyy. MM. dd. hh:mm'}}</span> 
+				<span class="col-md-6"><strong>{{comment.author.email}}</strong> - {{comment.author.role}}</span>
+				<span class="col-md-6 text-right">{{comment.timeStamp | date:'yyyy. MM. dd. HH:mm'}}</span> 
 			</div>
 			<div class="content row">
 				<span class="col-xs-12">{{comment.message}}</span>

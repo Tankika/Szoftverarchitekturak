@@ -1,5 +1,5 @@
 angular.module('BugTracker.Issue')
-	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'isEdit', 'IssueService', '$stateParams', 'UserHandlerService', function(preloadedIssue, preloadedChoices, isEdit, IssueService, $stateParams, UserHandlerService) {
+	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $stateParams, UserHandlerService, assignableUsers) {
 		'use strict';
 		
 		var vm = this;
@@ -7,6 +7,8 @@ angular.module('BugTracker.Issue')
 		vm.issue = angular.isObject(preloadedIssue) ? preloadedIssue : {};
 		vm.projectId = $stateParams.projectId;
 		vm.constants = preloadedChoices;
+		vm.assignableUsers = assignableUsers;
+		vm.assignUserToIssue = assignUserToIssue;
 		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
 		vm.onModifyButtonClick = onModifyButtonClick;
@@ -26,6 +28,10 @@ angular.module('BugTracker.Issue')
 				vm.issue.comment = result;
 			});
 			vm.newComment = undefined;
+		}
+		
+		function assignUserToIssue(assignee) {
+			IssueService.assignUserToIssue($stateParams.issueId, assignee.id);
 		}
 		
 		function navigateToIssueList() {

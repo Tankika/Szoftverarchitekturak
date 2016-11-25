@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.bme.archi.issue.bean.AssignUserToIssueRequest;
 import hu.bme.archi.issue.bean.Comment;
 import hu.bme.archi.issue.bean.ConstantsResponse;
 import hu.bme.archi.issue.bean.CreateNewProjectRequest;
@@ -16,6 +17,7 @@ import hu.bme.archi.issue.bean.ListIssuesData;
 import hu.bme.archi.issue.bean.ListIssuesResponse;
 import hu.bme.archi.issue.bean.ListProjectsResponse;
 import hu.bme.archi.issue.bean.SendCommentRequest;
+import hu.bme.archi.issue.bean.User;
 import hu.bme.archi.issue.service.IssueService;
 
 @RestController
@@ -58,5 +60,14 @@ public class IssueController {
 	public ConstantsResponse getConstants() {
 		return issueService.getConstants();
 	}
-
+	
+	@RequestMapping(path = "/listAssignableUsers/{projectId}", method = RequestMethod.GET)
+	public List<User> listAssignableUsers(@PathVariable long projectId) {
+		return issueService.listAssignableUsers(projectId);
+	}
+	
+	@RequestMapping(path = "/assignUserToIssue", method = RequestMethod.POST)
+	public void assignUserToIssue(@RequestBody AssignUserToIssueRequest assignUserToIssueRequest) {
+		issueService.assignUserToIssue(assignUserToIssueRequest);
+	}
 }

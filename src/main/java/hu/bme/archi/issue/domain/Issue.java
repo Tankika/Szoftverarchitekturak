@@ -121,6 +121,9 @@ public class Issue {
 	}
 	public void setAssignee(User assignee) {
 		this.assignee = assignee;
+		if(!assignee.getIssues().contains(this)) {
+			assignee.addIssue(this);
+		}
 	}
 	
 	@OneToMany(mappedBy="issue")

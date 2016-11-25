@@ -4,6 +4,8 @@ angular.module('BugTracker.Issue')
 		
 		this.getIssueById = getIssueById;
 		this.getConstants = getConstants;
+		this.listAssignableUsers = listAssignableUsers;
+		this.assignUserToIssue = assignUserToIssue;
 		
 		this.createIssue = createIssue;
 		this.modifyIssue = modifyIssue;
@@ -18,6 +20,21 @@ angular.module('BugTracker.Issue')
 		
 		function getConstants() {
 			return $http.get('/issue/getConstants').then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function listAssignableUsers(projectId) {
+			return $http.get('/issue/listAssignableUsers/' + projectId).then(function(response) {
+				return response.data;
+			});
+		}
+		
+		function assignUserToIssue(issueId, userId) {
+			return $http.post('/issue/assignUserToIssue', {
+				issueId: issueId,
+				userId: userId
+			}).then(function(response) {
 				return response.data;
 			});
 		}
