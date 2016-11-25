@@ -13,7 +13,7 @@
 			</div>
 			<div class="form-group">
 				<label>Létrehozva:</label>
-				<p class="form-control-static">{{vm.issue.creationTimeStamp | date:'yyyy. MM. dd.'}}</p>
+				<p class="form-control-static">{{vm.issue.creationTimeStamp | date:'yyyy. MM. dd. hh:mm'}}</p>
 			</div>
 			<div class="form-group">
 				<label>Verzió:</label>
@@ -42,27 +42,26 @@
 	
 	<hr>
 	
-	<div class="display-issue-comments row">
-		<div class="col-xs-12">
-			<div class="display-issue-comment" ng-repeat="comment in vm.issue.comment">
-				<div class="header">
-					<span>{{comment.authorEmail}} - {{comment.authorRole}}</span>
-					<span class="right">{{comment.timeStamp | date:'yyyy. MM. dd.'}}</span> 
-				</div>
-				<div class="content">
-					{{comment.message}}
-				</div>
+	<div class="display-issue-comments" ng-show="0 < vm.issue.comment.length">
+		<div class="comment" ng-repeat="comment in vm.issue.comment">
+			<div class="header row">
+				<span class="col-md-6"><strong>{{comment.authorEmail}}</strong> - {{comment.authorRole}}</span>
+				<span class="col-md-6 text-right">{{comment.timeStamp | date:'yyyy. MM. dd. hh:mm'}}</span> 
 			</div>
+			<div class="content row">
+				<span class="col-xs-12">{{comment.message}}</span>
+			</div>
+			<hr ng-show="!$last">
 		</div>
-		
-		<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form" ng-submit="vm.sendComment()")>
-			<div class="form-group">
-				<label for="comment">Megjegyzés:</label>
-				<textarea ng-model="vm.newComment" id="comment" name="comment" rows="7" class="form-control"></textarea>
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary">Küldés</button>
-			</div>
-		</form>
 	</div>
+		
+	<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form" ng-submit="form_comment.$valid && vm.sendComment()">
+		<div class="form-group">
+			<label for="comment">Megjegyzés:</label>
+			<textarea required ng-model="vm.newComment" id="comment" name="comment" rows="7" class="form-control"></textarea>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">Küldés</button>
+		</div>
+	</form>
 </div>

@@ -14,4 +14,37 @@
 	& > hr {
 		border-top-color: #cccccc;
 	}
+	
+	.display-issue-comments {
+	    padding: 20px 0;
+		margin-top: 40px;
+	    border: #ccc solid 1px;
+	    border-radius: 15px;
+	    background-color: #eee;
+	
+		.comment {
+			.header {
+				margin-bottom: 5px;
+			}
+		
+			& > .row {
+				margin-left: 0;
+				margin-right: 0; 
+			}
+			
+			& > hr {
+			    border-top-color: #ccc;
+			    margin-left: 30px;
+			    margin-right: 30px;
+			}
+		}
+	}
+		
+	form[name="form_comment"] {
+	    margin-top: 40px;
+	    padding: 20px;
+	    border: #ccc solid 1px;
+	    border-radius: 15px;
+	    background-color: #eee;
+	}
 }

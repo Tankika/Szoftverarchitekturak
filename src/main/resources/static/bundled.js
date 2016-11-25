@@ -1802,6 +1802,7 @@ angular.module('BugTracker.Issue')
 			IssueService.sendComment(vm.issue.id, vm.newComment).then(function(result) {
 				vm.issue.comment = result;
 			});
+			vm.newComment = undefined;
 		}
 		
 		function navigateToIssueList() {

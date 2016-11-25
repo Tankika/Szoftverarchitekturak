@@ -19003,3 +19003,26 @@ form .has-error .center-one-line > :not(.error-block) {
 .display-issue > hr {
   border-top-color: #cccccc; }
 
+.display-issue .display-issue-comments {
+  padding: 20px 0;
+  margin-top: 40px;
+  border: #ccc solid 1px;
+  border-radius: 15px;
+  background-color: #eee; }
+  .display-issue .display-issue-comments .comment .header {
+    margin-bottom: 5px; }
+  .display-issue .display-issue-comments .comment > .row {
+    margin-left: 0;
+    margin-right: 0; }
+  .display-issue .display-issue-comments .comment > hr {
+    border-top-color: #ccc;
+    margin-left: 30px;
+    margin-right: 30px; }
+
+.display-issue form[name="form_comment"] {
+  margin-top: 40px;
+  padding: 20px;
+  border: #ccc solid 1px;
+  border-radius: 15px;
+  background-color: #eee; }
+

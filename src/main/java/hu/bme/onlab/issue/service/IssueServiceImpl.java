@@ -138,6 +138,7 @@ public class IssueServiceImpl implements IssueService {
 			comment.setAuthorRole(c.getAuthor().getRole().getRoleName());
 			commentList.add(comment);
 		});
+		commentList.sort((c1, c2) -> c1.getTimeStamp().compareTo(c2.getTimeStamp()));
 		return commentList;
 	}
 
