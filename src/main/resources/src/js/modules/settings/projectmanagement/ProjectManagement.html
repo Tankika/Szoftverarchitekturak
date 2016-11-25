@@ -11,7 +11,12 @@
 		
 		<div class="form-group">
 			<label for="project">Projekt neve:</label>
-			<input class="form-control" type="text" ng-model="vm.projectName">
+			<input class="form-control" type="text" ng-model="vm.project.projectName">
+		</div>
+		
+		<div class="form-group">
+			<label for="description">Leírás:</label>
+			<textarea class="form-control" name="description" ng-model="vm.project.description"></textarea>
 		</div>
 		
 		<button class="btn btn-primary pull-right" ng-click="vm.newProjectForm.$valid && vm.onCreateNewProjectButtonClick()">Projekt lérehozása</button>

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(createUserRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
 		user.setEnabled(true);
-		user.setRoles(Sets.newHashSet(roleRepository.findAll(createUserRequest.getRoleIds())));
+		user.setRole(roleRepository.findOne(createUserRequest.getRoleId()));
 		user.setProjects(Sets.newHashSet(projectRepository.findAll(createUserRequest.getProjectIds())));
 		
 		userRepository.save(user);
@@ -95,10 +95,9 @@ public class UserServiceImpl implements UserService {
 	public UserDataResponse getUserData(UserDataRequest userDataRequest) {
 		UserDataResponse userDataResponse = new UserDataResponse();
 		userDataResponse.setProjectIds(new ArrayList<Long>());
-		userDataResponse.setRoleIds(new ArrayList<Long>());
 		User user = userRepository.findByEmail(userDataRequest.getEmail());
 		user.getProjects().forEach(p -> userDataResponse.getProjectIds().add(p.getId()));
-		user.getRoles().forEach(r -> userDataResponse.getRoleIds().add(r.getId()));
+		userDataResponse.setRoleId(user.getRole().getId());	
 		
 		return userDataResponse;
 	}
@@ -108,7 +107,7 @@ public class UserServiceImpl implements UserService {
 		User userToModify = userRepository.findByEmail(modifyUserRequest.getEmail());
 		
 		userToModify.setProjects(Sets.newHashSet(projectRepository.findAll(modifyUserRequest.getProjectIds())));
-		userToModify.setRoles(Sets.newHashSet(roleRepository.findAll(modifyUserRequest.getRoleIds())));
+		userToModify.setRole(roleRepository.findOne(modifyUserRequest.getRoleId()));
 		
 		userRepository.save(userToModify);
 	}

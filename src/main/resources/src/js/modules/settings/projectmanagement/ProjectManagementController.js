@@ -5,9 +5,10 @@ angular.module('BugTracker.Settings')
 		var vm = this;
 		
 		vm.onCreateNewProjectButtonClick = onCreateNewProjectButtonClick;
+		vm.project = {};
 		
 		function onCreateNewProjectButtonClick() {
-			ProjectManagementService.createNewProject(vm.projectName).then(function() {
+			ProjectManagementService.createNewProject(vm.project).then(function() {
 				vm.success = true;
 				vm.error = false;
 			}, function(error) {

@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		
-		<form novalidate name="form_comment" role="form">
+		<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form">
 			<div class="form-group">
 				<label for="comment">Megjegyzés:</label>
 				<textarea id="comment" name="comment" rows="7" class="form-control"></textarea>

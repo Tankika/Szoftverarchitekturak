@@ -39,13 +39,14 @@ public class IssueServiceImpl implements IssueService {
 	
 	@Override
 	public ListProjectsResponse listProjects() {
-		// TODO: itt csak azokat kellene visszaadni, amikhez az aktuális usernek van joga.
+		// TODO: itt csak azokat kellene visszaadni, amikhez az aktuális usernek van joga (kivéve ha admin, akkor mindet vissza kell adni).
 		ListProjectsResponse response = new ListProjectsResponse();
 		
 		projectRepository.findAll().forEach(p -> {
 			ListProjectsData listProjectsData = new ListProjectsData();
 			listProjectsData.setId(p.getId());
 			listProjectsData.setName(p.getName());
+			listProjectsData.setDescription(p.getDescription());
 			
 			response.getProjects().add(listProjectsData);
 		});
@@ -57,7 +58,7 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public ListIssuesResponse listIssues(long projectId) {
-		// TODO: figyelni kellene a projectId-ra, meg kell nézni, hogy az aktuális user, hozzá van-e rendelve a projekthez, amelynek az issue-it listázni akarjuk.
+		// TODO: itt csak azokat kellene visszaadni, amikhez az aktuális usernek van joga (kivéve ha admin, akkor mindet vissza kell adni).
 		ListIssuesResponse listIssuesResponse = new ListIssuesResponse();
 		
 		listIssuesResponse.setProjectName(projectRepository.findOne(projectId).getName());
@@ -73,6 +74,7 @@ public class IssueServiceImpl implements IssueService {
 	public void createNewProject(CreateNewProjectRequest createNewProjectRequest) {
 		Project project = new Project();
 		project.setName(createNewProjectRequest.getName());
+		project.setDescription(createNewProjectRequest.getDescription());
 		projectRepository.save(project);
 	}
 

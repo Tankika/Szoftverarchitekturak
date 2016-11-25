@@ -1,5 +1,5 @@
 angular.module('BugTracker.Project')
-	.controller('ProjectController', ['issueList', '$state', '$stateParams', 'uiGridConstants', function(issueList, $state, $stateParams, uiGridConstants) {
+	.controller('ProjectController', ['issueList', '$state', '$stateParams', 'uiGridConstants', 'UserHandlerService', function(issueList, $state, $stateParams, uiGridConstants, UserHandlerService) {
 		'use strict';
 		
 		var vm = this;
@@ -12,6 +12,7 @@ angular.module('BugTracker.Project')
 		vm.projectName = issueList.projectName;
 		vm.issueList =  issueList.issues;
 		vm.getTableHeight = getTableHeight;
+		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
 		vm.gridOptions = {
 			enablePagination: true,
@@ -31,8 +32,8 @@ angular.module('BugTracker.Project')
 				{
 					name: 'Action',
 					cellTemplate: '<span class=\"glyphicon glyphicon-eye-open\" ng-click=\"grid.appScope.onOpenButtonClick(row.entity)\"></span>' +
-								  '<span class=\"glyphicon glyphicon-pencil\" ng-click=\"grid.appScope.onModifyButtonClick(row.entity)"\></span>' +
-								  '<span class=\"glyphicon glyphicon-remove\" ng-click=\"grid.appScope.onRemoveButtonClick(row.entity)"\></span>'
+								  '<span class=\"glyphicon glyphicon-pencil\" ng-if=\"grid.appScope.isAuthorised(\'MODIFY_ISSUE\')\" ng-click=\"grid.appScope.onModifyButtonClick(row.entity)"\></span>' +
+								  '<span class=\"glyphicon glyphicon-remove\" ng-if=\"grid.appScope.isAuthorised(\'DELETE_ISSUE\')\" ng-click=\"grid.appScope.onRemoveButtonClick(row.entity)"\></span>'
 				}
 			]
 		};

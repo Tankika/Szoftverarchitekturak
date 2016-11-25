@@ -16,22 +16,22 @@ angular.module('BugTracker.Settings')
 			});
 		}
 		
-		function modifyUser(email, roleList, userProjectList) {
+		function modifyUser(email, role, userProjectList) {
 			var request = {
 				email: email,
-				roleIds: mapRoleIds(roleList),
+				roleId: role.id,
 				projectIds: mapProjectIds(userProjectList)
 			};
 			
 			return $http.post('/user/modifyUser', request);
 		}
 		
-		function createUser(credentials, roleList, userProjectList) {
+		function createUser(credentials, role, userProjectList) {
 			var deferred = $q.defer();
 			var request = {
 				email: credentials.email,
 				password: credentials.password,
-				roleIds: mapRoleIds(roleList),
+				roleId: role.id,
 				projectIds: mapProjectIds(userProjectList)
 			};
 			
@@ -47,14 +47,6 @@ angular.module('BugTracker.Settings')
 			});
 			
 			return deferred.promise;
-		}
-		
-		function mapRoleIds(roleList) {
-			var roleIds = [];
-			for(var i = 0; i < roleList.length; i++) {
-				roleIds.push(roleList[i].id);
-			}
-			return roleIds;
 		}
 		
 		function mapProjectIds(userProjectList) {

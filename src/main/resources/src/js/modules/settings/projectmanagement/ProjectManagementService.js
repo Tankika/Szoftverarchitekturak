@@ -4,9 +4,10 @@ angular.module('BugTracker.Settings')
 		
 		this.createNewProject = createNewProject;
 		
-		function createNewProject(projectName) {
+		function createNewProject(project) {
 			return $http.post('/issue/createNewProject', {
-				name: projectName
+				name: project.projectName,
+				description: project.description
 			});
 		}
 	}]);

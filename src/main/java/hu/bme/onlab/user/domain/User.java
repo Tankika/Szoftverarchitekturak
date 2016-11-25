@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -37,7 +38,7 @@ public class User {
 	private String password;
 	private boolean enabled;
 	
-	private Set<Role> roles;
+	private Role role;
 	private Set<Project> projects;
 	private Set<Issue> issues;
 	private Set<Comment> comments;
@@ -82,26 +83,15 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	@ManyToMany
-	@JoinTable(
-			name="USER_ROLE",
-			joinColumns=@JoinColumn(name="USER_ID", referencedColumnName="ID"),
-			inverseJoinColumns=@JoinColumn(name="ROLE_ID", referencedColumnName="ID"))
-	public Set<Role> getRoles() {
-		if(roles == null) {
-			roles = new HashSet<Role>();
-		}
-		return roles;
+	@ManyToOne
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
-	public void addRole(Role role) {
-		this.getRoles().add(role);
-	}
-
 	@ManyToMany
 	public Set<Project> getProjects() {
 		if(projects == null) {

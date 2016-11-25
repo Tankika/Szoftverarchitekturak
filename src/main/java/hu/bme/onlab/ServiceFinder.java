@@ -103,11 +103,10 @@ public class ServiceFinder {
 			return "select " 
 				+		"users.email, auth.authority "
 				+	"from "
-				+		"authority auth, users, user_role, role_auth " 
+				+		"authority auth, users, role_auth " 
 				+ 	"where "
 				+		"auth.ID = role_auth.AUTH_ID "
-				+		"and role_auth.ROLE_ID = user_role.ROLE_ID "
-				+		"and user_role.USER_ID = users.ID "
+				+		"and role_auth.ROLE_ID = users.ROLE_ID "
 				+		"and users.email = ?";
 		}
 		

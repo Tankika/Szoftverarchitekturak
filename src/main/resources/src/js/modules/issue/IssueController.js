@@ -1,5 +1,5 @@
 angular.module('BugTracker.Issue')
-	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'isEdit', 'IssueService', '$stateParams', function(preloadedIssue, preloadedChoices, isEdit, IssueService, $stateParams) {
+	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'isEdit', 'IssueService', '$stateParams', 'UserHandlerService', function(preloadedIssue, preloadedChoices, isEdit, IssueService, $stateParams, UserHandlerService) {
 		'use strict';
 		
 		var vm = this;
@@ -7,6 +7,7 @@ angular.module('BugTracker.Issue')
 		vm.issue = angular.isObject(preloadedIssue) ? preloadedIssue : {};
 		vm.projectId = $stateParams.projectId;
 		vm.constants = preloadedChoices;
+		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
 		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onCreateButtonClick = onCreateButtonClick;

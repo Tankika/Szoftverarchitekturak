@@ -5,9 +5,14 @@
 		
 		<hr>
 		
-		<div ng-repeat="project in vm.projectList">
-			<div ng-click="vm.openProjectDetails($index)">{{project.name}}</div>
+		<h3>Projektek:</h3>
+		<ul>
+			<li ng-repeat="project in vm.projectList">
+				<span ng-click="vm.openProjectDetails($index)">{{project.name}} - {{project.description}}</span>
+			</li>
 		</div>
+		</ul>
+		
 	</div> 
 	
 </div>

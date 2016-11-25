@@ -20,6 +20,7 @@ public class Project {
 	private Long id;
 	
 	private String name;
+	private String description;
 	
 	private Set<User> users;
 	private Set<Issue> issues;
@@ -39,7 +40,13 @@ public class Project {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@ManyToMany(mappedBy="projects")
 	public Set<User> getUsers() {
 		if(users == null) {
