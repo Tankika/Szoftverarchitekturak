@@ -11,6 +11,7 @@ angular.module('BugTracker.Issue')
 		
 		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onCreateButtonClick = onCreateButtonClick;
+		vm.sendComment = sendComment;
 		
 		function onModifyButtonClick() {
 			//IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
@@ -18,6 +19,12 @@ angular.module('BugTracker.Issue')
 		
 		function onCreateButtonClick() {
 			//IssueService.createIssue(vm.issue).then(navigateToIssueList);
+		}
+		
+		function sendComment() {
+			IssueService.sendComment(vm.issue.id, vm.newComment).then(function(result) {
+				vm.issue.comment = result;
+			});
 		}
 		
 		function navigateToIssueList() {

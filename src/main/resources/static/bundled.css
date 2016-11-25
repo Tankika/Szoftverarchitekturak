@@ -19000,6 +19000,6 @@ form .has-error .center-one-line > :not(.error-block) {
 .display-issue .details .form-group .form-control-static {
   padding: 0; }
 
-.display-issue hr {
+.display-issue > hr {
   border-top-color: #cccccc; }
 

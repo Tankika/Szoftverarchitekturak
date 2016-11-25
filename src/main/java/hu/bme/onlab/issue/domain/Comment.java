@@ -52,6 +52,9 @@ public class Comment {
 	}
 	public void setAuthor(User author) {
 		this.author = author;
+		if(!author.getComments().contains(this)) {
+			author.addComment(this);
+		}
 	}
 
 	@ManyToOne
@@ -61,5 +64,8 @@ public class Comment {
 	}
 	public void setIssue(Issue issue) {
 		this.issue = issue;
+		if(!issue.getComments().contains(this)) {
+			issue.addComment(this);
+		}
 	}
 }

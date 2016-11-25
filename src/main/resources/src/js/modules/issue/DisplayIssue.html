@@ -44,20 +44,25 @@
 	
 	<div class="display-issue-comments row">
 		<div class="col-xs-12">
-			<div class="display-issue-comment" ng-repeat="comment in vm.issue.comments">
-				{{comment}}
+			<div class="display-issue-comment" ng-repeat="comment in vm.issue.comment">
+				<div class="header">
+					<span>{{comment.authorEmail}} - {{comment.authorRole}}</span>
+					<span class="right">{{comment.timeStamp | date:'yyyy. MM. dd.'}}</span> 
+				</div>
+				<div class="content">
+					{{comment.message}}
+				</div>
 			</div>
 		</div>
 		
-		<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form">
+		<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form" ng-submit="vm.sendComment()")>
 			<div class="form-group">
 				<label for="comment">Megjegyzés:</label>
-				<textarea id="comment" name="comment" rows="7" class="form-control"></textarea>
+				<textarea ng-model="vm.newComment" id="comment" name="comment" rows="7" class="form-control"></textarea>
 			</div>
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Küldés</button>
 			</div>
-			
 		</form>
 	</div>
 </div>

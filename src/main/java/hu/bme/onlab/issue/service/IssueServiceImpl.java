@@ -1,28 +1,35 @@
 package hu.bme.onlab.issue.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.bme.onlab.issue.bean.Comment;
 import hu.bme.onlab.issue.bean.ConstantsResponse;
 import hu.bme.onlab.issue.bean.CreateNewProjectRequest;
 import hu.bme.onlab.issue.bean.ListIssuesData;
 import hu.bme.onlab.issue.bean.ListIssuesResponse;
 import hu.bme.onlab.issue.bean.ListProjectsData;
 import hu.bme.onlab.issue.bean.ListProjectsResponse;
+import hu.bme.onlab.issue.bean.SendCommentRequest;
+import hu.bme.onlab.issue.domain.Comment;
 import hu.bme.onlab.issue.domain.Issue;
 import hu.bme.onlab.issue.domain.Priority;
 import hu.bme.onlab.issue.domain.Project;
 import hu.bme.onlab.issue.domain.Severity;
 import hu.bme.onlab.issue.domain.Status;
 import hu.bme.onlab.issue.domain.Type;
+import hu.bme.onlab.issue.repository.CommentRepository;
 import hu.bme.onlab.issue.repository.IssueRepository;
 import hu.bme.onlab.issue.repository.ProjectRepository;
+import hu.bme.onlab.user.domain.User;
+import hu.bme.onlab.user.repository.UserRepository;
 
 @Service
 @Transactional
@@ -30,11 +37,15 @@ public class IssueServiceImpl implements IssueService {
 
 	private ProjectRepository projectRepository;
 	private IssueRepository issueRepository;
+	private CommentRepository commentRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository) {
+	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository) {
 		this.projectRepository = projectRepository;
 		this.issueRepository = issueRepository;
+		this.commentRepository = commentRepository;
+		this.userRepository = userRepository;
 	}
 	
 	@Override
@@ -79,6 +90,22 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
+	public List<hu.bme.onlab.issue.bean.Comment> sendComment(SendCommentRequest sendCommentRequest) {
+		UserDetails loggedInPrincipal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userRepository.findByEmailIgnoreCase(loggedInPrincipal.getUsername()).get(0);
+		Issue issue = issueRepository.findOne(sendCommentRequest.getIssueId());
+		
+		Comment comment = new Comment();
+		comment.setMessage(sendCommentRequest.getMessage());
+		comment.setTimeStamp(Calendar.getInstance());
+		comment.setIssue(issue);
+		comment.setAuthor(user);
+		commentRepository.save(comment);
+		
+		return mapCommentDataToBean(issue.getComments());
+	}
+
+	@Override
 	public ListIssuesData getIssueById(long issueId) {
 		return mapIssueDataToBean(issueRepository.findOne(issueId));
 	}
@@ -101,12 +128,14 @@ public class IssueServiceImpl implements IssueService {
 		return listIssuesData;
 	}
 	
-	private List<Comment> mapCommentDataToBean(Set<hu.bme.onlab.issue.domain.Comment> comments) {
-		List<Comment> commentList = new ArrayList<>();
+	private List<hu.bme.onlab.issue.bean.Comment> mapCommentDataToBean(Set<Comment> comments) {
+		List<hu.bme.onlab.issue.bean.Comment> commentList = new ArrayList<>();
 		comments.forEach(c -> {
-			Comment comment = new Comment();
+			hu.bme.onlab.issue.bean.Comment comment = new hu.bme.onlab.issue.bean.Comment();
 			comment.setMessage(c.getMessage());
 			comment.setTimeStamp(c.getTimeStamp());
+			comment.setAuthorEmail(c.getAuthor().getEmail());
+			comment.setAuthorRole(c.getAuthor().getRole().getRoleName());
 			commentList.add(comment);
 		});
 		return commentList;

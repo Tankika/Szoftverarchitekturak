@@ -1743,6 +1743,8 @@ angular.module('BugTracker.Issue')
 		this.createIssue = createIssue;
 		this.modifyIssue = modifyIssue;
 		
+		this.sendComment = sendComment;
+		
 		function getIssueById(issueId) {
 			return $http.get('/issue/' + issueId).then(function(response) {
 				return response.data;
@@ -1763,6 +1765,15 @@ angular.module('BugTracker.Issue')
 			
 		}
 		
+		function sendComment(issueId, message) {
+			return $http.post('/issue/sendComment', {
+				issueId: issueId,
+				message: message
+			}).then(function(response) {
+				return response.data;
+			});
+		}
+		
 	}]);
 angular.module('BugTracker.Issue')
 	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'isEdit', 'IssueService', '$stateParams', 'UserHandlerService', function(preloadedIssue, preloadedChoices, isEdit, IssueService, $stateParams, UserHandlerService) {
@@ -1777,6 +1788,7 @@ angular.module('BugTracker.Issue')
 		
 		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onCreateButtonClick = onCreateButtonClick;
+		vm.sendComment = sendComment;
 		
 		function onModifyButtonClick() {
 			//IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
@@ -1784,6 +1796,12 @@ angular.module('BugTracker.Issue')
 		
 		function onCreateButtonClick() {
 			//IssueService.createIssue(vm.issue).then(navigateToIssueList);
+		}
+		
+		function sendComment() {
+			IssueService.sendComment(vm.issue.id, vm.newComment).then(function(result) {
+				vm.issue.comment = result;
+			});
 		}
 		
 		function navigateToIssueList() {

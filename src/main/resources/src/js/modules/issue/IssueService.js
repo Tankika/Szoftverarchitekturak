@@ -8,6 +8,8 @@ angular.module('BugTracker.Issue')
 		this.createIssue = createIssue;
 		this.modifyIssue = modifyIssue;
 		
+		this.sendComment = sendComment;
+		
 		function getIssueById(issueId) {
 			return $http.get('/issue/' + issueId).then(function(response) {
 				return response.data;
@@ -26,6 +28,15 @@ angular.module('BugTracker.Issue')
 		
 		function modifyIssue(issue) {
 			
+		}
+		
+		function sendComment(issueId, message) {
+			return $http.post('/issue/sendComment', {
+				issueId: issueId,
+				message: message
+			}).then(function(response) {
+				return response.data;
+			});
 		}
 		
 	}]);
