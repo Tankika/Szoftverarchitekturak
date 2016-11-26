@@ -60,7 +60,7 @@
 		</div>
 	</div>
 		
-	<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="form_comment" role="form" ng-submit="form_comment.$valid && vm.sendComment()">
+	<form ng-if="vm.isAuthorised('COMMENT_ISSUE')" novalidate name="vm.form_comment" role="form" ng-submit="vm.form_comment.$valid && vm.sendComment()">
 		<div class="form-group">
 			<label for="comment">Megjegyzés:</label>
 			<textarea required ng-model="vm.newComment" id="comment" name="comment" rows="7" class="form-control"></textarea>

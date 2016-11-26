@@ -11,11 +11,11 @@ angular.module('BugTracker.Issue', [])
 				return null;
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
+				return IssueService.getConstants();
+ 			}],
+			assignableUsers: [function() {
 				return null;
 			}],
-			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
-				return IssueService.listAssignableUsers;
-			}]
 		}
 	})
 	.state('main.modifyissue', {
@@ -27,11 +27,11 @@ angular.module('BugTracker.Issue', [])
 				return IssueService.getIssueById($stateParams.issueId);
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
+				return IssueService.getConstants();
+ 			}],
+			assignableUsers: [function() {
 				return null;
 			}],
-			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
-				return IssueService.listAssignableUsers;
-			}]
 		}
 	})
 	.state('main.displayissue', {

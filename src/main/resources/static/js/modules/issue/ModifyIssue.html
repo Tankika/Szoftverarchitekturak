@@ -1,6 +1,6 @@
 <div class="modify-issue clearfix">
 	<h3>Issue módosítása</h3>
-	<form novalidate name="vm.modifyIssueForm" role="form">
+	<form novalidate name="vm.modifyIssueForm" role="form" ng-submit="vm.modifyIssueForm.$valid && vm.onModifyButtonClick()">
 		<div class="alert alert-danger" ng-if="vm.error">
 		    Ismeretlen hiba történt az issue módosítása közben. Kérlek próbáld meg később.
 		</div>
@@ -65,6 +65,6 @@
   			</ui-select>
 		</div>
 		
-		<button class="btn btn-primary pull-right" ng-click="vm.modifyIssueForm.$valid && vm.onModifyButtonClick()">Módosítás</button>
+		<button type="submit" class="btn btn-primary pull-right">Módosítás</button>
 	</form>
 </div>

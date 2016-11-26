@@ -120,11 +120,14 @@ public class Issue {
 	}
 	
 	@ManyToOne
-	@NotNull
 	public User getAssignee() {
 		return assignee;
 	}
 	public void setAssignee(User assignee) {
+		if(assignee == null) {
+			return;
+		}
+		
 		this.assignee = assignee;
 		if(!assignee.getIssues().contains(this)) {
 			assignee.addIssue(this);

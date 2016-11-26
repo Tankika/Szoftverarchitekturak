@@ -1,13 +1,13 @@
 <div class="create-issue clearfix">
 	<h3>Új issue létrehozása</h3>
-	<form novalidate name="vm.createIssueForm" role="form">
+	<form novalidate name="vm.createIssueForm" role="form" ng-submit="vm.createIssueForm.$valid && vm.onCreateButtonClick()">
 		<div class="alert alert-danger" ng-if="vm.error">
 		    Ismeretlen hiba történt az issue létrehozása közben. Kérlek próbáld meg később.
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group" ng-class="{ 'has-error' : vm.createIssueForm.name.$invalid && vm.createIssueForm.$submitted }">
 			<label for="name">Név:</label>
-			<input required type="text"  class="form-control" name="name" ng-model="vm.issue.name">
+			<input required type="text" class="form-control" name="name" ng-model="vm.issue.name">
 			<div class="text-danger error-block">
 				<div ng-if="vm.createIssueForm.name.$error.required">Kérlek add meg az issue nevét</div>
 			</div>
@@ -28,9 +28,9 @@
 			<input type="text" class="form-control" name="version" ng-model="vm.issue.version">
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group" ng-class="{ 'has-error' : vm.createIssueForm.name.$invalid && vm.createIssueForm.$submitted }">
 			<label for="type">Típus:</label>			
-			<ui-select ng-model="vm.issue.type" theme="bootstrap" title="Válassz típust!" required>
+			<ui-select name="type" ng-model="vm.issue.type" theme="bootstrap" title="Válassz típust!" required>
     			<ui-select-match placeholder="Válassz ki vagy írj be egy típust!">{{$select.selected}}</ui-select-match>
     			<ui-select-choices repeat="type in vm.constants.types | filter: $select.search">
       				<span ng-bind-html="type | highlight: $select.search"></span>
@@ -38,9 +38,9 @@
   			</ui-select>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group" ng-class="{ 'has-error' : vm.createIssueForm.status.$invalid && vm.createIssueForm.$submitted }">
 			<label for="status">Státusz</label>			
-			<ui-select ng-model="vm.issue.status" theme="bootstrap" title="Válassz státuszt!" required>
+			<ui-select name="status" ng-model="vm.issue.status" theme="bootstrap" title="Válassz státuszt!" required>
     			<ui-select-match placeholder="Válassz ki vagy írj be egy státuszt!">{{$select.selected}}</ui-select-match>
     			<ui-select-choices repeat="status in vm.constants.statuses | filter: $select.search">
       				<span ng-bind-html="status | highlight: $select.search"></span>
@@ -48,9 +48,9 @@
   			</ui-select>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group" ng-class="{ 'has-error' : vm.createIssueForm.priority.$invalid && vm.createIssueForm.$submitted }">
 			<label for="priority">Prioritás:</label>			
-			<ui-select ng-model="vm.issue.priority" theme="bootstrap" title="Válassz prioritást!" required>
+			<ui-select name="priority" ng-model="vm.issue.priority" theme="bootstrap" title="Válassz prioritást!" required>
     			<ui-select-match placeholder="Válassz ki vagy írj be egy prioritást!">{{$select.selected}}</ui-select-match>
     			<ui-select-choices repeat="priority in vm.constants.priorities | filter: $select.search">
       				<span ng-bind-html="priority | highlight: $select.search"></span>
@@ -58,9 +58,9 @@
   			</ui-select>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group" ng-class="{ 'has-error' : vm.createIssueForm.severity.$invalid && vm.createIssueForm.$submitted }">
 			<label for="severity">Súlyosság:</label>
-			<ui-select ng-model="vm.issue.severity" theme="bootstrap" title="Válassz súlyosságot!" required>
+			<ui-select name="severity" ng-model="vm.issue.severity" theme="bootstrap" title="Válassz súlyosságot!" required>
     			<ui-select-match placeholder="Válassz ki vagy írj be egy súlyosságot!">{{$select.selected}}</ui-select-match>
     			<ui-select-choices repeat="severity in vm.constants.severities | filter: $select.search">
       				<span ng-bind-html="severity | highlight: $select.search"></span>
@@ -68,6 +68,6 @@
   			</ui-select>
 		</div>
 		
-		<button class="btn btn-primary pull-right" ng-click="vm.createIssueForm.$valid && vm.onCreateButtonClick()">Létrehozás</button>
+		<button type="submit" class="btn btn-primary pull-right">Létrehozás</button>
 	</form>
 </div>

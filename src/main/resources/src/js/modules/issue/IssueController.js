@@ -11,16 +11,16 @@ angular.module('BugTracker.Issue')
 		vm.assignUserToIssue = assignUserToIssue;
 		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
-		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onCreateButtonClick = onCreateButtonClick;
+		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.sendComment = sendComment;
 		
-		function onModifyButtonClick() {
-			IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
+		function onCreateButtonClick() {
+			IssueService.createIssue($stateParams.projectId, vm.issue).then(navigateToIssueList);
 		}
 		
-		function onCreateButtonClick() {
-			IssueService.createIssue(vm.issue).then(navigateToIssueList);
+		function onModifyButtonClick() {
+			IssueService.modifyIssue($stateParams.projectId, vm.issue).then(navigateToIssueList);
 		}
 		
 		function sendComment() {

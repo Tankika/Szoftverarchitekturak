@@ -18,6 +18,7 @@ import hu.bme.archi.issue.bean.ListIssuesData;
 import hu.bme.archi.issue.bean.ListIssuesResponse;
 import hu.bme.archi.issue.bean.ListProjectsData;
 import hu.bme.archi.issue.bean.ListProjectsResponse;
+import hu.bme.archi.issue.bean.SaveIssueRequest;
 import hu.bme.archi.issue.bean.SendCommentRequest;
 import hu.bme.archi.issue.domain.Comment;
 import hu.bme.archi.issue.domain.Issue;
@@ -99,6 +100,32 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
+	public void saveIssue(long projectId, SaveIssueRequest saveIssueRequest) {
+		doSaveIssue(projectId, new Issue(), saveIssueRequest);
+	}
+
+	@Override
+	public void saveIssue(long projectId, long issueId, SaveIssueRequest saveIssueRequest) {
+		doSaveIssue(projectId, issueRepository.findOne(issueId), saveIssueRequest);
+	}
+	
+	public void doSaveIssue(long projectId, Issue issue, SaveIssueRequest saveIssueRequest) {
+		issue.setName(saveIssueRequest.getName());
+		issue.setDescription(saveIssueRequest.getDescription());
+		issue.setPriority(saveIssueRequest.getPriority());
+		issue.setReproductionSteps(saveIssueRequest.getReproductionSteps());
+		issue.setSeverity(saveIssueRequest.getSeverity());
+		issue.setStatus(saveIssueRequest.getStatus());
+		issue.setType(saveIssueRequest.getType());
+		issue.setVersion(saveIssueRequest.getVersion());
+		
+		Project project = projectRepository.findOne(projectId);
+		issue.setProject(project);
+		
+		issueRepository.save(issue);
+	}
+
+	@Override
 	public List<hu.bme.archi.issue.bean.Comment> sendComment(SendCommentRequest sendCommentRequest) {
 		User user = getLoggedInUser();
 		Issue issue = issueRepository.findOne(sendCommentRequest.getIssueId());
@@ -149,6 +176,10 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	private hu.bme.archi.issue.bean.User mapUserDataToBean(User src) {
+		if(src == null) {
+			return null;
+		}
+		
 		hu.bme.archi.issue.bean.User trg = new hu.bme.archi.issue.bean.User();
 		trg.setId(src.getId());
 		trg.setEmail(src.getEmail());

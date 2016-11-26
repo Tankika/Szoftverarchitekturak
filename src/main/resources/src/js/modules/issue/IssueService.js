@@ -39,12 +39,18 @@ angular.module('BugTracker.Issue')
 			});
 		}
 		
-		function createIssue(issue) {
-			
+		function createIssue(projectId, issue) {
+			return $http.post('/issue/saveIssue/' + projectId, createSaveIssueRequest(issue))
+			.then(function(response) {
+				return response.data;
+			});
 		}
 		
-		function modifyIssue(issue) {
-			
+		function modifyIssue(projectId, issue) {
+			return $http.post('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
+			.then(function(response) {
+				return response.data;
+			});
 		}
 		
 		function sendComment(issueId, message) {
@@ -54,6 +60,19 @@ angular.module('BugTracker.Issue')
 			}).then(function(response) {
 				return response.data;
 			});
+		}
+		
+		function createSaveIssueRequest(issue) {
+			return {
+			    name : issue.name,
+			    description : issue.description,
+			    reproductionSteps : issue.reproductionSteps,
+			    version : issue.version,
+			    type : issue.type,
+			    status : issue.status,
+			    priority : issue.priority,
+			    severity : issue.severity,
+			};
 		}
 		
 	}]);

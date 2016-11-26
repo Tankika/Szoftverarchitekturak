@@ -1693,11 +1693,11 @@ angular.module('BugTracker.Issue', [])
 				return null;
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
+				return IssueService.getConstants();
+ 			}],
+			assignableUsers: [function() {
 				return null;
 			}],
-			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
-				return IssueService.listAssignableUsers;
-			}]
 		}
 	})
 	.state('main.modifyissue', {
@@ -1709,11 +1709,11 @@ angular.module('BugTracker.Issue', [])
 				return IssueService.getIssueById($stateParams.issueId);
 			}],
 			preloadedChoices: ['IssueService', function(IssueService) {
+				return IssueService.getConstants();
+ 			}],
+			assignableUsers: [function() {
 				return null;
 			}],
-			assignableUsers: ['IssueService', '$stateParams', function(IssueService, $stateParams) {
-				return IssueService.listAssignableUsers;
-			}]
 		}
 	})
 	.state('main.displayissue', {
@@ -1774,12 +1774,18 @@ angular.module('BugTracker.Issue')
 			});
 		}
 		
-		function createIssue(issue) {
-			
+		function createIssue(projectId, issue) {
+			return $http.post('/issue/saveIssue/' + projectId, createSaveIssueRequest(issue))
+			.then(function(response) {
+				return response.data;
+			});
 		}
 		
-		function modifyIssue(issue) {
-			
+		function modifyIssue(projectId, issue) {
+			return $http.post('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
+			.then(function(response) {
+				return response.data;
+			});
 		}
 		
 		function sendComment(issueId, message) {
@@ -1789,6 +1795,19 @@ angular.module('BugTracker.Issue')
 			}).then(function(response) {
 				return response.data;
 			});
+		}
+		
+		function createSaveIssueRequest(issue) {
+			return {
+			    name : issue.name,
+			    description : issue.description,
+			    reproductionSteps : issue.reproductionSteps,
+			    version : issue.version,
+			    type : issue.type,
+			    status : issue.status,
+			    priority : issue.priority,
+			    severity : issue.severity,
+			};
 		}
 		
 	}]);
@@ -1805,16 +1824,16 @@ angular.module('BugTracker.Issue')
 		vm.assignUserToIssue = assignUserToIssue;
 		vm.isAuthorised = UserHandlerService.isAuthorised;
 		
-		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.onCreateButtonClick = onCreateButtonClick;
+		vm.onModifyButtonClick = onModifyButtonClick;
 		vm.sendComment = sendComment;
 		
-		function onModifyButtonClick() {
-			IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
+		function onCreateButtonClick() {
+			IssueService.createIssue($stateParams.projectId, vm.issue).then(navigateToIssueList);
 		}
 		
-		function onCreateButtonClick() {
-			IssueService.createIssue(vm.issue).then(navigateToIssueList);
+		function onModifyButtonClick() {
+			IssueService.modifyIssue($stateParams.projectId, vm.issue).then(navigateToIssueList);
 		}
 		
 		function sendComment() {

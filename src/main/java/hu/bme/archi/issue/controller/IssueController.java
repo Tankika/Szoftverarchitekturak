@@ -16,6 +16,7 @@ import hu.bme.archi.issue.bean.CreateNewProjectRequest;
 import hu.bme.archi.issue.bean.ListIssuesData;
 import hu.bme.archi.issue.bean.ListIssuesResponse;
 import hu.bme.archi.issue.bean.ListProjectsResponse;
+import hu.bme.archi.issue.bean.SaveIssueRequest;
 import hu.bme.archi.issue.bean.SendCommentRequest;
 import hu.bme.archi.issue.bean.User;
 import hu.bme.archi.issue.service.IssueService;
@@ -49,6 +50,16 @@ public class IssueController {
 	@RequestMapping(path = "/createNewProject", method = RequestMethod.POST)
 	public void createNewProject(@RequestBody CreateNewProjectRequest createNewProjectRequest) {
 		issueService.createNewProject(createNewProjectRequest);
+	}
+	
+	@RequestMapping(path = "/saveIssue/{projectId}", method = RequestMethod.POST)
+	public void saveIssue(@PathVariable long projectId,  @RequestBody SaveIssueRequest saveIssueRequest) {
+		issueService.saveIssue(projectId, saveIssueRequest);
+	}
+	
+	@RequestMapping(path = "/saveIssue/{projectId}/{issueId}", method = RequestMethod.PUT)
+	public void saveIssue(@PathVariable long projectId, @PathVariable long issueId,  @RequestBody SaveIssueRequest saveIssueRequest) {
+		issueService.saveIssue(projectId, issueId, saveIssueRequest);
 	}
 	
 	@RequestMapping(path = "/sendComment", method = RequestMethod.POST)
