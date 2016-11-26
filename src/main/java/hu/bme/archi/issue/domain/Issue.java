@@ -13,10 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import hu.bme.archi.user.domain.User;
 
+@Table(uniqueConstraints = {
+	@UniqueConstraint(columnNames={"project_id", "name"})
+})
 @Entity
 @SequenceGenerator(name="issue_sequence", sequenceName="issue_sequence", allocationSize=1)
 public class Issue {

@@ -16,11 +16,11 @@ angular.module('BugTracker.Issue')
 		vm.sendComment = sendComment;
 		
 		function onModifyButtonClick() {
-			//IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
+			IssueService.modifyIssue(vm.issue).then(navigateToIssueList);
 		}
 		
 		function onCreateButtonClick() {
-			//IssueService.createIssue(vm.issue).then(navigateToIssueList);
+			IssueService.createIssue(vm.issue).then(navigateToIssueList);
 		}
 		
 		function sendComment() {

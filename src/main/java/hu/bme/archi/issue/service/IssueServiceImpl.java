@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.bme.archi.exception.InsufficientAuthoritesException;
 import hu.bme.archi.issue.bean.AssignUserToIssueRequest;
 import hu.bme.archi.issue.bean.ConstantsResponse;
 import hu.bme.archi.issue.bean.CreateNewProjectRequest;
@@ -30,9 +29,9 @@ import hu.bme.archi.issue.domain.Type;
 import hu.bme.archi.issue.repository.CommentRepository;
 import hu.bme.archi.issue.repository.IssueRepository;
 import hu.bme.archi.issue.repository.ProjectRepository;
-import hu.bme.archi.user.domain.Authority;
+import hu.bme.archi.user.domain.Role;
 import hu.bme.archi.user.domain.User;
-import hu.bme.archi.user.repository.AuthorityRepository;
+import hu.bme.archi.user.repository.RoleRepository;
 import hu.bme.archi.user.repository.UserRepository;
 
 @Service
@@ -43,45 +42,49 @@ public class IssueServiceImpl implements IssueService {
 	private IssueRepository issueRepository;
 	private CommentRepository commentRepository;
 	private UserRepository userRepository;
-	private AuthorityRepository authorityRepository;
+	private RoleRepository roleRepository;
 
 	@Autowired
-	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository, AuthorityRepository authorityRepository) {
+	public IssueServiceImpl(ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository, RoleRepository roleRepository) {
 		this.projectRepository = projectRepository;
 		this.issueRepository = issueRepository;
 		this.commentRepository = commentRepository;
 		this.userRepository = userRepository;
-		this.authorityRepository = authorityRepository;
+		this.roleRepository = roleRepository;
 	}
 	
 	@Override
 	public ListProjectsResponse listProjects() {
-		// TODO: itt csak azokat kellene visszaadni, amikhez az aktuális usernek van joga (kivéve ha admin, akkor mindet vissza kell adni).
 		ListProjectsResponse response = new ListProjectsResponse();
 		
+		User loggedInUser = getLoggedInUser();
+		Role adminRole = roleRepository.findByRoleNameIgnoreCase("admin");
 		projectRepository.findAll().forEach(p -> {
-			ListProjectsData listProjectsData = new ListProjectsData();
-			listProjectsData.setId(p.getId());
-			listProjectsData.setName(p.getName());
-			listProjectsData.setDescription(p.getDescription());
-			
-			response.getProjects().add(listProjectsData);
+			if(loggedInUser.getRole().equals(adminRole) || p.getUsers().contains(loggedInUser)) {
+				ListProjectsData listProjectsData = new ListProjectsData();
+				listProjectsData.setId(p.getId());
+				listProjectsData.setName(p.getName());
+				listProjectsData.setDescription(p.getDescription());
+				
+				response.getProjects().add(listProjectsData);
+			}
 		});
 		
 		return response;
 	}
-	
-	
 
 	@Override
 	public ListIssuesResponse listIssues(long projectId) {
-		// TODO: itt csak azokat kellene visszaadni, amikhez az aktuális usernek van joga (kivéve ha admin, akkor mindet vissza kell adni).
 		ListIssuesResponse listIssuesResponse = new ListIssuesResponse();
 		
 		listIssuesResponse.setProjectName(projectRepository.findOne(projectId).getName());
-				
+		
+		User loggedInUser = getLoggedInUser();
+		Role adminRole = roleRepository.findByRoleNameIgnoreCase("admin");
 		issueRepository.findByProjectId(projectId).forEach(i -> {
-			listIssuesResponse.getIssues().add(mapIssueDataToBean(i));
+			if(loggedInUser.getRole().equals(adminRole) || i.getProject().getUsers().contains(loggedInUser)) {
+				listIssuesResponse.getIssues().add(mapIssueDataToBean(i));
+			}
 		});
 		
 		return listIssuesResponse;
@@ -175,10 +178,6 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public void assignUserToIssue(AssignUserToIssueRequest assignUserToIssueRequest) {
-		if(!userHasAuthority(getLoggedInUser(), "MODIFY_ISSUE")) {
-			throw new InsufficientAuthoritesException();
-		}
-		
 		Issue issue = issueRepository.findOne(assignUserToIssueRequest.getIssueId());
 		User user = userRepository.findOne(assignUserToIssueRequest.getUserId());
 
@@ -194,9 +193,4 @@ public class IssueServiceImpl implements IssueService {
 		User user = userRepository.findByEmailIgnoreCase(loggedInPrincipal.getUsername()).get(0);
 		return user;
 	}
-	
-	private boolean userHasAuthority(User user, String authority) {
-		return user.getRole().getAuthorities().contains(authorityRepository.findByAuthorityIgnoreCase(authority));
-	}
-
 }

@@ -1,6 +1,7 @@
 package hu.bme.archi.issue.domain;
 
 import java.util.HashSet;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,9 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import hu.bme.archi.user.domain.User;
 
+@Table(uniqueConstraints = {
+	@UniqueConstraint(columnNames={"name"})
+})
 @Entity
 @SequenceGenerator(name="project_sequence", sequenceName="project_sequence", allocationSize=1)
 public class Project {

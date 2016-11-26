@@ -2,6 +2,8 @@ package hu.bme.archi.issue.service;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import hu.bme.archi.issue.bean.AssignUserToIssueRequest;
 import hu.bme.archi.issue.bean.Comment;
 import hu.bme.archi.issue.bean.ConstantsResponse;
@@ -18,6 +20,7 @@ public interface IssueService {
 	
 	ListIssuesResponse listIssues(long projectId);
 
+	@PreAuthorize("hasAuthority('CREATE_PROJECT')")
 	void createNewProject(CreateNewProjectRequest createNewProjectRequest);
 	
 	List<Comment> sendComment(SendCommentRequest sendCommentRequest);
@@ -27,6 +30,7 @@ public interface IssueService {
 	ConstantsResponse getConstants();
 	
 	List<User> listAssignableUsers(long projectId);
-	
+
+	@PreAuthorize("hasAuthority('MODIFY_ISSUE')")
 	void assignUserToIssue(AssignUserToIssueRequest assignUserToIssueRequest);
 }
