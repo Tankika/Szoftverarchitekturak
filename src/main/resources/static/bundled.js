@@ -1782,7 +1782,7 @@ angular.module('BugTracker.Issue')
 		}
 		
 		function modifyIssue(projectId, issue) {
-			return $http.post('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
+			return $http.put('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
 			.then(function(response) {
 				return response.data;
 			});
@@ -1812,7 +1812,7 @@ angular.module('BugTracker.Issue')
 		
 	}]);
 angular.module('BugTracker.Issue')
-	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $stateParams, UserHandlerService, assignableUsers) {
+	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$state', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $state, $stateParams, UserHandlerService, assignableUsers) {
 		'use strict';
 		
 		var vm = this;
@@ -2168,6 +2168,10 @@ angular.module('BugTracker.Settings')
 		vm.credentials = {};
 		
 		function addUserToProject() {
+			if(!vm.selectedProject.id) {
+				return;
+			}
+			
 			var found = false;
 			for(var i = 0; i < vm.userProjectList.length; i++) {
 				if (vm.selectedProject.id === vm.userProjectList[i].id) {

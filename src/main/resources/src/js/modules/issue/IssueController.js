@@ -1,5 +1,5 @@
 angular.module('BugTracker.Issue')
-	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $stateParams, UserHandlerService, assignableUsers) {
+	.controller('IssueController', ['preloadedIssue', 'preloadedChoices', 'IssueService', '$state', '$stateParams', 'UserHandlerService', 'assignableUsers', function(preloadedIssue, preloadedChoices, IssueService, $state, $stateParams, UserHandlerService, assignableUsers) {
 		'use strict';
 		
 		var vm = this;

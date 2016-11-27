@@ -20,6 +20,10 @@ angular.module('BugTracker.Settings')
 		vm.credentials = {};
 		
 		function addUserToProject() {
+			if(!vm.selectedProject.id) {
+				return;
+			}
+			
 			var found = false;
 			for(var i = 0; i < vm.userProjectList.length; i++) {
 				if (vm.selectedProject.id === vm.userProjectList[i].id) {

@@ -47,7 +47,7 @@ angular.module('BugTracker.Issue')
 		}
 		
 		function modifyIssue(projectId, issue) {
-			return $http.post('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
+			return $http.put('/issue/saveIssue/' + projectId + '/' + issue.id, createSaveIssueRequest(issue))
 			.then(function(response) {
 				return response.data;
 			});

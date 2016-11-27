@@ -39,7 +39,9 @@ public class IssueController {
 	
 	@RequestMapping(path = "/listProjects", method = RequestMethod.GET)
 	public ListProjectsResponse listProjects() {
-		return issueService.listProjects();
+		ListProjectsResponse response = new ListProjectsResponse();
+		response.setProjects(issueService.listProjects());
+		return response;
 	}
 	
 	@RequestMapping(path = "/listIssues/{projectId}", method = RequestMethod.GET)
@@ -54,12 +56,17 @@ public class IssueController {
 	
 	@RequestMapping(path = "/saveIssue/{projectId}", method = RequestMethod.POST)
 	public void saveIssue(@PathVariable long projectId,  @RequestBody SaveIssueRequest saveIssueRequest) {
-		issueService.saveIssue(projectId, saveIssueRequest);
+		issueService.createIssue(projectId, saveIssueRequest);
 	}
 	
 	@RequestMapping(path = "/saveIssue/{projectId}/{issueId}", method = RequestMethod.PUT)
 	public void saveIssue(@PathVariable long projectId, @PathVariable long issueId,  @RequestBody SaveIssueRequest saveIssueRequest) {
 		issueService.saveIssue(projectId, issueId, saveIssueRequest);
+	}
+	
+	@RequestMapping(path = "/deleteIssue/{issueId}", method = RequestMethod.DELETE)
+	public void deleteIssue(@PathVariable long issueId) {
+		issueService.deleteIssue(issueId);
 	}
 	
 	@RequestMapping(path = "/sendComment", method = RequestMethod.POST)

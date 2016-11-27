@@ -17,7 +17,6 @@ import hu.bme.archi.issue.bean.CreateNewProjectRequest;
 import hu.bme.archi.issue.bean.ListIssuesData;
 import hu.bme.archi.issue.bean.ListIssuesResponse;
 import hu.bme.archi.issue.bean.ListProjectsData;
-import hu.bme.archi.issue.bean.ListProjectsResponse;
 import hu.bme.archi.issue.bean.SaveIssueRequest;
 import hu.bme.archi.issue.bean.SendCommentRequest;
 import hu.bme.archi.issue.domain.Comment;
@@ -30,7 +29,6 @@ import hu.bme.archi.issue.domain.Type;
 import hu.bme.archi.issue.repository.CommentRepository;
 import hu.bme.archi.issue.repository.IssueRepository;
 import hu.bme.archi.issue.repository.ProjectRepository;
-import hu.bme.archi.user.domain.Role;
 import hu.bme.archi.user.domain.User;
 import hu.bme.archi.user.repository.RoleRepository;
 import hu.bme.archi.user.repository.UserRepository;
@@ -55,20 +53,16 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public ListProjectsResponse listProjects() {
-		ListProjectsResponse response = new ListProjectsResponse();
+	public List<ListProjectsData> listProjects() {
+		List<ListProjectsData> response = new ArrayList<>();
 		
-		User loggedInUser = getLoggedInUser();
-		Role adminRole = roleRepository.findByRoleNameIgnoreCase("admin");
 		projectRepository.findAll().forEach(p -> {
-			if(loggedInUser.getRole().equals(adminRole) || p.getUsers().contains(loggedInUser)) {
-				ListProjectsData listProjectsData = new ListProjectsData();
-				listProjectsData.setId(p.getId());
-				listProjectsData.setName(p.getName());
-				listProjectsData.setDescription(p.getDescription());
-				
-				response.getProjects().add(listProjectsData);
-			}
+			ListProjectsData listProjectsData = new ListProjectsData();
+			listProjectsData.setId(p.getId());
+			listProjectsData.setName(p.getName());
+			listProjectsData.setDescription(p.getDescription());
+			
+			response.add(listProjectsData);
 		});
 		
 		return response;
@@ -80,12 +74,8 @@ public class IssueServiceImpl implements IssueService {
 		
 		listIssuesResponse.setProjectName(projectRepository.findOne(projectId).getName());
 		
-		User loggedInUser = getLoggedInUser();
-		Role adminRole = roleRepository.findByRoleNameIgnoreCase("admin");
 		issueRepository.findByProjectId(projectId).forEach(i -> {
-			if(loggedInUser.getRole().equals(adminRole) || i.getProject().getUsers().contains(loggedInUser)) {
-				listIssuesResponse.getIssues().add(mapIssueDataToBean(i));
-			}
+			listIssuesResponse.getIssues().add(mapIssueDataToBean(i));
 		});
 		
 		return listIssuesResponse;
@@ -100,8 +90,10 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void saveIssue(long projectId, SaveIssueRequest saveIssueRequest) {
-		doSaveIssue(projectId, new Issue(), saveIssueRequest);
+	public void createIssue(long projectId, SaveIssueRequest saveIssueRequest) {
+		Issue issue = new Issue();
+		issue.setCreationTimeStamp(Calendar.getInstance());
+		doSaveIssue(projectId, issue, saveIssueRequest);
 	}
 
 	@Override
@@ -123,6 +115,11 @@ public class IssueServiceImpl implements IssueService {
 		issue.setProject(project);
 		
 		issueRepository.save(issue);
+	}
+	
+	@Override
+	public void deleteIssue(long issueId) {
+		issueRepository.delete(issueId);
 	}
 
 	@Override
@@ -214,7 +211,9 @@ public class IssueServiceImpl implements IssueService {
 
 		List<User> assignableUsers = userRepository.findByProjectsId(issue.getProject().getId());
 		if(assignableUsers.contains(user)) {
-			issue.getAssignee().getIssues().remove(issue);
+			if(issue.getAssignee() != null) {
+				issue.getAssignee().getIssues().remove(issue);
+			}
 			issue.setAssignee(user);
 		}
 	}
