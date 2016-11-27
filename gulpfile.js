@@ -17,7 +17,7 @@ gulp.task('aggregateJs', function() {
 			'src/main/resources/src/js/3rdparty/angular/angular-sanitize.min.js',
 			'src/main/resources/src/js/3rdparty/angular/angular-ui-router.min.js',
 			'src/main/resources/src/js/3rdparty/angular/validate.min.js',
-			'src/main/resources/src/js/3rdparty/angular/ui-bootstrap-2.2.0.min.js',
+			'src/main/resources/src/js/3rdparty/angular/ui-bootstrap-tpls-2.2.0.min.js',
 			'src/main/resources/src/js/3rdparty/angular/select.min.js',
 			'src/main/resources/src/js/3rdparty/angular/ui-grid.min.js',
 			'src/main/resources/src/js/3rdparty/jquery/jquery-3.1.1.min.js',

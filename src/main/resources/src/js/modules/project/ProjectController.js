@@ -1,5 +1,5 @@
 angular.module('BugTracker.Project')
-	.controller('ProjectController', ['issueList', '$state', '$stateParams', 'uiGridConstants', 'UserHandlerService', function(issueList, $state, $stateParams, uiGridConstants, UserHandlerService) {
+	.controller('ProjectController', ['issueList', '$state', '$stateParams', 'uiGridConstants', 'UserHandlerService', 'ProjectService', '$uibModal', function(issueList, $state, $stateParams, uiGridConstants, UserHandlerService, ProjectService, $uibModal) {
 		'use strict';
 		
 		var vm = this;
@@ -53,7 +53,19 @@ angular.module('BugTracker.Project')
 		}
 		
 		function onRemoveButtonClick(rowEntity) {
-			// TODO: show modal confirmation screen
+			$uibModal.open({
+			    templateUrl: 'js/modules/project/deleteConfirmation.html',
+			    size: 'sm'
+			}).closed.then(function() {
+				ProjectService.deleteIssue(rowEntity.id).then(function() {
+					for(var i = 0, iMax = vm.issueList.length; i < iMax; i++) {
+						if(rowEntity.id === vm.issueList[i].id) {
+							vm.issueList.splice(i, 1);
+							break;
+						}
+					}
+				});
+			});
 		}
 		
 		function onCreateNewIssueButtonClick() {
