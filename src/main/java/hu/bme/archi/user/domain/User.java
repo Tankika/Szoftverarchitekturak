@@ -3,14 +3,11 @@ package hu.bme.archi.user.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,7 +21,6 @@ import javax.validation.constraints.Size;
 import hu.bme.archi.issue.domain.Comment;
 import hu.bme.archi.issue.domain.Issue;
 import hu.bme.archi.issue.domain.Project;
-import hu.bme.archi.post.domain.Post;
 
 @Entity(name="users")
 @Table(uniqueConstraints = {

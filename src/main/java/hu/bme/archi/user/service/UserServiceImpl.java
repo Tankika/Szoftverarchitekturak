@@ -20,7 +20,6 @@ import hu.bme.archi.user.bean.RoleDTO;
 import hu.bme.archi.user.bean.UserDataRequest;
 import hu.bme.archi.user.bean.UserDataResponse;
 import hu.bme.archi.user.domain.User;
-import hu.bme.archi.user.repository.AuthorityRepository;
 import hu.bme.archi.user.repository.RoleRepository;
 import hu.bme.archi.user.repository.UserRepository;
 
@@ -30,7 +29,6 @@ public class UserServiceImpl implements UserService {
 	
 	private UserRepository userRepository;
 	
-	private AuthorityRepository authorityRepository;
 	
 	private RoleRepository roleRepository;
 	
@@ -39,10 +37,9 @@ public class UserServiceImpl implements UserService {
 	private ProjectRepository projectRepository;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, ProjectRepository projectRepository) {
+	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ProjectRepository projectRepository) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
-		this.authorityRepository = authorityRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.projectRepository = projectRepository;
 	}
