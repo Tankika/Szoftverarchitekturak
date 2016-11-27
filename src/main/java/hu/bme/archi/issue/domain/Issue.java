@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -134,7 +135,7 @@ public class Issue {
 		}
 	}
 	
-	@OneToMany(mappedBy="issue")
+	@OneToMany(mappedBy="issue", cascade=CascadeType.REMOVE)
 	public Set<Comment> getComments() {
 		if(comments == null) {
 			comments = new HashSet<>();
